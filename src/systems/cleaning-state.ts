@@ -20,12 +20,15 @@ export interface CleaningState {
 export interface CollisionResult {
   spot: DirtSpot
   wasCleaned: boolean
+  intensity: number // 0-1, based on eraser speed/pressure
 }
 
 export class CleaningStateManager {
   private state: CleaningState
   private dirtSpots: Map<string, DirtSpot> = new Map()
   private eraser: EraserTool | null = null
+  private lastEraserPosition: { x: number; y: number } | null = null
+  private eraserSpeed: number = 0
 
   constructor() {
     this.state = {
@@ -89,6 +92,9 @@ export class CleaningStateManager {
       return []
     }
 
+    // Calculate eraser speed for intensity
+    this.calculateEraserSpeed()
+
     const results: CollisionResult[] = []
     const spots = Array.from(this.dirtSpots.values())
 
@@ -97,12 +103,16 @@ export class CleaningStateManager {
 
       if (spot.overlapsWithCircle(this.eraser.position, this.eraser.radius)) {
         const wasCleaned = !spot.isCleaned
+        const intensity = this.calculateCleaningIntensity()
+
         spot.clean()
 
         if (wasCleaned) {
+          // Apply intensity-based scoring
+          const points = Math.floor(spot.points * (0.5 + intensity * 0.5)) // 0.5x to 1x points based on intensity
           this.state.cleanedSpots++
-          this.state.score += spot.points
-          results.push({ spot, wasCleaned })
+          this.state.score += points
+          results.push({ spot, wasCleaned, intensity })
         }
       }
     }
@@ -116,6 +126,37 @@ export class CleaningStateManager {
     }
 
     return results
+  }
+
+  /**
+   * Calculate eraser speed based on position change
+   */
+  private calculateEraserSpeed(): void {
+    if (!this.eraser) return
+
+    if (this.lastEraserPosition) {
+      const dx = this.eraser.position.x - this.lastEraserPosition.x
+      const dy = this.eraser.position.y - this.lastEraserPosition.y
+      const distance = Math.sqrt(dx * dx + dy * dy)
+
+      // Simple speed calculation (pixels per frame)
+      this.eraserSpeed = distance
+    }
+
+    this.lastEraserPosition = { ...this.eraser.position }
+  }
+
+  /**
+   * Calculate cleaning intensity based on eraser speed and other factors
+   */
+  private calculateCleaningIntensity(): number {
+    // Base intensity from speed (0.3 to 1.0)
+    const intensity = Math.min(1.0, 0.3 + this.eraserSpeed * 0.02)
+
+    // Bonus intensity for continuous cleaning (staying in same area)
+    // This could be enhanced with time-based factors
+
+    return Math.max(0.1, Math.min(1.0, intensity))
   }
 
   /**

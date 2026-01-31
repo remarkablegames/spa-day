@@ -85,13 +85,13 @@ description: 'Task list template for feature implementation'
 
 ### Implementation for User Story 2
 
-- [ ] T020 [P] [US2] Implement mouse/touch input handling for eraser in src/gameobjects/eraser.ts
-- [ ] T021 [US2] Add smooth eraser movement and following behavior in src/gameobjects/eraser.ts
-- [ ] T022 [US2] Implement eraser activation/deactivation states in src/gameobjects/eraser.ts
-- [ ] T023 [US2] Add visual feedback for eraser tool state in src/gameobjects/eraser.ts
-- [ ] T024 [US2] Implement cleaning intensity variation based on input in src/systems/cleaning-state.ts
-- [ ] T025 [US2] Add boundary validation to prevent cleaning outside face areas in src/gameobjects/eraser.ts
-- [ ] T026 [US2] Integrate eraser events with cleaning state in src/events/cleaning.ts
+- [x] T020 [P] [US2] Implement mouse/touch input handling for eraser in src/gameobjects/eraser.ts
+- [x] T021 [P] [US2] Add smooth eraser movement and following behavior in src/gameobjects/eraser.ts
+- [x] T022 [US2] Implement eraser activation/deactivation states in src/gameobjects/eraser.ts
+- [x] T023 [US2] Add visual feedback for eraser tool state in src/gameobjects/eraser.ts
+- [x] T024 [US2] Implement cleaning intensity variation based on input in src/systems/cleaning-state.ts
+- [x] T025 [US2] Add boundary validation to prevent cleaning outside face areas in src/gameobjects/eraser.ts
+- [x] T026 [US2] Integrate eraser events with cleaning state in src/events/cleaning.ts
 
 **Checkpoint**: At this point, User Stories 1 AND 2 should both work independently
 
