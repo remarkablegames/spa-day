@@ -1,4 +1,3 @@
-import { createCleaningScene } from './cleaning'
 import { createResultsScene } from './results'
 import { createSpaGameScene } from './spa-game'
 
@@ -7,6 +6,3 @@ createSpaGameScene()
 
 // Create the results scene
 createResultsScene()
-
-// Create the cleaning scene
-createCleaningScene()
