@@ -30,9 +30,9 @@ description: 'Task list template for feature implementation'
 
 **Purpose**: Project initialization and basic structure
 
-- [ ] T001 Create project structure per implementation plan
-- [ ] T002 Initialize TypeScript project with Kaplay.js dependencies
-- [ ] T003 [P] Configure linting and formatting tools
+- [x] T001 Create project structure per implementation plan
+- [x] T002 Initialize TypeScript project with Kaplay.js dependencies
+- [x] T003 [P] Configure linting and formatting tools
 
 ---
 
@@ -42,12 +42,12 @@ description: 'Task list template for feature implementation'
 
 **⚠️ CRITICAL**: No user story work can begin until this phase is complete
 
-- [ ] T004 Setup Kaplay.js game engine and basic scene management
-- [ ] T005 [P] Implement touch input handling system in src/systems/input.ts
-- [ ] T006 [P] Setup asset management system in src/systems/assets.ts
-- [ ] T007 Create base game objects that all stories depend on in src/gameobjects/
-- [ ] T008 Configure game constants in src/constants/game-config.ts
-- [ ] T009 Setup local storage persistence system
+- [x] T004 Setup Kaplay.js game engine and basic scene management
+- [x] T005 [P] Implement touch input handling system in src/systems/input.ts
+- [x] T006 [P] Setup asset management system in src/systems/assets.ts
+- [x] T007 Create base game objects that all stories depend on in src/gameobjects/
+- [x] T008 Configure game constants in src/constants/game-config.ts
+- [x] T009 Setup local storage persistence system
 
 **Checkpoint**: Foundation ready - user story implementation can now begin in parallel
 
@@ -61,15 +61,15 @@ description: 'Task list template for feature implementation'
 
 ### Implementation for User Story 1
 
-- [ ] T010 [P] [US1] Create Character entity in src/gameobjects/character.ts with face areas using geometric shapes
-- [ ] T011 [P] [US1] Create FaceMask entity in src/gameobjects/mask.ts with geometric shape visuals
-- [ ] T012 [US1] Create TreatmentSession entity in src/gameobjects/treatment.ts
-- [ ] T013 [US1] Implement main gameplay scene in src/scenes/game.ts (depends on T010, T011, T012)
-- [ ] T014 [US1] Add mask selection and placement logic in src/scenes/game.ts
-- [ ] T015 [US1] Implement treatment timer and completion logic
-- [ ] T016 [US1] Add visual feedback for mask application using geometric shapes
-- [ ] T017 [US1] Implement basic scoring system in src/systems/scoring.ts
-- [ ] T018 [US1] Add touch controls for mask placement in src/systems/input.ts
+- [x] T010 [P] [US1] Create Character entity in src/gameobjects/character.ts with face areas using geometric shapes
+- [x] T011 [P] [US1] Create FaceMask entity in src/gameobjects/mask.ts with geometric shape visuals
+- [x] T012 [US1] Create TreatmentSession entity in src/gameobjects/treatment.ts
+- [x] T013 [US1] Implement main gameplay scene in src/scenes/game.ts (depends on T010, T011, T012)
+- [x] T014 [US1] Add mask selection and placement logic in src/scenes/game.ts
+- [x] T015 [US1] Implement treatment timer and completion logic
+- [x] T016 [US1] Add visual feedback for mask application using geometric shapes
+- [x] T017 [US1] Implement basic scoring system in src/systems/scoring.ts
+- [x] T018 [US1] Add touch controls for mask placement in src/systems/input.ts
 
 **Checkpoint**: At this point, User Story 1 should be fully functional and testable independently
 

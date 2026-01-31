@@ -1,16 +1,13 @@
 import { Scene } from '../constants'
-import { addEnemy, addPlayer } from '../gameobjects'
+import { createSpaGameScene } from './spa-game'
 
+// Create the spa game scene
+createSpaGameScene()
+
+// Keep the original game scene for reference/testing
 scene(Scene.Game, () => {
-  addPlayer()
-
-  onClick(() => addKaboom(mousePos()))
-
-  add([text('Press arrow keys', { width: width() / 2 }), pos(12, 12)])
-
-  for (let i = 0; i < 3; i++) {
-    const x = rand(0, width())
-    const y = rand(0, height())
-    addEnemy(x, y)
-  }
+  add([
+    text('Original Game Scene - Press arrow keys', { width: width() / 2 }),
+    pos(12, 12),
+  ])
 })
