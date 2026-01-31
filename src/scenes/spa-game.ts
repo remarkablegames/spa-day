@@ -737,11 +737,6 @@ function initializeCleaningMode(gameState: SpaGameState): void {
     'cleaning-mode-indicator',
   ])
 
-  // Add cleaning UI
-  add([text('Score: 0', { size: 16 }), pos(20, 20), 'cleaning-score'])
-
-  add([text('Progress: 0%', { size: 14 }), pos(20, 45), 'cleaning-progress'])
-
   // Add eraser toggle button
   const eraserToggleButton = add([
     rect(120, 40),
@@ -885,22 +880,9 @@ function updateCleaningMode(gameState: SpaGameState): void {
           spot.visual = null
         }
 
-        // Update UI
-        const scoreText = get('cleaning-score')[0]
-        if (scoreText) {
-          scoreText.text = `Score: ${gameState.score}`
-        }
-
-        const progressText = get('cleaning-progress')[0]
-        if (progressText) {
-          const cleanedCount = gameState.dirtSpots.filter(
-            (s: DirtSpot) => s.isCleaned,
-          ).length
-          const progress = Math.round(
-            (cleanedCount / gameState.dirtSpots.length) * 100,
-          )
-          progressText.text = `Progress: ${progress}%`
-        }
+        // Update UI - main game score is already handled by stateManager
+        const stateManager = getGameStateManager()
+        stateManager.addScore(spot.points)
       }
     }
   })
