@@ -62,16 +62,16 @@ description: 'Task list template for feature implementation'
 
 ### Implementation for User Story 1
 
-- [ ] T010 [P] [US1] Implement EraserTool class with round collision detection in src/gameobjects/eraser.ts
-- [ ] T011 [P] [US1] Implement DirtSpot class with cleaning state in src/gameobjects/dirt-spot.ts
-- [ ] T012 [P] [US1] Create FaceRegion class with cleanliness tracking in src/gameobjects/character.ts
-- [ ] T013 [US1] Implement collision detection between eraser and dirt spots in src/systems/cleaning-state.ts
-- [ ] T014 [US1] Add cleaning logic and score system in src/systems/cleaning-state.ts
-- [ ] T015 [US1] Implement cleaning scene initialization in src/scenes/cleaning.ts
-- [ ] T016 [US1] Add visual feedback for cleaning actions in src/gameobjects/dirt-spot.ts
-- [ ] T017 [US1] Add audio feedback for cleaning actions in src/scenes/cleaning.ts
-- [ ] T018 [US1] Implement face cleanliness validation in src/systems/cleaning-state.ts
-- [ ] T019 [US1] Add cleaning progress display in src/scenes/cleaning.ts
+- [x] T010 [P] [US1] Implement EraserTool class with round collision detection in src/gameobjects/eraser.ts
+- [x] T011 [P] [US1] Implement DirtSpot class with cleaning state in src/gameobjects/dirt-spot.ts
+- [x] T012 [P] [US1] Create FaceRegion class with cleanliness tracking in src/gameobjects/character.ts
+- [x] T013 [US1] Implement collision detection between eraser and dirt spots in src/systems/cleaning-state.ts
+- [x] T014 [US1] Add cleaning logic and score system in src/systems/cleaning-state.ts
+- [x] T015 [US1] Implement cleaning scene initialization in src/scenes/cleaning.ts
+- [x] T016 [US1] Add visual feedback for cleaning actions in src/gameobjects/dirt-spot.ts
+- [x] T017 [US1] Add audio feedback for cleaning actions in src/scenes/cleaning.ts
+- [x] T018 [US1] Implement face cleanliness validation in src/systems/cleaning-state.ts
+- [x] T019 [US1] Add cleaning progress display in src/scenes/cleaning.ts
 
 **Checkpoint**: At this point, User Story 1 should be fully functional and testable independently
 

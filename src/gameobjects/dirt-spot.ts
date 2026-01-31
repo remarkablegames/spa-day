@@ -21,6 +21,8 @@ export class DirtSpot {
   public readonly points: number
   public isCleaned: boolean
   public readonly size: number
+  public visualElement: unknown = null // Kaplay.js game object
+  public cleaningAnimation: number = 0 // Animation progress
 
   constructor(id: string, position: { x: number; y: number }, points?: number) {
     this.id = id
@@ -31,12 +33,57 @@ export class DirtSpot {
   }
 
   /**
+   * Create visual representation
+   */
+  createVisual(): void {
+    if (this.visualElement) return
+
+    // Visual creation will be implemented when integrated with scene
+    // TODO: Create Kaplay.js visual element for dirt spot
+  }
+
+  /**
    * Clean the dirt spot
    */
   clean(): void {
     if (!this.isCleaned) {
       this.isCleaned = true
+      this.startCleaningAnimation()
       this.emitCleaned()
+    }
+  }
+
+  /**
+   * Start cleaning animation
+   */
+  private startCleaningAnimation(): void {
+    this.cleaningAnimation = 0
+
+    // Animation will be implemented when integrated with scene
+    // TODO: Start fade out or scale down animation
+  }
+
+  /**
+   * Update cleaning animation
+   */
+  updateAnimation(deltaTime: number): void {
+    if (this.cleaningAnimation < 1) {
+      this.cleaningAnimation = Math.min(
+        1,
+        this.cleaningAnimation + deltaTime * 2,
+      )
+
+      // Update visual based on animation progress
+      if (this.visualElement) {
+        // TODO: Update visual properties (opacity, scale, etc.)
+        // this.visualElement.opacity = 1 - this.cleaningAnimation
+        // this.visualElement.scale = vec2(1 + this.cleaningAnimation * 0.5)
+      }
+
+      // Remove spot when animation completes
+      if (this.cleaningAnimation >= 1) {
+        this.remove()
+      }
     }
   }
 
@@ -44,8 +91,12 @@ export class DirtSpot {
    * Remove the dirt spot (after cleaning animation)
    */
   remove(): void {
-    // Removal logic will be implemented when integrated with scene
-    // TODO: Remove from scene/game objects
+    if (this.visualElement) {
+      // Removal will be implemented when integrated with scene
+      // TODO: Destroy Kaplay.js visual element
+      // destroy(this.visualElement)
+      this.visualElement = null
+    }
   }
 
   /**

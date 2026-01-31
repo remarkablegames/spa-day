@@ -156,6 +156,22 @@ function setupCleaningUI(): void {
   add([rect(0, 20), pos(20, 60), color(0, 255, 0), 'progress_bar'])
 
   add([text('Progress: 0%', { size: 16 }), pos(20, 90), 'progress_text'])
+
+  // Cleanliness validation display
+  add([
+    text('Cleanliness: Not Ready', { size: 16 }),
+    pos(20, 120),
+    color(255, 100, 100),
+    'cleanliness_status',
+  ])
+
+  // Instructions
+  add([
+    text('Arrow Keys: Move | Space: Toggle Eraser', { size: 14 }),
+    pos(20, height() - 40),
+    color(200, 200, 200),
+    'instructions',
+  ])
 }
 
 /**
@@ -163,7 +179,12 @@ function setupCleaningUI(): void {
  */
 function updateCleaningScene(cleaningState: CleaningStateManager): void {
   // Check for collisions
-  cleaningState.checkCollisions()
+  const collisions = cleaningState.checkCollisions()
+
+  // Play audio feedback for cleaned spots
+  if (collisions.length > 0) {
+    playCleaningSound()
+  }
 
   // Update UI
   updateCleaningUI(cleaningState)
@@ -173,6 +194,15 @@ function updateCleaningScene(cleaningState: CleaningStateManager): void {
     // Handle completion
     handleCleaningComplete()
   }
+}
+
+/**
+ * Play cleaning sound effect
+ */
+function playCleaningSound(): void {
+  // Audio playback will be implemented when integrated with scene
+  // TODO: Play cleaning sound using Kaplay.js play()
+  // play('clean')
 }
 
 /**
@@ -203,6 +233,16 @@ function updateCleaningUI(cleaningState: CleaningStateManager): void {
   const progressText = get('progress_text')[0]
   if (progressText) {
     progressText.text = `Progress: ${Math.round(progress * 100)}%`
+  }
+
+  // Update cleanliness status
+  const validation = cleaningState.validateFaceCleanliness()
+  const cleanlinessStatus = get('cleanliness_status')[0]
+  if (cleanlinessStatus) {
+    cleanlinessStatus.text = `Cleanliness: ${Math.round(validation.cleanliness * 100)}%`
+    cleanlinessStatus.color = validation.isValid
+      ? rgb(0, 255, 0)
+      : rgb(255, 100, 100)
   }
 }
 

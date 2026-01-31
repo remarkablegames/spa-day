@@ -107,12 +107,26 @@ export class CleaningStateManager {
       }
     }
 
+    // Update animations for all spots
+    this.updateSpotAnimations()
+
     if (results.length > 0) {
       this.emitProgress()
       this.checkCompletion()
     }
 
     return results
+  }
+
+  /**
+   * Update spot animations
+   */
+  private updateSpotAnimations(): void {
+    const deltaTime = 1 / 60 // Assuming 60 FPS
+    const spots = Array.from(this.dirtSpots.values())
+    for (const spot of spots) {
+      spot.updateAnimation(deltaTime)
+    }
   }
 
   /**
@@ -163,6 +177,36 @@ export class CleaningStateManager {
    */
   getUncleanedSpots(): DirtSpot[] {
     return Array.from(this.dirtSpots.values()).filter((spot) => !spot.isCleaned)
+  }
+
+  /**
+   * Validate face cleanliness for mask application
+   */
+  validateFaceCleanliness(): {
+    isValid: boolean
+    cleanliness: number
+    requiredCleanliness: number
+    message: string
+  } {
+    const cleanliness = this.getProgress()
+    const requiredCleanliness = 0.8 // 80% required for mask application
+
+    return {
+      isValid: cleanliness >= requiredCleanliness,
+      cleanliness,
+      requiredCleanliness,
+      message:
+        cleanliness >= requiredCleanliness
+          ? 'Face is ready for mask application!'
+          : `Face needs more cleaning. Current: ${Math.round(cleanliness * 100)}%, Required: ${Math.round(requiredCleanliness * 100)}%`,
+    }
+  }
+
+  /**
+   * Check if specific cleanliness threshold is met
+   */
+  isCleanlinessMet(threshold: number = 0.8): boolean {
+    return this.getProgress() >= threshold
   }
 
   /**
