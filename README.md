@@ -38,12 +38,8 @@ npm install
 
 Update the files:
 
-- [ ] `README.md`
-- [ ] `index.html`
-- [ ] `package.json`
 - [ ] `public/app-icon.png`
 - [ ] `public/favicon.png`
-- [ ] `public/manifest.json`
 
 ## Environment Variables
 
