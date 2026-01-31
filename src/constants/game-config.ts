@@ -55,6 +55,7 @@ export const GAME_CONFIG = {
     TREATMENT_HISTORY: 'spa-day-treatment-history',
     GAME_SETTINGS: 'spa-day-game-settings',
     HIGH_SCORE: 'spa-day-high-score',
+    CUSTOMER_LOYALTY: 'spa-day-customer-loyalty',
   },
 
   // Game states

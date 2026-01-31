@@ -23,7 +23,7 @@ export interface CustomerLoyaltyData {
 
 export class CustomerLoyaltySystem {
   private loyaltyData: CustomerLoyaltyData
-  private storageKey = GAME_CONFIG.STORAGE_KEYS.PLAYER_PROGRESS + '_loyalty'
+  private storageKey = GAME_CONFIG.STORAGE_KEYS.CUSTOMER_LOYALTY
 
   constructor() {
     this.loyaltyData = this.loadLoyaltyData()
