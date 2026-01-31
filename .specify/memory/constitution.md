@@ -1,9 +1,9 @@
 <!--
 Sync Impact Report:
-- Version change: 0.0.0 → 1.0.0 (initial constitution)
-- Modified principles: N/A (initial creation)
-- Added sections: Core Principles (5), Technical Standards, Development Workflow, Governance
-- Removed sections: N/A (initial creation)
+- Version change: 1.0.0 → 1.1.0 (minor version - new principle added)
+- Modified principles: N/A
+- Added sections: Principle VI - Code Reuse and Anti-Duplication
+- Removed sections: N/A
 - Templates requiring updates: ✅ plan-template.md, ✅ spec-template.md, ✅ tasks-template.md
 - Follow-up TODOs: None
 -->
@@ -31,6 +31,10 @@ Game MUST run entirely in the browser; No server-side dependencies for gameplay;
 ### V. Mobile-First Design
 
 Controls MUST work on touch devices; UI MUST scale appropriately on mobile screens; Game mechanics MUST be playable without keyboard; Performance MUST be adequate on mobile browsers; Desktop experience enhanced but not required.
+
+### VI. Code Reuse and Anti-Duplication
+
+All systems MUST follow DRY principles; Common patterns MUST be extracted into reusable utilities; Singleton patterns MUST use consistent initialization patterns; System managers MUST share common base interfaces; Duplicate code across similar systems MUST be eliminated; Shared utilities MUST be placed in appropriate common directories.
 
 ## Technical Standards
 
@@ -81,4 +85,4 @@ This constitution supersedes all other development practices. Amendments require
 
 All pull requests MUST verify compliance with this constitution. Complexity beyond these principles MUST be explicitly justified in implementation plans. Use this constitution as the primary guidance for all development decisions.
 
-**Version**: 1.0.0 | **Ratified**: 2025-01-30 | **Last Amended**: 2025-01-30
+**Version**: 1.1.0 | **Ratified**: 2026-01-30 | **Last Amended**: 2026-01-31

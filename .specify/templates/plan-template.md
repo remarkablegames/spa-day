@@ -36,6 +36,7 @@ _GATE: Must pass before Phase 0 research. Re-check after Phase 1 design._
 - **Performance First**: MUST maintain 60 FPS and stay within browser memory limits
 - **Static Web**: MUST run entirely in browser with no server-side gameplay dependencies
 - **Mobile-First**: Controls and UI MUST work on touch devices
+- **Code Reuse**: MUST follow DRY principles and eliminate duplication
 
 ## Project Structure
 

@@ -20,7 +20,8 @@ description: 'Task list template for feature implementation'
 ## Path Conventions
 
 - **Game project**: `src/` at repository root with Kaplay.js structure
-- **Game structure**: `src/scenes/`, `src/gameobjects/`, `src/constants/`, `src/events/`
+- **Game structure**: `src/scenes/`, `src/gameobjects/`, `src/constants/`, `src/events/`, `src/systems/`
+- **Shared utilities**: `src/utils/` for common patterns and DRY compliance
 - **Assets**: `public/sprites/`, `public/sounds/`
 - **Testing**: Manual gameplay testing (automated testing optional in `tests/` if needed)
 
@@ -247,4 +248,5 @@ With multiple developers:
 - Verify tests fail before implementing
 - Commit after each task or logical group
 - Stop at any checkpoint to validate story independently
-- Avoid: vague tasks, same file conflicts, cross-story dependencies that break independence
+- **Avoid**: vague tasks, same file conflicts, cross-story dependencies that break independence
+- **Code Reuse**: Extract common patterns into shared utilities, eliminate duplication across systems
