@@ -118,12 +118,12 @@ description: 'Task list template for feature implementation'
 
 **Purpose**: Improvements that affect multiple user stories
 
-- [ ] T032 [P] Add sound effects for mask application and completion
-- [ ] T033 [P] Implement particle effects for mask application
-- [ ] T034 [P] Performance optimization across all scenes
-- [ ] T035 Add background spa music
-- [ ] T036 [P] Mobile responsiveness optimization
-- [ ] T037 Add loading screen and asset preloading
+- [x] T032 [P] Add sound effects for mask application and completion
+- [x] T033 [P] Implement particle effects for mask application
+- [x] T034 [P] Performance optimization across all scenes
+- [x] T035 Add background spa music
+- [x] T036 [P] Mobile responsiveness optimization
+- [x] T037 Add loading screen and asset preloading
 - [ ] T038 Implement pause/resume functionality
 - [ ] T039 Add game over and restart functionality
 - [ ] T040 Asset preparation for external image swapping capability

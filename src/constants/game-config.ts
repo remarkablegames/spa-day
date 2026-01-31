@@ -5,6 +5,10 @@ export const GAME_CONFIG = {
   MEMORY_LIMIT: 100, // MB
   ASSET_LOAD_TIME: 3000, // milliseconds
 
+  // Visual effects
+  PARTICLE_COUNT: 10,
+  EFFECT_DURATION: 1000, // milliseconds
+
   // Screen dimensions
   SCREEN_WIDTH: 800,
   SCREEN_HEIGHT: 600,
@@ -37,11 +41,6 @@ export const GAME_CONFIG = {
   MASK_TYPES_COUNT: 5,
   UNLOCK_THRESHOLD_SCORE: 1000,
   UNLOCK_THRESHOLD_TREATMENTS: 10,
-
-  // Visual effects
-  PARTICLE_COUNT: 20,
-  EFFECT_DURATION: 1000, // milliseconds
-  FADE_DURATION: 500, // milliseconds
 
   // Audio
   MASTER_VOLUME_DEFAULT: 0.8,

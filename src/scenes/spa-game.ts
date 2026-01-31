@@ -8,6 +8,7 @@ import {
   ZComp,
 } from 'kaplay'
 
+import { Scene } from '../constants'
 import { GAME_CONFIG } from '../constants/game-config'
 import { getGameStateManager, initGameStateManager } from '../gameobjects/base'
 import { Character } from '../gameobjects/character'
@@ -15,6 +16,10 @@ import { FaceMask } from '../gameobjects/mask'
 import { TreatmentSession } from '../gameobjects/treatment'
 import { initAssetManager } from '../systems/assets'
 import { initInputSystem } from '../systems/input'
+import {
+  getPerformanceMonitor,
+  initPerformanceMonitor,
+} from '../systems/performance'
 
 interface TouchPosition {
   x: number
@@ -45,6 +50,13 @@ export function createSpaGameScene() {
     initGameStateManager()
     initInputSystem()
     initAssetManager()
+    initPerformanceMonitor()
+
+    // Start background music
+    // const music = play(Sound.BackgroundMusic, {
+    //   volume: 0.3,
+    //   loop: true,
+    // })
 
     // Setup game state
     setupGameState(gameState)
@@ -55,14 +67,30 @@ export function createSpaGameScene() {
     // Setup input handlers
     setupInputHandlers(gameState)
 
-    // Game loop
+    // Game loop with performance monitoring
     onUpdate(() => {
+      const perfMonitor = getPerformanceMonitor()
+      perfMonitor.update()
+
+      // Optimize if performance is poor
+      if (perfMonitor.shouldOptimize()) {
+        // Reduce particle effects or other optimizations
+        // Performance optimization would go here
+      }
+
       updateGame(gameState)
     })
 
     // Render
     onDraw(() => {
       renderGame(gameState)
+    })
+
+    // Cleanup music on scene destroy
+    onDestroy(() => {
+      // if (music) {
+      //   music.stop()
+      // }
     })
   })
 }
@@ -380,42 +408,42 @@ function setupInputHandlers(gameState: GameState) {
   })
 }
 
-function handleTouchStart(pos: TouchPosition, gameState: GameState) {
+function handleTouchStart(touchPos: TouchPosition, gameState: GameState) {
   // Convert position to Kaplay.js vector
-  const touchPos = vec2(pos.x, pos.y)
+  const touchVector = vec2(touchPos.x, touchPos.y)
 
   // Check if clicking on a mask
-  const clickedMask = getMaskAtPosition(touchPos, gameState)
+  const clickedMask = getMaskAtPosition(touchVector, gameState)
   if (clickedMask && clickedMask.isUnlocked) {
     gameState.selectedMask = clickedMask
     gameState.isDragging = true
     gameState.dragOffset = {
-      x: touchPos.x - clickedMask.position.x,
-      y: touchPos.y - clickedMask.position.y,
+      x: touchVector.x - clickedMask.position.x,
+      y: touchVector.y - clickedMask.position.y,
     }
   }
 }
 
-function handleTouchMove(pos: TouchPosition, gameState: GameState) {
+function handleTouchMove(touchPos: TouchPosition, gameState: GameState) {
   if (gameState.isDragging && gameState.selectedMask && gameState.dragOffset) {
     // Convert position to Kaplay.js vector
-    const touchPos = vec2(pos.x, pos.y)
+    const touchVector = vec2(touchPos.x, touchPos.y)
     gameState.selectedMask.position = vec2(
-      touchPos.x - gameState.dragOffset.x,
-      touchPos.y - gameState.dragOffset.y,
+      touchVector.x - gameState.dragOffset.x,
+      touchVector.y - gameState.dragOffset.y,
     )
   }
 }
 
-function handleTouchEnd(pos: TouchPosition, gameState: GameState) {
+function handleTouchEnd(touchPos: TouchPosition, gameState: GameState) {
   if (!gameState.isDragging || !gameState.selectedMask) return
 
   // Convert position to Kaplay.js vector
-  const touchPos = vec2(pos.x, pos.y)
+  const touchVector = vec2(touchPos.x, touchPos.y)
 
   // Try to apply mask to character
   if (gameState.character && gameState.treatmentSession) {
-    const faceArea = gameState.character.getFaceAreaAtPosition(touchPos)
+    const faceArea = gameState.character.getFaceAreaAtPosition(touchVector)
 
     if (faceArea && gameState.selectedMask.isCompatibleWith()) {
       // Apply mask
@@ -426,6 +454,23 @@ function handleTouchEnd(pos: TouchPosition, gameState: GameState) {
       )
 
       if (success) {
+        // Play mask application sound
+        // play(Sound.MaskApply, { volume: 0.3 })
+
+        // Create particle effects at application point
+        const faceAreaPos = faceArea.position
+        for (let i = 0; i < GAME_CONFIG.PARTICLE_COUNT; i++) {
+          add([
+            circle(rand(2, 6)),
+            pos(faceAreaPos.x + rand(-20, 20), faceAreaPos.y + rand(-20, 20)),
+            color(GAME_CONFIG.COLORS.MASK_HYDRATING),
+            lifespan(GAME_CONFIG.EFFECT_DURATION / 1000),
+            move(rand(0, 360), rand(20, 60)),
+            opacity(1),
+            z(200),
+          ])
+        }
+
         // Update score
         const stateManager = getGameStateManager()
         const maskScore = gameState.selectedMask.calculateScore(
@@ -499,10 +544,11 @@ function renderGame(gameState: GameState) {
   })
 }
 
-import { Scene } from '../constants/scene'
-
 function handleTreatmentComplete(gameState: GameState) {
   if (!gameState.treatmentSession || !gameState.character) return
+
+  // Play treatment completion sound
+  // play(Sound.TreatmentComplete, { volume: 0.5 })
 
   // Create simple score breakdown from treatment session
   const scoreBreakdown = {
