@@ -286,17 +286,19 @@ export class Character extends GameObject {
         area.currentMask &&
         this.preferredMaskTypes.includes(area.currentMask)
       ) {
-        satisfactionScore += 20 // Bonus for preferred masks
+        satisfactionScore += 25 // Bonus for preferred masks
       } else {
-        satisfactionScore += 10 // Base score for any mask
+        satisfactionScore += 15 // Base score for any mask
       }
     })
 
-    // Normalize to 0-100 range
-    const maxPossibleScore = this.faceAreas.length * 20
+    // Calculate satisfaction based on applied masks, not total possible
+    // Each mask gives significant satisfaction boost
+    const averageScorePerMask = satisfactionScore / occupiedAreas.length
+    const coverageBonus = (occupiedAreas.length / this.faceAreas.length) * 20 // Coverage bonus
     const calculatedSatisfaction = Math.min(
       100,
-      (satisfactionScore / maxPossibleScore) * 100,
+      averageScorePerMask + coverageBonus,
     )
 
     // Blend calculated satisfaction with current level for smoother transitions
