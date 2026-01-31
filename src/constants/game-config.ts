@@ -50,11 +50,11 @@ export const GAME_CONFIG = {
 
   // Storage
   STORAGE_KEYS: {
-    PLAYER_PROGRESS: 'spa_day_player_progress',
-    UNLOCKED_MASKS: 'spa_day_unlocked_masks',
-    TREATMENT_HISTORY: 'spa_day_treatment_history',
-    GAME_SETTINGS: 'spa_day_game_settings',
-    HIGH_SCORE: 'spa_day_high_score',
+    PLAYER_PROGRESS: 'spa-day-player-progress',
+    UNLOCKED_MASKS: 'spa-day-unlocked-masks',
+    TREATMENT_HISTORY: 'spa-day-treatment-history',
+    GAME_SETTINGS: 'spa-day-game-settings',
+    HIGH_SCORE: 'spa-day-high-score',
   },
 
   // Game states

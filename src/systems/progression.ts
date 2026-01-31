@@ -3,6 +3,7 @@
  * Handles player progression, unlocks, and achievements
  */
 
+import { GAME_CONFIG } from '../constants/game-config'
 import { getMaskTypeConfig, MaskType } from '../constants/mask-types'
 import { getGameStateManager } from '../gameobjects/base'
 
@@ -90,7 +91,7 @@ export class ProgressionSystem {
   }
 
   private loadProgress(): PlayerProgress {
-    const saved = getData('spa-day-progress')
+    const saved = getData(GAME_CONFIG.STORAGE_KEYS.PLAYER_PROGRESS)
     if (saved && typeof saved === 'string') {
       try {
         const parsed = JSON.parse(saved)
@@ -125,7 +126,10 @@ export class ProgressionSystem {
 
   private saveProgress(): void {
     try {
-      setData('spa-day-progress', JSON.stringify(this.progress))
+      setData(
+        GAME_CONFIG.STORAGE_KEYS.PLAYER_PROGRESS,
+        JSON.stringify(this.progress),
+      )
     } catch (error) {
       // eslint-disable-next-line no-console
       console.error('Failed to save progress:', error)
