@@ -186,15 +186,6 @@ function createGameUI(gameState: SpaGameState) {
     z(-100),
   ])
 
-  // Title
-  add([
-    text('Spa Face Mask Game', { size: 48 }),
-    pos(width() / 2, 50),
-    anchor('center'),
-    color(GAME_CONFIG.COLORS.UI_TEXT),
-    z(100),
-  ])
-
   // Score display with animations
   const scoreText = add([
     text('Score: 0', { size: 32, font: 'bold' }),
