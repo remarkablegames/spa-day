@@ -224,14 +224,32 @@ export class ProgressionSystem {
 
 ## Asset Requirements
 
-### Character Sprites
+### Character Sprites (MVP → Final)
+
+**MVP (Geometric Shapes)**:
+
+- Character: Simple circle/rectangle combination with colored regions for face areas
+- Face areas: Highlighted rectangles showing valid mask placement zones
+- Satisfaction feedback: Color changes (green for happy, red for unhappy)
+- Size: 128x128px geometric composition
+
+**Final Polish (External Images)**:
 
 - Base character sprite with neutral expression
 - Face area highlight overlays
 - Satisfaction expression variations
 - Size: 256x256px for main character
 
-### Mask Sprites
+### Mask Sprites (MVP → Final)
+
+**MVP (Geometric Shapes)**:
+
+- Different colored shapes for mask types (circles, rectangles, triangles)
+- Application effects: Particle bursts using Kaplay.js particles
+- Completion animations: Scale and opacity transitions
+- Size: 32x32px geometric shapes
+
+**Final Polish (External Images)**:
 
 - Different mask types with visual variety
 - Application effects (sparkles, glow)
@@ -256,10 +274,11 @@ export class ProgressionSystem {
 
 ### Asset Loading
 
-- Preload essential assets before game start
-- Use sprite sheets to reduce HTTP requests
+- Preload essential geometric shapes before game start
+- Use sprite sheets for final image assets (when ready)
 - Implement progressive loading for non-critical assets
 - Cache assets in browser storage when possible
+- Asset management system supports shape → image swapping
 
 ### Mobile Optimization
 

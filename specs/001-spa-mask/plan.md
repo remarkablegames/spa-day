@@ -7,7 +7,7 @@
 
 ## Summary
 
-Create a spa face mask game where players apply different face masks to characters for relaxation treatments. The game features mask collection, treatment timing, scoring system, and customer satisfaction mechanics. Built with Kaplay.js for browser-based mobile-first gameplay with touch controls and 60 FPS performance target.
+Create a spa face mask game where players apply different face masks to characters for relaxation treatments. The game features mask collection, treatment timing, scoring system, and customer satisfaction mechanics. Built with Kaplay.js for browser-based mobile-first gameplay with touch controls and 60 FPS performance target. MVP uses geometric shapes for visual assets with seamless external image swapping capability for final polish.
 
 ## Technical Context
 
@@ -25,7 +25,8 @@ Create a spa face mask game where players apply different face masks to characte
 **Project Type**: Single web game  
 **Performance Goals**: 60 FPS on mobile devices, <3 second load time  
 **Constraints**: Browser memory limits, touch-only controls, static deployment  
-**Scale/Scope**: Single-player game with local progression
+**Scale/Scope**: Single-player game with local progression  
+**Visual Assets**: Geometric shapes for MVP, external images for final polish
 
 ## Constitution Check
 
@@ -63,8 +64,8 @@ specs/001-spa-mask/
 ```text
 src/
 ├── gameobjects/
-│   ├── character.ts     # Character entity with face areas
-│   ├── mask.ts          # Face mask entities and effects
+│   ├── character.ts     # Character entity with face areas (geometric shapes)
+│   ├── mask.ts          # Face mask entities and effects (geometric shapes)
 │   └── treatment.ts     # Treatment session management
 ├── scenes/
 │   ├── game.ts          # Main gameplay scene
@@ -73,16 +74,17 @@ src/
 ├── systems/
 │   ├── scoring.ts       # Score calculation system
 │   ├── progression.ts  # Unlock and progression system
-│   └── input.ts         # Touch input handling
-└── assets/
-    ├── sprites/         # Character and mask sprites
-    └── sounds/          # Audio feedback
+│   ├── input.ts         # Touch input handling
+│   └── assets.ts        # Asset management (shapes → images swap)
+└── constants/
+    ├── mask-types.ts    # Mask type definitions
+    └── game-config.ts   # Game configuration
 
 public/
-└── assets/              # Static game assets
+└── assets/              # Static game assets (for final polish images)
 ```
 
-**Structure Decision**: Single web game project using existing Kaplay.js structure. Game objects organized by entity type (character, mask, treatment) with scene-based gameplay flow. Systems handle core mechanics (scoring, progression, input). Assets managed through public directory for static deployment.
+**Structure Decision**: Single web game project using existing Kaplay.js structure. Game objects organized by entity type (character, mask, treatment) with scene-based gameplay flow. Systems handle core mechanics (scoring, progression, input). Asset management system supports geometric shapes for MVP with seamless external image swapping for final polish.
 
 ## Complexity Tracking
 

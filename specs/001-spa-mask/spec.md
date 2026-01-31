@@ -5,6 +5,12 @@
 **Status**: Draft  
 **Input**: User description: "create a spa face mask game"
 
+## Clarifications
+
+### Session 2025-01-30
+
+- Q: Will you need placeholder images or will you create them in Kaplay? → A: Create simple geometric shapes in Kaplay.js for MVP, with placeholder external images for final polish
+
 ## User Scenarios & Testing _(mandatory)_
 
 <!--
@@ -81,7 +87,7 @@ Player earns points and feedback based on mask combinations and treatment qualit
 ### Functional Requirements
 
 - **FR-001**: System MUST allow players to select and apply face masks to character faces
-- **FR-002**: System MUST display visual feedback when masks are applied correctly
+- **FR-002**: System MUST display visual feedback when masks are applied correctly using geometric shapes initially, replaceable with external images
 - **FR-003**: System MUST track treatment duration and completion status
 - **FR-004**: System MUST provide a collection of different mask types with unique effects
 - **FR-005**: System MUST calculate and display scores based on treatment quality
@@ -93,7 +99,7 @@ Player earns points and feedback based on mask combinations and treatment qualit
 
 ### Key Entities
 
-- **Face Mask**: Represents different mask types with properties like treatment duration, effect type, and unlock requirements
+- **Face Mask**: Represents different mask types with properties like treatment duration, effect type, and unlock requirements; visual representation using geometric shapes for MVP
 - **Character**: Represents spa customers with face areas for mask application and satisfaction levels
 - **Treatment Session**: Represents individual spa treatments with start time, duration, applied masks, and results
 - **Player Progress**: Tracks unlocked masks, completed treatments, total score, and achievements
