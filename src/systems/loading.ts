@@ -35,6 +35,11 @@ export class LoadingManager {
       this.loadSprite('ghosty', 'sprites/ghosty.png'),
     )
 
+    // Register spa game specific assets
+    this.registerAsset('initialize-systems', () => this.initializeGameSystems())
+    this.registerAsset('preload-masks', () => this.preloadMaskAssets())
+    this.registerAsset('preload-character', () => this.preloadCharacterAssets())
+
     // Register sounds using the SOUND_FILES mapping
     // this.registerAsset(SOUND_FILES[Sound.MaskApply], () =>
     //   this.loadSound(Sound.MaskApply, SOUND_FILES[Sound.MaskApply]),
@@ -118,6 +123,36 @@ export class LoadingManager {
     })
   }
 
+  private async initializeGameSystems(): Promise<void> {
+    // Import and initialize systems during preload
+    const { initGameStateManager } = await import('../gameobjects/base')
+    const { initInputSystem } = await import('../systems/input')
+    const { initAssetManager } = await import('../systems/assets')
+    const { initPerformanceMonitor } = await import('../systems/performance')
+    const { initPauseManager } = await import('../systems/pause')
+    const { initGameOverManager } = await import('../systems/gameover')
+
+    initGameStateManager()
+    initInputSystem()
+    initAssetManager()
+    initPerformanceMonitor()
+    initPauseManager()
+    initGameOverManager()
+  }
+
+  private async preloadMaskAssets(): Promise<void> {
+    // Preload mask types and assets
+    const { FaceMask } = await import('../gameobjects/mask')
+    // This will pre-create mask types and cache them
+    FaceMask.createMaskTypes()
+  }
+
+  private async preloadCharacterAssets(): Promise<void> {
+    // Preload character assets and configurations
+    // Character assets will be loaded when needed
+    // This function is a placeholder for future character preloading
+  }
+
   public getProgress(): LoadingProgress {
     return { ...this.progress }
   }
@@ -152,7 +187,7 @@ export function createLoadingScreen(): LoadingUI {
 
   // Loading subtitle
   add([
-    text('Loading peaceful experience...', { size: 20, font: 'monospace' }),
+    text('Initializing spa experience...', { size: 20, font: 'monospace' }),
     pos(center().x, center().y - 50),
     anchor('center'),
     color(GAME_CONFIG.COLORS.UI_TEXT),

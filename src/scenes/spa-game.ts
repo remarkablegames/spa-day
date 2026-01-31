@@ -11,18 +11,13 @@ import {
 
 import { Scene } from '../constants'
 import { GAME_CONFIG } from '../constants/game-config'
-import { getGameStateManager, initGameStateManager } from '../gameobjects/base'
+import { getGameStateManager } from '../gameobjects/base'
 import { Character } from '../gameobjects/character'
 import { FaceMask } from '../gameobjects/mask'
 import { TreatmentSession } from '../gameobjects/treatment'
-import { initAssetManager } from '../systems/assets'
-import { getGameOverManager, initGameOverManager } from '../systems/gameover'
-import { initInputSystem } from '../systems/input'
-import { getPauseManager, initPauseManager } from '../systems/pause'
-import {
-  getPerformanceMonitor,
-  initPerformanceMonitor,
-} from '../systems/performance'
+import { getGameOverManager } from '../systems/gameover'
+import { getPauseManager } from '../systems/pause'
+import { getPerformanceMonitor } from '../systems/performance'
 
 interface TouchPosition {
   x: number
@@ -78,14 +73,7 @@ export function createSpaGameScene() {
   }
 
   scene(Scene.SpaGame, () => {
-    // Initialize systems
-    initGameStateManager()
-    initInputSystem()
-    initAssetManager()
-    initPerformanceMonitor()
-    initPauseManager()
-    initGameOverManager()
-
+    // Systems are now initialized in preload scene
     // Start background music
     // const music = play(Sound.BackgroundMusic, {
     //   volume: 0.3,
