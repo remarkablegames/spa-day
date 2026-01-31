@@ -745,6 +745,56 @@ function initializeCleaningMode(gameState: SpaGameState): void {
 
   // Handle button click
   eraserToggleButton.onClick(() => {
+    // Clean up old eraser visual if it exists
+    const wasActive = gameState.eraser?.isActive || false
+
+    if (gameState.eraser && gameState.eraser.visual) {
+      destroy(gameState.eraser.visual)
+    }
+
+    // Always create/recreate eraser when button is clicked
+    if (gameState.character) {
+      gameState.eraser = {
+        id: 'spa-eraser',
+        position: vec2(
+          gameState.character.position.x,
+          gameState.character.position.y,
+        ),
+        radius: 32,
+        isActive: wasActive, // Preserve the previous active state
+        moveTo: function (pos) {
+          this.position = pos
+          if (this.visual) {
+            this.visual.pos = pos
+          }
+        },
+        activate: function () {
+          this.isActive = true
+          if (this.visual) {
+            this.visual.opacity = 0.8
+          }
+        },
+        deactivate: function () {
+          this.isActive = false
+          if (this.visual) {
+            this.visual.opacity = 0
+          }
+        },
+        visual: null,
+      }
+
+      // Create visual eraser
+      gameState.eraser.visual = add([
+        circle(gameState.eraser.radius),
+        pos(gameState.eraser.position.x, gameState.eraser.position.y),
+        color(255, 255, 255), // White transparent color
+        opacity(wasActive ? 0.8 : 0), // Set initial opacity based on state
+        outline(4),
+        z(100),
+        'eraser-visual',
+      ]) as unknown as EraserVisual
+    }
+
     if (gameState.eraser) {
       if (gameState.eraser.isActive) {
         gameState.eraser.deactivate()
