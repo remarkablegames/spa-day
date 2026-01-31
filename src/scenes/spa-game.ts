@@ -724,23 +724,21 @@ function initializeCleaningMode(gameState: SpaGameState): void {
     gameState.dirtSpots.push(spot)
   }
 
-  // Add eraser toggle button
+  // Add eraser toggle button above mask buttons to prevent overlap
   const eraserToggleButton = add([
     rect(120, 40),
-    pos(20, 80),
+    pos(20, height() - 220), // Moved up even further
     color(100, 100, 100),
     z(90),
     area(),
-    'eraser-toggle-button',
   ])
 
   const eraserButtonText = add([
     text('Clean: OFF', { size: 14 }),
-    pos(80, 100),
+    pos(80, height() - 200), // Centered on button
     anchor('center'),
     color(255, 255, 255),
     z(91),
-    'erasaser-button-text',
   ])
 
   // Handle button click
