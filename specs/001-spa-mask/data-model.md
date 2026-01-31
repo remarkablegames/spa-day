@@ -194,7 +194,7 @@ interface UnlockRequirement {
 
 ## Persistence Strategy
 
-All game state persisted in localStorage using JSON serialization:
+All game state persisted in localStorage using Kaplay.js helpers (`getData`, `setData`):
 
 - `player_progress` - PlayerProgress object
 - `unlocked_masks` - Array of mask IDs

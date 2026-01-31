@@ -90,8 +90,8 @@ export class ProgressionSystem {
   }
 
   private loadProgress(): PlayerProgress {
-    const saved = localStorage.getItem('spa-day-progress')
-    if (saved) {
+    const saved = getData('spa-day-progress')
+    if (saved && typeof saved === 'string') {
       try {
         const parsed = JSON.parse(saved)
         // Convert string dates back to Date objects
@@ -125,7 +125,7 @@ export class ProgressionSystem {
 
   private saveProgress(): void {
     try {
-      localStorage.setItem('spa-day-progress', JSON.stringify(this.progress))
+      setData('spa-day-progress', JSON.stringify(this.progress))
     } catch (error) {
       // eslint-disable-next-line no-console
       console.error('Failed to save progress:', error)

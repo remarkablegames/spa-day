@@ -25,12 +25,14 @@ export class VisualAudioFeedbackSystem {
 
   private loadSettings(): void {
     try {
-      const settings = JSON.parse(
-        localStorage.getItem(GAME_CONFIG.STORAGE_KEYS.GAME_SETTINGS) || '{}',
-      )
-      if (settings) {
-        this.soundEnabled = settings.soundEnabled !== false
-        this.effectsEnabled = settings.visualEffects !== false
+      const settings = getData(GAME_CONFIG.STORAGE_KEYS.GAME_SETTINGS)
+      if (settings && typeof settings === 'object') {
+        const settingsObj = settings as {
+          soundEnabled?: boolean
+          visualEffects?: boolean
+        }
+        this.soundEnabled = settingsObj.soundEnabled !== false
+        this.effectsEnabled = settingsObj.visualEffects !== false
       }
     } catch {
       // Use defaults
@@ -545,10 +547,7 @@ export class VisualAudioFeedbackSystem {
         soundEnabled: this.soundEnabled,
         visualEffects: this.effectsEnabled,
       }
-      localStorage.setItem(
-        GAME_CONFIG.STORAGE_KEYS.GAME_SETTINGS,
-        JSON.stringify(settings),
-      )
+      setData(GAME_CONFIG.STORAGE_KEYS.GAME_SETTINGS, settings)
     } catch {
       // Silently fail
     }

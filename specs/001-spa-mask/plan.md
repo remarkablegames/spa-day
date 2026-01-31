@@ -35,7 +35,7 @@ _✅ PASSED: All requirements satisfied with Phase 1 design_
 - **Game-First**: ✅ Feature serves game experience with clear player value through mask application, scoring, and progression mechanics
 - **Kaplay.js Native**: ✅ Implementation uses Kaplay.js entity-component system, scene management, and native touch input handling
 - **Performance First**: ✅ 60 FPS target maintained through object pooling, sprite optimization, and frame rate monitoring
-- **Static Web**: ✅ Game runs entirely in browser using localStorage for persistence, no server-side dependencies
+- **Static Web**: ✅ Game runs entirely in browser using Kaplay's localStorage helpers (`getData`, `setData`) for persistence, no server-side dependencies
 - **Mobile-First**: ✅ Touch controls prioritized, 44x44px touch targets, mobile testing required, responsive design
 
 ## Project Structure

@@ -41,7 +41,7 @@ export class StorageManager {
   private isAvailable(): boolean {
     try {
       const testKey = '__storage_test__'
-      localStorage.setItem(testKey, 'test')
+      setData(testKey, 'test')
       localStorage.removeItem(testKey)
       return true
     } catch {
@@ -61,10 +61,7 @@ export class StorageManager {
     if (!storage) return false
 
     try {
-      storage.setItem(
-        GAME_CONFIG.STORAGE_KEYS.PLAYER_PROGRESS,
-        JSON.stringify(progress),
-      )
+      setData(GAME_CONFIG.STORAGE_KEYS.PLAYER_PROGRESS, progress)
       return true
     } catch {
       return false
@@ -76,8 +73,8 @@ export class StorageManager {
     if (!storage) return null
 
     try {
-      const data = storage.getItem(GAME_CONFIG.STORAGE_KEYS.PLAYER_PROGRESS)
-      return data ? (JSON.parse(data) as PlayerProgress) : null
+      const data = getData(GAME_CONFIG.STORAGE_KEYS.PLAYER_PROGRESS)
+      return data && typeof data === 'object' ? (data as PlayerProgress) : null
     } catch {
       return null
     }
@@ -88,10 +85,7 @@ export class StorageManager {
     if (!storage) return false
 
     try {
-      storage.setItem(
-        GAME_CONFIG.STORAGE_KEYS.UNLOCKED_MASKS,
-        JSON.stringify(maskIds),
-      )
+      setData(GAME_CONFIG.STORAGE_KEYS.UNLOCKED_MASKS, maskIds)
       return true
     } catch {
       return false
@@ -103,8 +97,8 @@ export class StorageManager {
     if (!storage) return []
 
     try {
-      const data = storage.getItem(GAME_CONFIG.STORAGE_KEYS.UNLOCKED_MASKS)
-      return data ? (JSON.parse(data) as string[]) : []
+      const data = getData(GAME_CONFIG.STORAGE_KEYS.UNLOCKED_MASKS)
+      return data && Array.isArray(data) ? (data as string[]) : []
     } catch {
       return []
     }
@@ -117,10 +111,7 @@ export class StorageManager {
     try {
       // Keep only the last 50 treatments to avoid storage bloat
       const limitedHistory = history.slice(-50)
-      storage.setItem(
-        GAME_CONFIG.STORAGE_KEYS.TREATMENT_HISTORY,
-        JSON.stringify(limitedHistory),
-      )
+      setData(GAME_CONFIG.STORAGE_KEYS.TREATMENT_HISTORY, limitedHistory)
       return true
     } catch {
       return false
@@ -132,8 +123,8 @@ export class StorageManager {
     if (!storage) return []
 
     try {
-      const data = storage.getItem(GAME_CONFIG.STORAGE_KEYS.TREATMENT_HISTORY)
-      return data ? (JSON.parse(data) as TreatmentHistory[]) : []
+      const data = getData(GAME_CONFIG.STORAGE_KEYS.TREATMENT_HISTORY)
+      return data && Array.isArray(data) ? (data as TreatmentHistory[]) : []
     } catch {
       return []
     }
@@ -150,10 +141,7 @@ export class StorageManager {
     if (!storage) return false
 
     try {
-      storage.setItem(
-        GAME_CONFIG.STORAGE_KEYS.GAME_SETTINGS,
-        JSON.stringify(settings),
-      )
+      setData(GAME_CONFIG.STORAGE_KEYS.GAME_SETTINGS, settings)
       return true
     } catch {
       return false
@@ -165,11 +153,11 @@ export class StorageManager {
     if (!storage) return this.getDefaultSettings()
 
     try {
-      const data = storage.getItem(GAME_CONFIG.STORAGE_KEYS.GAME_SETTINGS)
-      return data
+      const data = getData(GAME_CONFIG.STORAGE_KEYS.GAME_SETTINGS)
+      return data && typeof data === 'object'
         ? {
             ...this.getDefaultSettings(),
-            ...(JSON.parse(data) as GameSettings),
+            ...(data as GameSettings),
           }
         : this.getDefaultSettings()
     } catch {
@@ -182,7 +170,7 @@ export class StorageManager {
     if (!storage) return false
 
     try {
-      storage.setItem(GAME_CONFIG.STORAGE_KEYS.HIGH_SCORE, score.toString())
+      setData(GAME_CONFIG.STORAGE_KEYS.HIGH_SCORE, score)
       return true
     } catch {
       return false
@@ -194,8 +182,8 @@ export class StorageManager {
     if (!storage) return 0
 
     try {
-      const data = storage.getItem(GAME_CONFIG.STORAGE_KEYS.HIGH_SCORE)
-      return data ? parseInt(data, 10) : 0
+      const data = getData(GAME_CONFIG.STORAGE_KEYS.HIGH_SCORE)
+      return typeof data === 'number' ? data : 0
     } catch {
       return 0
     }

@@ -31,9 +31,12 @@ export class CustomerLoyaltySystem {
 
   private loadLoyaltyData(): CustomerLoyaltyData {
     try {
-      const stored = localStorage.getItem(this.storageKey)
-      if (stored) {
-        return JSON.parse(stored)
+      const stored = getData(this.storageKey)
+      if (stored && typeof stored === 'string') {
+        const parsed = JSON.parse(stored)
+        if (parsed && typeof parsed === 'object' && 'customers' in parsed) {
+          return parsed as CustomerLoyaltyData
+        }
       }
     } catch (error) {
       // eslint-disable-next-line no-console
@@ -52,7 +55,7 @@ export class CustomerLoyaltySystem {
 
   private saveLoyaltyData(): void {
     try {
-      localStorage.setItem(this.storageKey, JSON.stringify(this.loyaltyData))
+      setData(this.storageKey, this.loyaltyData)
     } catch (error) {
       // eslint-disable-next-line no-console
       console.warn('Failed to save loyalty data:', error)
