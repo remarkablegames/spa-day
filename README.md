@@ -1,17 +1,17 @@
 <p align="center">
-  <img src="public/favicon.png" width="200" alt="Kaplay Template">
+  <img src="public/favicon.png" width="200" alt="Spa Day">
 </p>
 
-# Kaplay Template
+# Spa Day
 
-[![release](https://img.shields.io/github/v/release/remarkablegames/kaplay-template)](https://github.com/remarkablegames/kaplay-template/releases)
-[![build](https://github.com/remarkablegames/kaplay-template/actions/workflows/build.yml/badge.svg)](https://github.com/remarkablegames/kaplay-template/actions/workflows/build.yml)
+[![release](https://img.shields.io/github/v/release/remarkablegames/spa-day)](https://github.com/remarkablegames/spa-day/releases)
+[![build](https://github.com/remarkablegames/spa-day/actions/workflows/build.yml/badge.svg)](https://github.com/remarkablegames/spa-day/actions/workflows/build.yml)
 
-<kbd>kaplay-template</kbd> is a template for making [KAPLAY](https://kaplayjs.com/) games.
+💆🏻‍♀️ Spa Day
 
 Play the game on:
 
-- [remarkablegames](https://remarkablegames.org/kaplay-template/)
+- [remarkablegames](https://remarkablegames.org/spa-day/)
 
 ## Prerequisites
 
@@ -26,24 +26,14 @@ brew install nvm
 Clone the repository:
 
 ```sh
-git clone https://github.com/remarkablegames/kaplay-template.git
-cd kaplay-template
+git clone https://github.com/remarkablegames/spa-day.git
+cd spa-day
 ```
 
 Install the dependencies:
 
 ```sh
 npm install
-```
-
-Rename the project:
-
-```sh
-git grep -l kaplay-template | xargs sed -i '' -e 's/kaplay-template/my-game/g'
-```
-
-```sh
-git grep -l 'Kaplay Template' | xargs sed -i '' -e 's/Kaplay Template/My Game/g'
 ```
 
 Update the files:
