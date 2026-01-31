@@ -97,23 +97,6 @@ description: 'Task list template for feature implementation'
 
 ---
 
-## Phase 5: Polish & Cross-Cutting Concerns
-
-**Purpose**: Improvements that affect multiple user stories
-
-- [ ] T027 [P] Add character sprite to public/sprites/character.png
-- [ ] T028 [P] Add eraser cursor sprite to public/sprites/eraser.png
-- [ ] T029 [P] Add dirt spot sprites to public/sprites/dirt-spot.png
-- [ ] T030 [P] Add cleaning sound effect to public/sounds/clean.mp3
-- [ ] T031 [P] Update scene index to include cleaning scene in src/scenes/index.ts
-- [ ] T032 Update main game to load cleaning assets in src/index.ts
-- [ ] T033 Performance optimization for collision detection in src/systems/cleaning-state.ts
-- [ ] T034 Add error handling for invalid input positions in src/gameobjects/eraser.ts
-- [ ] T035 Run manual gameplay testing per quickstart.md checklist
-- [ ] T036 Update README.md with cleaning feature documentation
-
----
-
 ## Dependencies & Execution Order
 
 ### Phase Dependencies
