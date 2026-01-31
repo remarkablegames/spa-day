@@ -3,6 +3,7 @@ import {
   GameObj,
   OpacityComp,
   PosComp,
+  ScaleComp,
   TextComp,
   Vec2,
   ZComp,
@@ -28,23 +29,52 @@ interface TouchPosition {
   y: number
 }
 
-interface GameState {
+interface EraserObject {
+  id: string
+  position: Vec2
+  radius: number
+  isActive: boolean
+  moveTo(pos: Vec2): void
+  activate(): void
+  deactivate(): void
+  visual: GameObj<PosComp | ColorComp | ZComp | ScaleComp | OpacityComp> | null
+}
+
+interface DirtSpot {
+  id: string
+  position: Vec2
+  isCleaned: boolean
+  points: number
+  visual: GameObj<PosComp | ColorComp | ZComp | ScaleComp | OpacityComp> | null
+}
+
+interface SpaGameState {
   character: Character | null
   treatmentSession: TreatmentSession | null
   availableMasks: FaceMask[]
   selectedMask: FaceMask | null
   isDragging: boolean
   dragOffset: TouchPosition | null
+  cleaningMode: boolean
+  eraser: EraserObject | null
+  cleaningState: GameObj<TextComp | PosComp | ColorComp | ZComp> | null
+  dirtSpots: DirtSpot[]
+  score: number
 }
 
 export function createSpaGameScene() {
-  const gameState: GameState = {
+  const gameState: SpaGameState = {
     character: null,
     treatmentSession: null,
     availableMasks: [],
     selectedMask: null,
     isDragging: false,
     dragOffset: null,
+    cleaningMode: false,
+    eraser: null,
+    cleaningState: null,
+    dirtSpots: [],
+    score: 0,
   }
 
   scene(Scene.SpaGame, () => {
@@ -71,6 +101,11 @@ export function createSpaGameScene() {
     // Setup input handlers
     setupInputHandlers(gameState)
 
+    // Add cleaning mode toggle
+    onKeyPress('e', () => {
+      toggleCleaningMode(gameState)
+    })
+
     // Game loop with performance monitoring
     onUpdate(() => {
       const perfMonitor = getPerformanceMonitor()
@@ -88,6 +123,11 @@ export function createSpaGameScene() {
       }
 
       updateGame(gameState)
+
+      // Update cleaning mode
+      if (gameState.cleaningMode) {
+        updateCleaningMode(gameState)
+      }
 
       // Update treatment session with pause-adjusted time
       if (gameState.treatmentSession) {
@@ -114,7 +154,7 @@ export function createSpaGameScene() {
   })
 }
 
-function setupGameState(gameState: GameState) {
+function setupGameState(gameState: SpaGameState) {
   // Create character
   gameState.character = new Character({
     id: 'character_1',
@@ -133,7 +173,7 @@ function setupGameState(gameState: GameState) {
 
   // Set initial positions for masks
   const maskY = height() - 100
-  gameState.availableMasks.forEach((mask, index) => {
+  gameState.availableMasks.forEach((mask: FaceMask, index: number) => {
     mask.position = vec2(100 + index * 80, maskY)
   })
 
@@ -147,7 +187,7 @@ function setupGameState(gameState: GameState) {
   gameState.treatmentSession.setPauseManager(pauseManager)
 }
 
-function createGameUI(gameState: GameState) {
+function createGameUI(gameState: SpaGameState) {
   // Background
   add([
     rect(width(), height()),
@@ -400,7 +440,7 @@ function createGameUI(gameState: GameState) {
   })
 }
 
-function setupInputHandlers(gameState: GameState) {
+function setupInputHandlers(gameState: SpaGameState) {
   onTouchStart((pos) => {
     handleTouchStart(pos, gameState)
   })
@@ -431,7 +471,7 @@ function setupInputHandlers(gameState: GameState) {
   })
 }
 
-function handleTouchStart(touchPos: TouchPosition, gameState: GameState) {
+function handleTouchStart(touchPos: TouchPosition, gameState: SpaGameState) {
   // Convert position to Kaplay.js vector
   const touchVector = vec2(touchPos.x, touchPos.y)
 
@@ -447,7 +487,7 @@ function handleTouchStart(touchPos: TouchPosition, gameState: GameState) {
   }
 }
 
-function handleTouchMove(touchPos: TouchPosition, gameState: GameState) {
+function handleTouchMove(touchPos: TouchPosition, gameState: SpaGameState) {
   if (gameState.isDragging && gameState.selectedMask && gameState.dragOffset) {
     // Convert position to Kaplay.js vector
     const touchVector = vec2(touchPos.x, touchPos.y)
@@ -458,7 +498,7 @@ function handleTouchMove(touchPos: TouchPosition, gameState: GameState) {
   }
 }
 
-function handleTouchEnd(touchPos: TouchPosition, gameState: GameState) {
+function handleTouchEnd(touchPos: TouchPosition, gameState: SpaGameState) {
   if (!gameState.isDragging || !gameState.selectedMask) return
 
   // Convert position to Kaplay.js vector
@@ -525,10 +565,10 @@ function handleTouchEnd(touchPos: TouchPosition, gameState: GameState) {
 
 function getMaskAtPosition(
   pos: TouchPosition,
-  gameState: GameState,
+  gameState: SpaGameState,
 ): FaceMask | null {
   return (
-    gameState.availableMasks.find((mask) => {
+    gameState.availableMasks.find((mask: FaceMask) => {
       const maskPos = vec2(pos.x, pos.y)
       const distance = maskPos.dist(mask.position)
       return distance <= GAME_CONFIG.MASK_SIZE && mask.isUnlocked
@@ -536,7 +576,7 @@ function getMaskAtPosition(
   )
 }
 
-function updateGame(gameState: GameState) {
+function updateGame(gameState: SpaGameState) {
   // Update character
   if (gameState.character) {
     gameState.character.update()
@@ -553,26 +593,26 @@ function updateGame(gameState: GameState) {
   }
 
   // Update masks
-  gameState.availableMasks.forEach((mask) => {
+  gameState.availableMasks.forEach((mask: FaceMask) => {
     mask.update()
   })
 }
 
-function renderGame(gameState: GameState) {
+function renderGame(gameState: SpaGameState) {
   // Render character
   if (gameState.character) {
     gameState.character.render()
   }
 
   // Render available masks
-  gameState.availableMasks.forEach((mask) => {
+  gameState.availableMasks.forEach((mask: FaceMask) => {
     if (!mask.isApplied) {
       mask.render()
     }
   })
 }
 
-function handleTreatmentComplete(gameState: GameState) {
+function handleTreatmentComplete(gameState: SpaGameState) {
   if (!gameState.treatmentSession || !gameState.character) return
 
   // Play treatment completion sound
@@ -605,5 +645,290 @@ function handleTreatmentComplete(gameState: GameState) {
     character: gameState.character,
     scoreBreakdown: scoreBreakdown,
     treatmentDuration: gameState.treatmentSession.getElapsedTime() * 1000,
+  })
+}
+
+/**
+ * Toggle cleaning mode on/off
+ */
+function toggleCleaningMode(gameState: SpaGameState): void {
+  gameState.cleaningMode = !gameState.cleaningMode
+
+  if (gameState.cleaningMode) {
+    // Simple eraser implementation for testing
+    if (!gameState.eraser && gameState.character) {
+      gameState.eraser = {
+        id: 'spa-eraser',
+        position: vec2(
+          gameState.character.position.x,
+          gameState.character.position.y,
+        ),
+        radius: 32,
+        isActive: false,
+        moveTo: function (pos: Vec2) {
+          this.position = vec2(pos.x, pos.y)
+          // Update visual eraser
+          if (this.visual) {
+            this.visual.pos = vec2(this.position.x, this.position.y)
+          }
+        },
+        activate: function () {
+          this.isActive = true
+          // Update visual eraser appearance
+          if (this.visual) {
+            this.visual.color = rgb(255, 255, 255)
+            this.visual.opacity = 0.8
+            this.visual.scale = vec2(1.2)
+          }
+        },
+        deactivate: function () {
+          this.isActive = false
+          // Update visual eraser appearance
+          if (this.visual) {
+            this.visual.color = rgb(255, 255, 255)
+            this.visual.opacity = 0.3
+            this.visual.scale = vec2(1.0)
+          }
+        },
+        visual: null as unknown as GameObj<
+          PosComp | ColorComp | ZComp | OpacityComp | ScaleComp
+        > | null,
+      }
+
+      // Create visual eraser
+      gameState.eraser!.visual = add([
+        circle(gameState.eraser!.radius),
+        pos(gameState.eraser!.position.x, gameState.eraser!.position.y),
+        color(255, 100, 100), // Red color to be more visible
+        opacity(0.8),
+        scale(1),
+        outline(4), // Add border
+        z(100), // Higher z-index to be on top
+        'eraser-visual',
+      ])
+    }
+
+    // Simple dirt spots
+    gameState.dirtSpots = []
+    for (let i = 0; i < 25; i++) {
+      const angle = (i / 25) * Math.PI * 2
+      const distance = 50 + Math.random() * 30
+      const spotPosition = {
+        x: gameState.character!.position.x + Math.cos(angle) * distance,
+        y: gameState.character!.position.y + Math.sin(angle) * distance,
+      }
+
+      const spot = {
+        id: `spot-${i}`,
+        position: vec2(spotPosition.x, spotPosition.y),
+        isCleaned: false,
+        points: 10,
+        visual: null as unknown as GameObj<
+          PosComp | ColorComp | ZComp | OpacityComp | ScaleComp
+        > | null,
+      }
+
+      // Create visual dirt spot
+      spot.visual = add([
+        circle(4),
+        pos(spotPosition.x, spotPosition.y),
+        color(139, 69, 19), // Brown dirt color
+        opacity(1),
+        scale(1),
+        z(45),
+        'dirt-spot',
+      ])
+
+      gameState.dirtSpots.push(spot)
+    }
+
+    // Show cleaning mode indicator
+    add([
+      text(
+        'CLEANING MODE - Mouse: Click & drag to clean | Arrow keys + Space also work',
+        { size: 20 },
+      ),
+      pos(center().x, 50),
+      anchor('center'),
+      color(255, 255, 0),
+      z(100),
+      'cleaning-mode-indicator',
+    ])
+
+    // Add cleaning UI
+    add([text('Score: 0', { size: 16 }), pos(20, 20), 'cleaning-score'])
+
+    add([text('Progress: 0%', { size: 14 }), pos(20, 45), 'cleaning-progress'])
+
+    // Setup eraser controls
+    setupEraserControls(gameState)
+
+    // Add mouse/touch controls for eraser
+    setupMouseControls(gameState)
+  } else {
+    // Exit cleaning mode
+    if (gameState.eraser) {
+      gameState.eraser.deactivate()
+      // Remove visual eraser
+      if (gameState.eraser.visual) {
+        destroy(gameState.eraser.visual)
+        gameState.eraser.visual = null
+      }
+    }
+
+    // Remove cleaning UI
+    destroyAll('cleaning-mode-indicator')
+    destroyAll('cleaning-score')
+    destroyAll('cleaning-progress')
+
+    // Remove eraser controls
+    removeEraserControls()
+  }
+}
+
+/**
+ * Setup eraser controls for cleaning mode
+ */
+function setupEraserControls(gameState: SpaGameState): void {
+  if (!gameState.eraser) return
+
+  // Keyboard controls
+  onKeyDown('left', () => {
+    if (gameState.eraser) {
+      gameState.eraser.moveTo(
+        vec2(gameState.eraser.position.x - 5, gameState.eraser.position.y),
+      )
+    }
+  })
+
+  onKeyDown('right', () => {
+    if (gameState.eraser) {
+      gameState.eraser.moveTo(
+        vec2(gameState.eraser.position.x + 5, gameState.eraser.position.y),
+      )
+    }
+  })
+
+  onKeyDown('up', () => {
+    if (gameState.eraser) {
+      gameState.eraser.moveTo(
+        vec2(gameState.eraser.position.x, gameState.eraser.position.y - 5),
+      )
+    }
+  })
+
+  onKeyDown('down', () => {
+    if (gameState.eraser) {
+      gameState.eraser.moveTo(
+        vec2(gameState.eraser.position.x, gameState.eraser.position.y + 5),
+      )
+    }
+  })
+
+  onKeyDown('space', () => {
+    if (gameState.eraser) {
+      gameState.eraser.isActive = !gameState.eraser.isActive
+    }
+  })
+}
+
+/**
+ * Remove eraser controls
+ */
+function removeEraserControls(): void {
+  // Note: Kaplay.js doesn't have a built-in way to remove specific key handlers
+  // This would need to be handled with a custom input management system
+  // For now, we'll just deactivate the eraser when exiting cleaning mode
+}
+
+/**
+ * Setup mouse/touch controls for eraser
+ */
+function setupMouseControls(gameState: SpaGameState): void {
+  if (!gameState.eraser) return
+
+  // Mouse movement - follow cursor
+  onMouseMove((pos) => {
+    if (gameState.cleaningMode && gameState.eraser) {
+      gameState.eraser.moveTo(pos)
+    }
+  })
+
+  // Mouse press - activate eraser
+  onMousePress(() => {
+    if (gameState.cleaningMode && gameState.eraser) {
+      gameState.eraser.activate()
+    }
+  })
+
+  // Mouse release - deactivate eraser
+  onMouseRelease(() => {
+    if (gameState.cleaningMode && gameState.eraser) {
+      gameState.eraser.deactivate()
+    }
+  })
+
+  // Touch support
+  onTouchMove((pos) => {
+    if (gameState.cleaningMode && gameState.eraser) {
+      gameState.eraser.moveTo(pos)
+    }
+  })
+
+  onTouchStart(() => {
+    if (gameState.cleaningMode && gameState.eraser) {
+      gameState.eraser.activate()
+    }
+  })
+
+  onTouchEnd(() => {
+    if (gameState.cleaningMode && gameState.eraser) {
+      gameState.eraser.deactivate()
+    }
+  })
+}
+
+/**
+ * Update cleaning mode logic
+ */
+function updateCleaningMode(gameState: SpaGameState): void {
+  if (!gameState.eraser || !gameState.dirtSpots) return
+
+  // Check for collisions with dirt spots
+  gameState.dirtSpots.forEach((spot: DirtSpot) => {
+    if (!spot.isCleaned && gameState.eraser!.isActive) {
+      const dx = spot.position.x - gameState.eraser!.position.x
+      const dy = spot.position.y - gameState.eraser!.position.y
+      const distance = Math.sqrt(dx * dx + dy * dy)
+
+      if (distance <= gameState.eraser!.radius) {
+        spot.isCleaned = true
+        gameState.score += spot.points
+
+        // Remove visual dirt spot
+        if (spot.visual) {
+          destroy(spot.visual)
+          spot.visual = null
+          spot.visual = null
+        }
+
+        // Update UI
+        const scoreText = get('cleaning-score')[0]
+        if (scoreText) {
+          scoreText.text = `Score: ${gameState.score}`
+        }
+
+        const progressText = get('cleaning-progress')[0]
+        if (progressText) {
+          const cleanedCount = gameState.dirtSpots.filter(
+            (s: DirtSpot) => s.isCleaned,
+          ).length
+          const progress = Math.round(
+            (cleanedCount / gameState.dirtSpots.length) * 100,
+          )
+          progressText.text = `Progress: ${progress}%`
+        }
+      }
+    }
   })
 }

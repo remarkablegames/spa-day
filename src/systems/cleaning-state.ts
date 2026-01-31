@@ -69,6 +69,13 @@ export class CleaningStateManager {
   }
 
   /**
+   * Get the eraser tool
+   */
+  getEraser(): EraserTool | null {
+    return this.eraser
+  }
+
+  /**
    * Add a dirt spot to the system
    */
   addDirtSpot(spot: DirtSpot): void {

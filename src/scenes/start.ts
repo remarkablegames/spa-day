@@ -1,3 +1,4 @@
+import './cleaning'
 import './game'
 import './preload'
 
