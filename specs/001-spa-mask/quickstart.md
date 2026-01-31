@@ -1,7 +1,7 @@
 # Quickstart Guide: Spa Face Mask Game
 
 **Phase**: 1 - Design & Contracts  
-**Date**: 2025-01-30  
+**Date**: 2026-01-30  
 **Feature**: Spa Face Mask Game
 
 ## Development Setup

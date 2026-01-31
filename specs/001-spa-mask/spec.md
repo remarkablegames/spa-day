@@ -1,13 +1,13 @@
 # Feature Specification: Spa Face Mask Game
 
 **Feature Branch**: `001-spa-mask`  
-**Created**: 2025-01-30  
+**Created**: 2026-01-30  
 **Status**: Draft  
 **Input**: User description: "create a spa face mask game"
 
 ## Clarifications
 
-### Session 2025-01-30
+### Session 2026-01-30
 
 - Q: Will you need placeholder images or will you create them in Kaplay? → A: Create simple geometric shapes in Kaplay.js for MVP, with placeholder external images for final polish
 

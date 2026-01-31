@@ -1,6 +1,6 @@
 # Implementation Plan: Spa Face Mask Game
 
-**Branch**: `001-spa-mask` | **Date**: 2025-01-30 | **Spec**: [spec.md](spec.md)
+**Branch**: `001-spa-mask` | **Date**: 2026-01-30 | **Spec**: [spec.md](spec.md)
 **Input**: Feature specification from `/specs/001-spa-mask/spec.md`
 
 **Note**: This template is filled in by the `/speckit.plan` command. See `.specify/templates/commands/plan.md` for the execution workflow.

@@ -1,9 +1,18 @@
 # Feature Specification: Face Cleaning Tool
 
 **Feature Branch**: `001-face-clean`  
-**Created**: 2025-01-31  
+**Created**: 2026-01-31  
 **Status**: Draft  
 **Input**: User description: "clean face with an erase tool before putting on mask"
+
+## Clarifications
+
+### Session 2026-01-31
+
+- Q: Will there be multiple cleaning tools or just one erase tool? → A: One erase tool for now
+- Q: What is the shape of the eraser? Is it round? → A: Round
+- Q: How will the dirt be displayed on the face? → A: Individual small spots only (larger patches for future tools)
+- Q: How will the score be affected with this feature? → A: Points per spot cleaned
 
 ## User Scenarios & Testing _(mandatory)_
 
@@ -58,7 +67,7 @@ Player needs intuitive controls for the erase tool that provide satisfying feedb
 - How does system handle rapid, chaotic cleaning movements?
 - What happens when cleaning is interrupted (player lifts finger/mouse)?
 - How does system handle cleaning when face is already fully clean?
-- What happens when multiple cleaning tools are available [NEEDS CLARIFICATION: will there be multiple cleaning tools or just one erase tool]?
+- What happens when multiple cleaning tools are available? (Resolved: One erase tool only)
 
 ## Requirements _(mandatory)_
 

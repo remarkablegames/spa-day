@@ -1,7 +1,7 @@
 # Specification Quality Checklist: Spa Face Mask Game
 
 **Purpose**: Validate specification completeness and quality before proceeding to planning
-**Created**: 2025-01-30
+**Created**: 2026-01-30
 **Feature**: [spec.md](spec.md)
 
 ## Content Quality
