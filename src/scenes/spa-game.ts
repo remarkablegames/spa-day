@@ -690,10 +690,8 @@ function toggleCleaningMode(gameState: SpaGameState): void {
             this.visual.scale = vec2(1.0)
           }
         },
-        visual: null as unknown as GameObj<
-          PosComp | ColorComp | ZComp | OpacityComp | ScaleComp
-        > | null,
-      }
+        visual: null,
+      } as EraserObject
 
       // Create visual eraser
       gameState.eraser!.visual = add([
@@ -718,14 +716,12 @@ function toggleCleaningMode(gameState: SpaGameState): void {
         y: gameState.character!.position.y + Math.sin(angle) * distance,
       }
 
-      const spot = {
+      const spot: DirtSpot = {
         id: `spot-${i}`,
         position: vec2(spotPosition.x, spotPosition.y),
         isCleaned: false,
         points: 10,
-        visual: null as unknown as GameObj<
-          PosComp | ColorComp | ZComp | OpacityComp | ScaleComp
-        > | null,
+        visual: null,
       }
 
       // Create visual dirt spot
@@ -908,7 +904,6 @@ function updateCleaningMode(gameState: SpaGameState): void {
         // Remove visual dirt spot
         if (spot.visual) {
           destroy(spot.visual)
-          spot.visual = null
           spot.visual = null
         }
 
