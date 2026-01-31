@@ -477,11 +477,16 @@ function handleTouchEnd(touchPos: TouchPosition, gameState: GameState) {
         // play(Sound.MaskApply, { volume: 0.3 })
 
         // Create particle effects at application point
-        const faceAreaPos = faceArea.position
+        const faceAreaWorldPos = gameState.character.position.add(
+          faceArea.position,
+        )
         for (let i = 0; i < GAME_CONFIG.PARTICLE_COUNT; i++) {
           add([
             circle(rand(2, 6)),
-            pos(faceAreaPos.x + rand(-20, 20), faceAreaPos.y + rand(-20, 20)),
+            pos(
+              faceAreaWorldPos.x + rand(-20, 20),
+              faceAreaWorldPos.y + rand(-20, 20),
+            ),
             color(GAME_CONFIG.COLORS.MASK_HYDRATING),
             lifespan(GAME_CONFIG.EFFECT_DURATION / 1000),
             move(rand(0, 360), rand(20, 60)),
