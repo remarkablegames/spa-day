@@ -692,37 +692,48 @@ function initializeCleaningMode(gameState: SpaGameState): void {
     ]) as unknown as EraserVisual
   }
 
-  // Simple dirt spots
+  // Dirt spots covering face areas
   gameState.dirtSpots = []
-  for (let i = 0; i < 25; i++) {
-    if (!gameState.character) continue
+  const spotsPerArea = 5 // Number of dirt spots per face area
 
-    const angle = (i / 25) * Math.PI * 2
-    const distance = 50 + Math.random() * 30
-    const spotPosition = vec2(
-      gameState.character.position.x + Math.cos(angle) * distance,
-      gameState.character.position.y + Math.sin(angle) * distance,
-    )
+  // Get face areas from character
+  const faceAreas = gameState.character?.faceAreas || []
 
-    const spot: DirtSpot = {
-      id: `spot-${i}`,
-      position: spotPosition,
-      isCleaned: false,
-      points: 10,
-      visual: null,
+  faceAreas.forEach((faceArea, areaIndex) => {
+    for (let i = 0; i < spotsPerArea; i++) {
+      // Generate random position within this face area
+      const areaHalfWidth = faceArea.size.x / 2
+      const areaHalfHeight = faceArea.size.y / 2
+
+      // Random position within the face area bounds
+      const randomX = (Math.random() - 0.5) * areaHalfWidth * 2.2 // 110% of area width
+      const randomY = (Math.random() - 0.5) * areaHalfHeight * 2.2 // 110% of area height
+
+      const spotPosition = vec2(
+        gameState.character!.position.x + faceArea.position.x + randomX,
+        gameState.character!.position.y + faceArea.position.y + randomY,
+      )
+
+      const spot: DirtSpot = {
+        id: `spot-${areaIndex}-${i}`,
+        position: spotPosition,
+        isCleaned: false,
+        points: 10,
+        visual: null,
+      }
+
+      // Create visual dirt spot
+      spot.visual = add([
+        circle(4), // Back to original size
+        pos(spotPosition.x, spotPosition.y),
+        color(139, 69, 19), // Brown dirt color
+        z(45),
+        'dirt-spot',
+      ]) as DirtSpotVisual
+
+      gameState.dirtSpots.push(spot)
     }
-
-    // Create visual dirt spot
-    spot.visual = add([
-      circle(4),
-      pos(spotPosition.x, spotPosition.y),
-      color(139, 69, 19), // Brown dirt color
-      z(45),
-      'dirt-spot',
-    ]) as DirtSpotVisual
-
-    gameState.dirtSpots.push(spot)
-  }
+  })
 
   // Add eraser toggle button above mask buttons to prevent overlap
   const eraserToggleButton = add([
