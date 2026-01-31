@@ -52,7 +52,7 @@ Create character entities with face areas for mask placement:
 
 ```typescript
 // src/gameobjects/character.ts
-export class Character extends KaboomCtx.GameObj {
+export class Character extends KaplayCtx.GameObj {
   faceAreas: FaceArea[]
   satisfactionLevel: number
 
@@ -80,7 +80,7 @@ Implement face mask entities with effects and timing:
 
 ```typescript
 // src/gameobjects/mask.ts
-export class FaceMask extends KaboomCtx.GameObj {
+export class FaceMask extends KaplayCtx.GameObj {
   type: MaskType
   duration: number
   effectiveness: number
