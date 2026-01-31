@@ -347,4 +347,4 @@ export function createCollectionScene() {
 }
 
 // Scene registration
-scene('collection', createCollectionScene)
+scene(Scene.Collection, createCollectionScene)
