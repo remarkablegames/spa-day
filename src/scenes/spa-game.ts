@@ -724,19 +724,6 @@ function initializeCleaningMode(gameState: SpaGameState): void {
     gameState.dirtSpots.push(spot)
   }
 
-  // Show cleaning mode indicator
-  add([
-    text(
-      'CLEANING MODE - Mouse: Click & drag to clean | Arrow keys + Space also work',
-      { size: 20 },
-    ),
-    pos(center().x, 50),
-    anchor('center'),
-    color(255, 255, 0),
-    z(100),
-    'cleaning-mode-indicator',
-  ])
-
   // Add eraser toggle button
   const eraserToggleButton = add([
     rect(120, 40),
