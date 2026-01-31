@@ -1,8 +1,8 @@
 <!--
 Sync Impact Report:
-- Version change: 1.0.0 → 1.1.0 (minor version - new principle added)
-- Modified principles: N/A
-- Added sections: Principle VI - Code Reuse and Anti-Duplication
+- Version change: 1.1.0 → 1.2.0 (minor version - new principle added)
+- Modified principles: Code Quality section updated
+- Added sections: Principle VII - Explicit TypeScript Typing
 - Removed sections: N/A
 - Templates requiring updates: ✅ plan-template.md, ✅ spec-template.md, ✅ tasks-template.md
 - Follow-up TODOs: None
@@ -36,6 +36,10 @@ Controls MUST work on touch devices; UI MUST scale appropriately on mobile scree
 
 All systems MUST follow DRY principles; Common patterns MUST be extracted into reusable utilities; Singleton patterns MUST use consistent initialization patterns; System managers MUST share common base interfaces; Duplicate code across similar systems MUST be eliminated; Shared utilities MUST be placed in appropriate common directories.
 
+### VII. Explicit TypeScript Typing
+
+All TypeScript code MUST use explicit types; Type annotations MUST be provided for function parameters and return values; The `any` type is PROHIBITED in all cases; Interfaces MUST be used for object shapes; Type aliases MUST be used for union types and complex types; Generic types MUST be properly constrained; Type assertions MUST be avoided in favor of type guards.
+
 ## Technical Standards
 
 ### Technology Stack
@@ -51,6 +55,8 @@ All systems MUST follow DRY principles; Common patterns MUST be extracted into r
 - ESLint configuration MUST be followed
 - Prettier formatting REQUIRED for all commits
 - TypeScript strict mode enforced
+- Explicit types REQUIRED for all variables and functions
+- `any` type PROHIBITED - use proper interfaces or unknown
 - Conventional commits REQUIRED (using commitlint)
 - All PRs MUST pass automated checks
 
@@ -85,4 +91,4 @@ This constitution supersedes all other development practices. Amendments require
 
 All pull requests MUST verify compliance with this constitution. Complexity beyond these principles MUST be explicitly justified in implementation plans. Use this constitution as the primary guidance for all development decisions.
 
-**Version**: 1.1.0 | **Ratified**: 2026-01-30 | **Last Amended**: 2026-01-31
+**Version**: 1.2.0 | **Ratified**: 2026-01-30 | **Last Amended**: 2026-01-31

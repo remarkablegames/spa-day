@@ -250,3 +250,4 @@ With multiple developers:
 - Stop at any checkpoint to validate story independently
 - **Avoid**: vague tasks, same file conflicts, cross-story dependencies that break independence
 - **Code Reuse**: Extract common patterns into shared utilities, eliminate duplication across systems
+- **TypeScript Typing**: Use explicit types for all variables and functions, `any` type is PROHIBITED
