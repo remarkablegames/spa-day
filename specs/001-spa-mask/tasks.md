@@ -103,12 +103,12 @@ description: 'Task list template for feature implementation'
 
 ### Implementation for User Story 3
 
-- [ ] T026 [P] [US3] Enhance scoring system with satisfaction calculations in src/systems/scoring.ts
-- [ ] T027 [US3] Create treatment results scene in src/scenes/results.ts
-- [ ] T028 [US3] Implement character satisfaction feedback system
-- [ ] T029 [US3] Add score display and animations
-- [ ] T030 [US3] Implement customer return logic for high satisfaction
-- [ ] T031 [US3] Add visual and audio feedback for scoring events
+- [x] T026 [P] [US3] Enhance scoring system with satisfaction calculations in src/systems/scoring.ts
+- [x] T027 [US3] Create treatment results scene in src/scenes/results.ts
+- [x] T028 [US3] Implement character satisfaction feedback system
+- [x] T029 [US3] Add score display and animations
+- [x] T030 [US3] Implement customer return logic for high satisfaction
+- [x] T031 [US3] Add visual and audio feedback for scoring events
 
 **Checkpoint**: All user stories should now be independently functional
 

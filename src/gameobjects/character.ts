@@ -44,6 +44,13 @@ export class Character extends GameObject {
   public faceAreas: FaceArea[]
   private visualElement: VisualElement | null = null
   private faceAreaVisuals: Map<string, FaceAreaVisuals> = new Map()
+  private satisfactionIndicator: TextElement | null = null
+  private satisfactionEmoji: TextElement | null = null
+  private lastSatisfactionLevel: number = -1
+  private lastSatisfactionEmoji: string = ''
+  private lastUpdateFrame: number = 0
+  private updateThrottle: number = 10 // Update satisfaction every 10 frames
+  private satisfactionDecayRate: number = 0.98 // Gradual decay factor
 
   constructor(config: CharacterConfig) {
     super(config.id, config.position)
@@ -108,8 +115,12 @@ export class Character extends GameObject {
     // Character update logic
     if (!this.isActive) return
 
-    // Update satisfaction based on applied masks
-    this.updateSatisfaction()
+    // Throttle satisfaction updates to prevent spazzing
+    this.lastUpdateFrame++
+    if (this.lastUpdateFrame >= this.updateThrottle) {
+      this.updateSatisfaction()
+      this.lastUpdateFrame = 0
+    }
   }
 
   public render() {
@@ -130,6 +141,7 @@ export class Character extends GameObject {
 
     // Render face areas (for debugging or visual feedback)
     this.renderFaceAreas()
+    this.renderSatisfactionFeedback()
   }
 
   private renderFaceAreas() {
@@ -255,8 +267,16 @@ export class Character extends GameObject {
 
   private updateSatisfaction() {
     const occupiedAreas = this.getOccupiedAreas()
+
     if (occupiedAreas.length === 0) {
-      this.satisfactionLevel = 0
+      // Gradual decay instead of immediate drop to 0
+      const newSatisfaction = Math.max(
+        0,
+        this.satisfactionLevel * this.satisfactionDecayRate,
+      )
+      if (newSatisfaction !== this.satisfactionLevel) {
+        this.satisfactionLevel = newSatisfaction
+      }
       return
     }
 
@@ -274,10 +294,21 @@ export class Character extends GameObject {
 
     // Normalize to 0-100 range
     const maxPossibleScore = this.faceAreas.length * 20
-    this.satisfactionLevel = Math.min(
+    const calculatedSatisfaction = Math.min(
       100,
       (satisfactionScore / maxPossibleScore) * 100,
     )
+
+    // Blend calculated satisfaction with current level for smoother transitions
+    const blendFactor = 0.3 // How quickly to adapt to new satisfaction
+    const newSatisfactionLevel =
+      this.satisfactionLevel * (1 - blendFactor) +
+      calculatedSatisfaction * blendFactor
+
+    // Only update if satisfaction actually changed significantly
+    if (Math.abs(newSatisfactionLevel - this.satisfactionLevel) > 0.5) {
+      this.satisfactionLevel = newSatisfactionLevel
+    }
   }
 
   public getSatisfaction(): number {
@@ -294,5 +325,65 @@ export class Character extends GameObject {
 
   public isUnhappy(): boolean {
     return this.satisfactionLevel < 40
+  }
+
+  private renderSatisfactionFeedback() {
+    const indicatorY = this.position.y - GAME_CONFIG.CHARACTER_SIZE / 2 - 30
+    const currentEmoji = this.getSatisfactionEmoji()
+    const roundedSatisfaction = Math.round(this.satisfactionLevel) // Round to whole number
+
+    // Only update if satisfaction level actually changed
+    if (roundedSatisfaction !== this.lastSatisfactionLevel) {
+      this.lastSatisfactionLevel = roundedSatisfaction
+
+      // Update or create satisfaction indicator
+      if (!this.satisfactionIndicator) {
+        this.satisfactionIndicator = add([
+          text(`${roundedSatisfaction}%`, { size: 16, font: 'bold' }),
+          pos(this.position.x, indicatorY),
+          anchor('center'),
+          color(255, 255, 255),
+          z(30),
+        ])
+      } else {
+        this.satisfactionIndicator.text = `${roundedSatisfaction}%`
+        this.satisfactionIndicator.pos = vec2(this.position.x, indicatorY)
+      }
+
+      // Update indicator color based on satisfaction level
+      if (roundedSatisfaction >= 80) {
+        this.satisfactionIndicator.color = rgb(0, 255, 0) // Green
+      } else if (roundedSatisfaction >= 60) {
+        this.satisfactionIndicator.color = rgb(255, 255, 0) // Yellow
+      } else {
+        this.satisfactionIndicator.color = rgb(255, 0, 0) // Red
+      }
+    }
+
+    // Only update emoji if it actually changed
+    if (currentEmoji !== this.lastSatisfactionEmoji) {
+      this.lastSatisfactionEmoji = currentEmoji
+      const emojiY = indicatorY - 25
+
+      if (!this.satisfactionEmoji) {
+        this.satisfactionEmoji = add([
+          text(currentEmoji, { size: 24 }),
+          pos(this.position.x, emojiY),
+          anchor('center'),
+          color(255, 255, 255),
+          z(30),
+        ])
+      } else {
+        this.satisfactionEmoji.text = currentEmoji
+        this.satisfactionEmoji.pos = vec2(this.position.x, emojiY)
+      }
+    }
+  }
+
+  private getSatisfactionEmoji(): string {
+    if (this.satisfactionLevel >= 80) return '😊'
+    if (this.satisfactionLevel >= 60) return '🙂'
+    if (this.satisfactionLevel >= 40) return '😐'
+    return '😞'
   }
 }

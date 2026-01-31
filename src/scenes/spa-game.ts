@@ -1,3 +1,13 @@
+import {
+  ColorComp,
+  GameObj,
+  OpacityComp,
+  PosComp,
+  TextComp,
+  Vec2,
+  ZComp,
+} from 'kaplay'
+
 import { GAME_CONFIG } from '../constants/game-config'
 import { getGameStateManager, initGameStateManager } from '../gameobjects/base'
 import { Character } from '../gameobjects/character'
@@ -104,13 +114,105 @@ function createGameUI(gameState: GameState) {
     z(100),
   ])
 
-  // Score display
+  // Score display with animations
   const scoreText = add([
     text('Score: 0', { size: 20, font: 'bold' }),
     pos(10, 10),
     color(GAME_CONFIG.COLORS.UI_TEXT),
+    scale(1),
     z(100),
   ])
+
+  // Score popup container for animations
+  const scorePopups: GameObj<
+    TextComp | PosComp | OpacityComp | ColorComp | ZComp
+  >[] = []
+
+  // Function to create score popup animation
+  function showScorePopup(points: number, position: Vec2) {
+    const popup = add([
+      text(`+${points}`, { size: 24, font: 'bold' }),
+      pos(position),
+      color(255, 215, 0), // Gold color for points
+      opacity(1),
+      z(150),
+    ])
+
+    scorePopups.push(popup)
+
+    // Animate popup floating up and fading
+    tween(
+      popup.pos,
+      vec2(position.x, position.y - 50),
+      1.5,
+      (newPos) => (popup.pos = newPos),
+      easings.easeOutQuad,
+    )
+
+    tween(
+      1,
+      0,
+      1.5,
+      (opacity) => (popup.opacity = opacity),
+      easings.easeOutQuad,
+    )
+
+    // Remove popup after animation
+    wait(1.5, () => {
+      destroy(popup)
+      const index = scorePopups.indexOf(popup)
+      if (index > -1) {
+        scorePopups.splice(index, 1)
+      }
+    })
+  }
+
+  // Function to animate score text change
+  function animateScoreChange(newScore: number, oldScore: number) {
+    const scoreDiff = newScore - oldScore
+
+    // Pulse effect for score text
+    tween(
+      1,
+      1.3,
+      0.2,
+      (scale) => {
+        scoreText.scale = vec2(scale, scale)
+      },
+      easings.easeOutBack,
+    )
+
+    tween(
+      1.3,
+      1,
+      0.3,
+      (scale) => {
+        scoreText.scale = vec2(scale, scale)
+      },
+      easings.easeInBack,
+    )
+
+    // Show score popup if score increased
+    if (scoreDiff > 0) {
+      showScorePopup(
+        scoreDiff,
+        vec2(scoreText.pos.x + 50, scoreText.pos.y + 20),
+      )
+    }
+
+    // Change color temporarily for big scores
+    if (scoreDiff >= 50) {
+      scoreText.color = rgb(255, 215, 0) // Gold
+      wait(1, () => {
+        scoreText.color = rgb(51, 51, 51) // GAME_CONFIG.COLORS.UI_TEXT as RGB
+      })
+    } else if (scoreDiff >= 20) {
+      scoreText.color = rgb(0, 255, 0) // Green
+      wait(0.5, () => {
+        scoreText.color = rgb(51, 51, 51) // GAME_CONFIG.COLORS.UI_TEXT as RGB
+      })
+    }
+  }
 
   // Collection button
   const collectionButton = add([
@@ -133,11 +235,17 @@ function createGameUI(gameState: GameState) {
     go('collection')
   })
 
-  // Update score display
+  // Update score display with animations
   const stateManager = getGameStateManager()
+  let oldScore = 0
+
   stateManager.on('scoreChanged', (data) => {
-    const score = data as number
-    scoreText.text = `Score: ${score}`
+    const newScore = data as number
+    scoreText.text = `Score: ${newScore}`
+
+    // Animate the score change
+    animateScoreChange(newScore, oldScore)
+    oldScore = newScore
   })
 
   // Listen for mask unlocks

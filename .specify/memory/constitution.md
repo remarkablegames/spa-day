@@ -18,7 +18,7 @@ Every feature MUST serve the game experience; Game mechanics MUST be playable be
 
 ### II. Kaplay.js Native
 
-All game code MUST use Kaplay.js conventions; Components MUST follow Kaplay entity-component pattern; Scene management MUST use Kaplay scene system; Asset loading MUST follow Kaplay preload patterns; Avoid external game engine abstractions.
+All game code MUST use Kaplay.js conventions; Components MUST follow Kaplay entity-component pattern; Scene management MUST use Kaplay scene system; Asset loading MUST follow Kaplay preload patterns; Avoid external game engine abstractions; Use global Kaplay functions.
 
 ### III. Performance First (NON-NEGOTIABLE)
 
