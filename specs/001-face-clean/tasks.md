@@ -31,9 +31,9 @@ description: 'Task list template for feature implementation'
 
 **Purpose**: Project initialization and basic structure
 
-- [ ] T001 Create cleaning scene structure in src/scenes/cleaning.ts
-- [ ] T002 [P] Create cleaning constants in src/constants/cleaning-config.ts
-- [ ] T003 [P] Create cleaning events in src/events/cleaning.ts
+- [x] T001 Create cleaning scene structure in src/scenes/cleaning.ts
+- [x] T002 [P] Create cleaning constants in src/constants/cleaning-config.ts
+- [x] T003 [P] Create cleaning events in src/events/cleaning.ts
 
 ---
 
@@ -43,12 +43,12 @@ description: 'Task list template for feature implementation'
 
 **⚠️ CRITICAL**: No user story work can begin until this phase is complete
 
-- [ ] T004 Create base eraser tool game object in src/gameobjects/eraser.ts
-- [ ] T005 Create base dirt spot game object in src/gameobjects/dirt-spot.ts
-- [ ] T006 Create character game object with face regions in src/gameobjects/character.ts
-- [ ] T007 Create cleaning state management system in src/systems/cleaning-state.ts
-- [ ] T008 Setup asset loading for cleaning sprites and sounds in public/assets/
-- [ ] T009 Create base cleaning scene with initialization in src/scenes/cleaning.ts
+- [x] T004 Create base eraser tool game object in src/gameobjects/eraser.ts
+- [x] T005 Create base dirt spot game object in src/gameobjects/dirt-spot.ts
+- [x] T006 Create character game object with face regions in src/gameobjects/character.ts
+- [x] T007 Create cleaning state management system in src/systems/cleaning-state.ts
+- [x] T008 Setup asset loading for cleaning sprites and sounds in public/assets/
+- [x] T009 Create base cleaning scene with initialization in src/scenes/cleaning.ts
 
 **Checkpoint**: Foundation ready - user story implementation can now begin in parallel
 

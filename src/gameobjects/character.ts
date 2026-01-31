@@ -8,6 +8,7 @@ import {
   ZComp,
 } from 'kaplay'
 
+import { CLEANING_CONFIG } from '../constants/cleaning-config'
 import { GAME_CONFIG } from '../constants/game-config'
 import { GameObject } from './base'
 
@@ -18,6 +19,8 @@ export interface FaceArea {
   currentMask: string | null
   areaType: string
   isOccupied: boolean
+  cleanliness?: number // 0-1, for cleaning mechanic
+  maskReady?: boolean // Ready for mask application
 }
 
 export interface CharacterConfig {
@@ -58,6 +61,99 @@ export class Character extends GameObject {
     this.satisfactionLevel = config.satisfactionLevel
     this.preferredMaskTypes = config.preferredMaskTypes
     this.faceAreas = this.createFaceAreas()
+  }
+
+  /**
+   * Initialize cleaning state for all face areas
+   */
+  initializeCleaningState(): void {
+    this.faceAreas.forEach((area) => {
+      area.cleanliness = 0.0 // Start dirty
+      area.maskReady = false
+    })
+  }
+
+  /**
+   * Update cleanliness for a specific face area
+   */
+  updateAreaCleanliness(areaId: string, cleanlinessIncrease: number): void {
+    const area = this.faceAreas.find((a) => a.id === areaId)
+    if (!area) return
+
+    area.cleanliness = Math.min(
+      1.0,
+      (area.cleanliness || 0) + cleanlinessIncrease,
+    )
+    area.maskReady =
+      area.cleanliness >= CLEANING_CONFIG.faceRegions.requiredCleanliness
+
+    if (area.maskReady) {
+      this.emitRegionCleaned()
+    }
+  }
+
+  /**
+   * Get overall face cleanliness
+   */
+  getOverallCleanliness(): number {
+    if (this.faceAreas.length === 0) return 0
+    const totalCleanliness = this.faceAreas.reduce(
+      (sum, area) => sum + (area.cleanliness || 0),
+      0,
+    )
+    return totalCleanliness / this.faceAreas.length
+  }
+
+  /**
+   * Check if face is ready for mask application
+   */
+  isFaceReadyForMask(): boolean {
+    return this.faceAreas.every((area) => area.maskReady === true)
+  }
+
+  /**
+   * Get face areas that need cleaning
+   */
+  getDirtyAreas(): FaceArea[] {
+    return this.faceAreas.filter(
+      (area) =>
+        (area.cleanliness || 0) <
+        CLEANING_CONFIG.faceRegions.requiredCleanliness,
+    )
+  }
+
+  /**
+   * Check if a position is within any face area
+   */
+  isPositionInFaceArea(position: Vec2): FaceArea | null {
+    const worldPos = this.position
+    return (
+      this.faceAreas.find((area) => {
+        const areaWorldPos = worldPos.add(area.position)
+        const halfSize = vec2(area.size.x / 2, area.size.y / 2)
+        const areaBounds = {
+          left: areaWorldPos.x - halfSize.x,
+          right: areaWorldPos.x + halfSize.x,
+          top: areaWorldPos.y - halfSize.y,
+          bottom: areaWorldPos.y + halfSize.y,
+        }
+
+        return (
+          position.x >= areaBounds.left &&
+          position.x <= areaBounds.right &&
+          position.y >= areaBounds.top &&
+          position.y <= areaBounds.bottom
+        )
+      }) || null
+    )
+  }
+
+  /**
+   * Emit region cleaned event
+   */
+  private emitRegionCleaned(): void {
+    // Event emission will be implemented when integrated with scene
+    // TODO: Emit event through scene event system
   }
 
   private createFaceAreas(): FaceArea[] {

@@ -4,4 +4,5 @@ export enum Scene {
   SpaGame = 'SpaGame',
   Results = 'Results',
   Collection = 'Collection',
+  Cleaning = 'Cleaning',
 }
