@@ -4,6 +4,9 @@ Auto-generated from all feature plans. Last updated: 2026-01-30
 
 ## Active Technologies
 
+- TypeScript 5.x (strict mode) + Kaplay.js 3001.0.19 (locked version) (001-levels)
+- Browser localStorage for progress/inventory persistence (001-levels)
+
 - TypeScript 5.9.3 + Kaplay.js 3001.0.19 (001-face-clean)
 - N/A (in-memory game state) (001-face-clean)
 
@@ -44,6 +47,8 @@ npm test && npm run lint
 TypeScript 5.9.3: Follow standard conventions
 
 ## Recent Changes
+
+- 001-levels: Added TypeScript 5.x (strict mode) + Kaplay.js 3001.0.19 (locked version)
 
 - 001-face-clean: Added TypeScript 5.9.3 + Kaplay.js 3001.0.19
 
