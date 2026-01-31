@@ -75,6 +75,8 @@ export interface GameState {
   currentScene: string
   score: number
   level: number
+  completions: number
+  averageSatisfaction: number
 }
 
 export class GameStateManager extends EventEmitter {
@@ -83,6 +85,8 @@ export class GameStateManager extends EventEmitter {
     currentScene: 'preload',
     score: 0,
     level: 1,
+    completions: 0,
+    averageSatisfaction: 50,
   }
 
   public getState(): GameState {
@@ -137,6 +141,26 @@ export class GameStateManager extends EventEmitter {
 
   public nextLevel() {
     this.setState({ level: this.state.level + 1 })
+  }
+
+  public incrementCompletions() {
+    this.setState({ completions: this.state.completions + 1 })
+  }
+
+  public setCompletions(completions: number) {
+    this.setState({ completions })
+  }
+
+  public getCompletions(): number {
+    return this.state.completions
+  }
+
+  public setAverageSatisfaction(satisfaction: number) {
+    this.setState({ averageSatisfaction: satisfaction })
+  }
+
+  public getAverageSatisfaction(): number {
+    return this.state.averageSatisfaction
   }
 
   public setLevel(level: number) {

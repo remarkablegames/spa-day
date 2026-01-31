@@ -32,9 +32,9 @@ export function createSpaGameScene() {
 
   scene('spa-game', () => {
     // Initialize systems
+    initGameStateManager()
     initInputSystem()
     initAssetManager()
-    initGameStateManager()
 
     // Setup game state
     setupGameState(gameState)
@@ -106,11 +106,109 @@ function createGameUI(gameState: GameState) {
 
   // Score display
   const scoreText = add([
-    text('Score: 0', { size: 24 }),
-    pos(20, 20),
+    text('Score: 0', { size: 20, font: 'bold' }),
+    pos(10, 10),
     color(GAME_CONFIG.COLORS.UI_TEXT),
     z(100),
   ])
+
+  // Collection button
+  const collectionButton = add([
+    rect(120, 40),
+    pos(width() - 130, 60),
+    color(GAME_CONFIG.COLORS.UI_BUTTON),
+    z(100),
+    area(),
+  ])
+
+  add([
+    text('Collection', { size: 16 }),
+    pos(width() - 70, 80),
+    anchor('center'),
+    color(255, 255, 255),
+    z(101),
+  ])
+
+  collectionButton.onClick(() => {
+    go('collection')
+  })
+
+  // Update score display
+  const stateManager = getGameStateManager()
+  stateManager.on('scoreChanged', (data) => {
+    const score = data as number
+    scoreText.text = `Score: ${score}`
+  })
+
+  // Listen for mask unlocks
+  stateManager.on('maskUnlocked', (data) => {
+    // Show unlock notification
+    const notification = add([
+      rect(300, 80),
+      pos(center().x, 100),
+      color(0, 0, 0),
+      opacity(0.8),
+      z(200),
+    ])
+
+    add([
+      text(
+        ` New Mask Unlocked: ${(data as { name: string }).name} ${(data as { icon: string }).icon}`,
+        {
+          size: 18,
+          font: 'bold',
+        },
+      ),
+      pos(center().x, 140),
+      anchor('center'),
+      color(255, 255, 255),
+      z(201),
+    ])
+
+    // Auto-remove notification after 3 seconds
+    wait(3, () => {
+      destroy(notification)
+    })
+  })
+
+  // Listen for achievements
+  stateManager.on('achievementUnlocked', (achievement) => {
+    // Show achievement notification
+    const notification = add([
+      rect(350, 100),
+      pos(center().x, 100),
+      color(0, 0, 0),
+      opacity(0.8),
+      z(200),
+    ])
+
+    add([
+      text(` Achievement: ${(achievement as { name: string }).name}`, {
+        size: 18,
+        font: 'bold',
+      }),
+      pos(center().x, 130),
+      anchor('center'),
+      color(255, 255, 255),
+      z(201),
+    ])
+
+    add([
+      text((achievement as { description: string }).description, {
+        size: 14,
+        width: 330,
+      }),
+      pos(center().x, 160),
+      anchor('center'),
+      color(255, 255, 255),
+      z(201),
+    ])
+
+    // Auto-remove notification after 4 seconds
+    wait(4, () => {
+      destroy(notification)
+    })
+  })
 
   // Timer display
   const timerText = add([
@@ -230,6 +328,10 @@ function handleTouchEnd(pos: TouchPosition, gameState: GameState) {
         // Mark mask as applied and destroy its visual elements
         gameState.selectedMask.isApplied = true
         gameState.selectedMask.destroy()
+
+        // Update progression system
+        // For now, just update the game state manager
+        // The progression system will be updated when the scene is reloaded
       }
     }
   }

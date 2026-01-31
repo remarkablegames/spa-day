@@ -88,6 +88,8 @@ export const GAME_CONFIG = {
     UI_BACKGROUND: '#FFFFFF',
     UI_TEXT: '#333333',
     UI_ACCENT: '#87CEEB', // Sky blue
+    UI_BUTTON: '#4A90E2', // Blue
+    UI_PANEL: '#F8F9FA', // Light gray
     SATISFACTION_HIGH: '#90EE90', // Light green
     SATISFACTION_LOW: '#FFB6C1', // Light red
     MASK_HYDRATING: '#87CEEB', // Sky blue

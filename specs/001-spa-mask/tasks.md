@@ -83,13 +83,13 @@ description: 'Task list template for feature implementation'
 
 ### Implementation for User Story 2
 
-- [ ] T019 [P] [US2] Create mask type definitions in src/constants/mask-types.ts
-- [ ] T020 [US2] Implement mask collection scene in src/scenes/collection.ts
-- [ ] T021 [US2] Create progression system in src/systems/progression.ts
-- [ ] T022 [US2] Add mask unlock logic based on treatment completion
-- [ ] T023 [US2] Implement mask selection UI in collection scene
-- [ ] T024 [US2] Integrate collection scene with main game flow
-- [ ] T025 [US2] Add visual feedback for unlocked masks
+- [x] T019 [P] [US2] Create mask type definitions in src/constants/mask-types.ts
+- [x] T020 [US2] Implement mask collection scene in src/scenes/collection.ts
+- [x] T021 [US2] Create progression system in src/systems/progression.ts
+- [x] T022 [US2] Add mask unlock logic based on treatment completion
+- [x] T023 [US2] Implement mask selection UI in collection scene
+- [x] T024 [US2] Integrate collection scene with main game flow
+- [x] T025 [US2] Add visual feedback for unlocked masks
 
 **Checkpoint**: At this point, User Stories 1 AND 2 should both work independently
 
