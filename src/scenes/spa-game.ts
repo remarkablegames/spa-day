@@ -499,49 +499,27 @@ function renderGame(gameState: GameState) {
   })
 }
 
+import { Scene } from '../constants/scene'
+
 function handleTreatmentComplete(gameState: GameState) {
-  if (!gameState.treatmentSession) return
+  if (!gameState.treatmentSession || !gameState.character) return
 
-  const summary = gameState.treatmentSession.getSummary()
-
-  // Show completion message
-  add([
-    text(`Treatment Complete! Score: ${summary.score}`, { size: 32 }),
-    pos(width() / 2, height() / 2),
-    anchor('center'),
-    color(GAME_CONFIG.COLORS.UI_TEXT),
-    z(200),
-  ])
-
-  // Save high score
-  const stateManager = getGameStateManager()
-  const currentHighScore = stateManager.getScore()
-  if (summary.score > currentHighScore) {
-    stateManager.setScore(summary.score)
+  // Create simple score breakdown from treatment session
+  const scoreBreakdown = {
+    baseScore: gameState.treatmentSession.score,
+    effectivenessBonus: 0,
+    timingBonus: 0,
+    completionBonus: 0,
+    satisfactionBonus: 0,
+    comboMultiplier: 1,
+    totalScore: gameState.treatmentSession.score,
   }
 
-  // Reset after delay
-  wait(3, () => {
-    resetGame(gameState)
-  })
-}
-
-function resetGame(gameState: GameState) {
-  // Clear current session
-  if (gameState.treatmentSession) {
-    gameState.treatmentSession = TreatmentSession.createNewSession(
-      gameState.character!.id,
-    )
-  }
-
-  // Reset character
-  if (gameState.character) {
-    gameState.character.clearAllMasks()
-    gameState.character.setSatisfaction(50)
-  }
-
-  // Reset masks
-  gameState.availableMasks.forEach((mask) => {
-    mask.remove()
+  // Go to results scene with treatment data
+  go(Scene.Results, {
+    session: gameState.treatmentSession,
+    character: gameState.character,
+    scoreBreakdown: scoreBreakdown,
+    treatmentDuration: gameState.treatmentSession.getElapsedTime() * 1000,
   })
 }

@@ -3,6 +3,7 @@ import { Scene } from '../constants/scene'
 import { Character } from '../gameobjects/character'
 import { TreatmentSession } from '../gameobjects/treatment'
 import { CustomerLoyaltySystem } from '../systems/customer-loyalty'
+import { getProgressionSystem } from '../systems/progression'
 import { ScoreBreakdown } from '../systems/scoring'
 
 export interface ResultsData {
@@ -203,7 +204,7 @@ export function createResultsScene() {
     })
 
     continueButton.onClick(() => {
-      play('confirm', { volume: 0.5 })
+      // play('confirm', { volume: 0.5 }) // Sound not loaded yet
       go(Scene.Game) // Return to main game scene
     })
 
@@ -220,6 +221,13 @@ export function createResultsScene() {
       satisfactionLevel,
       scoreBreakdown.totalScore,
       character.preferredMaskTypes,
+    )
+
+    // Update progression system
+    const progressionSystem = getProgressionSystem()
+    progressionSystem.updateProgress(
+      scoreBreakdown.totalScore,
+      satisfactionLevel,
     )
 
     if (customerRecord.willReturn) {
