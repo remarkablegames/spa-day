@@ -685,7 +685,7 @@ function initializeCleaningMode(gameState: SpaGameState): void {
       circle(gameState.eraser.radius),
       pos(gameState.eraser.position.x, gameState.eraser.position.y),
       color(255, 100, 100), // Red color to be more visible
-      opacity(0.8),
+      opacity(0), // Start hidden
       outline(4), // Add border
       z(100), // Higher z-index to be on top
       'eraser-visual',
@@ -753,7 +753,7 @@ function initializeCleaningMode(gameState: SpaGameState): void {
   ])
 
   const eraserButtonText = add([
-    text('Eraser: OFF', { size: 14 }),
+    text('Clean: OFF', { size: 14 }),
     pos(80, 100),
     anchor('center'),
     color(255, 255, 255),
@@ -766,12 +766,22 @@ function initializeCleaningMode(gameState: SpaGameState): void {
     if (gameState.eraser) {
       if (gameState.eraser.isActive) {
         gameState.eraser.deactivate()
-        eraserButtonText.text = 'Eraser: OFF'
+        eraserButtonText.text = 'Clean: OFF'
         eraserToggleButton.color = rgb(100, 100, 100)
+        // Hide eraser when deactivated
+        if (gameState.eraser.visual) {
+          gameState.eraser.visual.opacity = 0
+        }
       } else {
         gameState.eraser.activate()
-        eraserButtonText.text = 'Eraser: ON'
+        eraserButtonText.text = 'Clean: ON'
         eraserToggleButton.color = rgb(100, 255, 100)
+        // Show eraser at mouse position when activated
+        if (gameState.eraser.visual) {
+          const currentMousePos = mousePos()
+          gameState.eraser.moveTo(currentMousePos)
+          gameState.eraser.visual.opacity = 0.8
+        }
       }
     }
   })
