@@ -145,7 +145,7 @@ export class GameOverManager {
       text = 'Very Dissatisfied'
     }
 
-    return `${emoji} Customer ${text} (${satisfaction}%)`
+    return `${emoji} Customer ${text} (${Math.round(satisfaction)}%)`
   }
 
   public restart(): void {

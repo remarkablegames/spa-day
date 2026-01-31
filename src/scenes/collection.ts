@@ -110,7 +110,7 @@ export function createCollectionScene() {
   ])
 
   add([
-    text(`Avg Satisfaction: ${satisfaction}%`, { size: 18 }),
+    text(`Avg Satisfaction: ${Math.round(satisfaction)}%`, { size: 18 }),
     pos(50, statsY + 60),
     color(GAME_CONFIG.COLORS.UI_TEXT),
     z(10),

@@ -47,7 +47,7 @@ export function createResultsScene() {
       satisfactionLevel >= 80 ? GREEN : satisfactionLevel >= 60 ? YELLOW : RED
 
     add([
-      text(`Satisfaction: ${satisfactionLevel}%`, {
+      text(`Satisfaction: ${Math.round(satisfactionLevel)}%`, {
         size: 24,
         font: 'monospace',
       }),
