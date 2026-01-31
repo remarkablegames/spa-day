@@ -1,50 +1,84 @@
-# [PROJECT_NAME] Constitution
-<!-- Example: Spec Constitution, TaskFlow Constitution, etc. -->
+<!--
+Sync Impact Report:
+- Version change: 0.0.0 → 1.0.0 (initial constitution)
+- Modified principles: N/A (initial creation)
+- Added sections: Core Principles (5), Technical Standards, Development Workflow, Governance
+- Removed sections: N/A (initial creation)
+- Templates requiring updates: ✅ plan-template.md, ✅ spec-template.md, ✅ tasks-template.md
+- Follow-up TODOs: None
+-->
+
+# Spa Day Constitution
 
 ## Core Principles
 
-### [PRINCIPLE_1_NAME]
-<!-- Example: I. Library-First -->
-[PRINCIPLE_1_DESCRIPTION]
-<!-- Example: Every feature starts as a standalone library; Libraries must be self-contained, independently testable, documented; Clear purpose required - no organizational-only libraries -->
+### I. Game-First Development
 
-### [PRINCIPLE_2_NAME]
-<!-- Example: II. CLI Interface -->
-[PRINCIPLE_2_DESCRIPTION]
-<!-- Example: Every library exposes functionality via CLI; Text in/out protocol: stdin/args → stdout, errors → stderr; Support JSON + human-readable formats -->
+Every feature MUST serve the game experience; Game mechanics MUST be playable before any polish; Core loop MUST be functional and fun before adding additional content; No feature added without clear player value.
 
-### [PRINCIPLE_3_NAME]
-<!-- Example: III. Test-First (NON-NEGOTIABLE) -->
-[PRINCIPLE_3_DESCRIPTION]
-<!-- Example: TDD mandatory: Tests written → User approved → Tests fail → Then implement; Red-Green-Refactor cycle strictly enforced -->
+### II. Kaplay.js Native
 
-### [PRINCIPLE_4_NAME]
-<!-- Example: IV. Integration Testing -->
-[PRINCIPLE_4_DESCRIPTION]
-<!-- Example: Focus areas requiring integration tests: New library contract tests, Contract changes, Inter-service communication, Shared schemas -->
+All game code MUST use Kaplay.js conventions; Components MUST follow Kaplay entity-component pattern; Scene management MUST use Kaplay scene system; Asset loading MUST follow Kaplay preload patterns; Avoid external game engine abstractions.
 
-### [PRINCIPLE_5_NAME]
-<!-- Example: V. Observability, VI. Versioning & Breaking Changes, VII. Simplicity -->
-[PRINCIPLE_5_DESCRIPTION]
-<!-- Example: Text I/O ensures debuggability; Structured logging required; Or: MAJOR.MINOR.BUILD format; Or: Start simple, YAGNI principles -->
+### III. Performance First (NON-NEGOTIABLE)
 
-## [SECTION_2_NAME]
-<!-- Example: Additional Constraints, Security Requirements, Performance Standards, etc. -->
+60 FPS target MUST be maintained on target devices; Asset bundling MUST optimize for web delivery; Memory usage MUST stay within browser limits; Performance testing REQUIRED before each release; No features that compromise frame rate.
 
-[SECTION_2_CONTENT]
-<!-- Example: Technology stack requirements, compliance standards, deployment policies, etc. -->
+### IV. Static Web Deployment
 
-## [SECTION_3_NAME]
-<!-- Example: Development Workflow, Review Process, Quality Gates, etc. -->
+Game MUST run entirely in the browser; No server-side dependencies for gameplay; All assets MUST be bundled for static hosting; CDN-friendly asset structure REQUIRED; Offline capability preferred but not required.
 
-[SECTION_3_CONTENT]
-<!-- Example: Code review requirements, testing gates, deployment approval process, etc. -->
+### V. Mobile-First Design
+
+Controls MUST work on touch devices; UI MUST scale appropriately on mobile screens; Game mechanics MUST be playable without keyboard; Performance MUST be adequate on mobile browsers; Desktop experience enhanced but not required.
+
+## Technical Standards
+
+### Technology Stack
+
+- **Engine**: Kaplay.js 3001.0.19 (locked version)
+- **Build Tool**: Vite with static optimization
+- **Language**: TypeScript with strict mode
+- **Testing**: Manual gameplay testing (automated testing optional)
+- **Deployment**: Static hosting (GitHub Pages, Netlify, itch.io)
+
+### Code Quality
+
+- ESLint configuration MUST be followed
+- Prettier formatting REQUIRED for all commits
+- TypeScript strict mode enforced
+- Conventional commits REQUIRED (using commitlint)
+- All PRs MUST pass automated checks
+
+## Development Workflow
+
+### Feature Development
+
+1. Create feature specification using `/speckit.specify`
+2. Generate implementation plan using `/speckit.plan`
+3. Create task breakdown using `/speckit.tasks`
+4. Implement features following task order
+5. Manual gameplay testing REQUIRED
+6. Performance validation before merge
+
+### Release Process
+
+1. All features MUST be playable
+2. Build MUST pass without errors
+3. Bundle size MUST be reasonable (<10MB compressed)
+4. Gameplay MUST be tested on target devices
+5. Version MUST follow semantic versioning
 
 ## Governance
-<!-- Example: Constitution supersedes all other practices; Amendments require documentation, approval, migration plan -->
 
-[GOVERNANCE_RULES]
-<!-- Example: All PRs/reviews must verify compliance; Complexity must be justified; Use [GUIDANCE_FILE] for runtime development guidance -->
+This constitution supersedes all other development practices. Amendments require:
 
-**Version**: [CONSTITUTION_VERSION] | **Ratified**: [RATIFICATION_DATE] | **Last Amended**: [LAST_AMENDED_DATE]
-<!-- Example: Version: 2.1.1 | Ratified: 2025-06-13 | Last Amended: 2025-07-16 -->
+- Documentation of proposed changes
+- Team review and approval
+- Updated version number following semantic versioning
+- Migration plan for existing code
+- Update of all dependent templates
+
+All pull requests MUST verify compliance with this constitution. Complexity beyond these principles MUST be explicitly justified in implementation plans. Use this constitution as the primary guidance for all development decisions.
+
+**Version**: 1.0.0 | **Ratified**: 2025-01-30 | **Last Amended**: 2025-01-30
