@@ -205,7 +205,7 @@ export function createResultsScene() {
 
     continueButton.onClick(() => {
       // play('confirm', { volume: 0.5 }) // Sound not loaded yet
-      go(Scene.Game) // Return to main game scene
+      go(Scene.SpaGame) // Return to spa game scene
     })
 
     // Particle effects for high scores

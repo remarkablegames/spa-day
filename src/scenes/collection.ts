@@ -7,6 +7,7 @@ import {
   ZComp,
 } from 'kaplay'
 
+import { Scene } from '../constants'
 import { GAME_CONFIG } from '../constants/game-config'
 import type { MaskTypeConfig } from '../constants/mask-types'
 import {
@@ -89,7 +90,7 @@ export function createCollectionScene() {
   ])
 
   backButton.onClick(() => {
-    go('spa-game')
+    go(Scene.SpaGame)
   })
 
   // Stats display

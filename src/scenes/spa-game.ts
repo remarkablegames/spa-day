@@ -40,7 +40,7 @@ export function createSpaGameScene() {
     dragOffset: null,
   }
 
-  scene('spa-game', () => {
+  scene(Scene.SpaGame, () => {
     // Initialize systems
     initGameStateManager()
     initInputSystem()
@@ -232,7 +232,7 @@ function createGameUI(gameState: GameState) {
   ])
 
   collectionButton.onClick(() => {
-    go('collection')
+    go(Scene.Collection)
   })
 
   // Update score display with animations
