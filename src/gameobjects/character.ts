@@ -31,7 +31,7 @@ export interface CharacterConfig {
   preferredMaskTypes: string[]
 }
 
-type VisualElement = GameObj<ColorComp | PosComp | ZComp>
+type VisualElement = GameObj<PosComp | ZComp>
 type TextElement = GameObj<ColorComp | PosComp | ZComp | TextComp>
 type CircleElement = GameObj<CircleComp | ColorComp | PosComp | ZComp>
 
@@ -224,12 +224,15 @@ export class Character extends GameObject {
 
     // Create visual element if it doesn't exist
     if (!this.visualElement) {
+      // Load the character sprite
+      loadSprite('character_base', '/sprites/face-eyes-closed.png')
+
       this.visualElement = add([
-        circle(GAME_CONFIG.CHARACTER_SIZE / 2),
+        sprite('character_base'),
         pos(this.position),
-        color(255, 200, 150), // Skin color
+        anchor('center'),
         z(10),
-      ])
+      ]) as GameObj<PosComp | ZComp>
     } else {
       // Update position of existing visual element
       this.visualElement.pos = this.position

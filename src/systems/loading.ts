@@ -27,14 +27,6 @@ export class LoadingManager {
   }
 
   private setupDefaultAssets(): void {
-    // Register default game assets
-    this.registerAsset('sprites/bean.png', () =>
-      this.loadSprite('bean', 'sprites/bean.png'),
-    )
-    this.registerAsset('sprites/ghosty.png', () =>
-      this.loadSprite('ghosty', 'sprites/ghosty.png'),
-    )
-
     // Register spa game specific assets
     this.registerAsset('initialize-systems', () => this.initializeGameSystems())
     this.registerAsset('preload-masks', () => this.preloadMaskAssets())
