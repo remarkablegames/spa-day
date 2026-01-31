@@ -21,12 +21,15 @@ export class PauseManager {
 
   private onPauseCallbacks: Array<() => void> = []
   private onResumeCallbacks: Array<() => void> = []
+  private keyboardControlsActive = false
 
   constructor() {
     this.setupKeyboardControls()
   }
 
-  private setupKeyboardControls(): void {
+  public setupKeyboardControls(): void {
+    if (this.keyboardControlsActive) return
+
     // Listen for pause key (ESC or P)
     onKeyPress('escape', () => {
       this.togglePause()
@@ -35,6 +38,14 @@ export class PauseManager {
     onKeyPress('p', () => {
       this.togglePause()
     })
+
+    this.keyboardControlsActive = true
+  }
+
+  private cleanupKeyboardControls(): void {
+    // Note: Kaplay.js doesn't provide a direct way to remove specific keyboard listeners
+    // We'll use the keyboardControlsActive flag to prevent multiple setups
+    this.keyboardControlsActive = false
   }
 
   public togglePause(): void {
@@ -210,6 +221,15 @@ export class PauseManager {
   }
 
   public reset(): void {
+    // Clean up pause UI if visible
+    if (this.pauseState.isPaused) {
+      this.hidePauseUI()
+    }
+
+    // Clean up keyboard controls
+    this.cleanupKeyboardControls()
+
+    // Reset pause state
     this.pauseState = {
       isPaused: false,
       pauseTime: null,
@@ -217,6 +237,10 @@ export class PauseManager {
       lastPauseStart: null,
       realTimeAtPause: null,
     }
+
+    // Clear callbacks
+    this.onPauseCallbacks = []
+    this.onResumeCallbacks = []
   }
 }
 
@@ -226,6 +250,10 @@ let pauseManager: PauseManager | null = null
 export function initPauseManager(): PauseManager {
   if (!pauseManager) {
     pauseManager = new PauseManager()
+  } else {
+    // If already exists, reset it to clean state and re-setup controls
+    pauseManager.reset()
+    pauseManager.setupKeyboardControls()
   }
   return pauseManager
 }

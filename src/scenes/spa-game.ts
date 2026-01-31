@@ -101,11 +101,15 @@ export function createSpaGameScene() {
       renderGame(gameState)
     })
 
-    // Cleanup music on scene destroy
+    // Cleanup on scene destroy
     onDestroy(() => {
       // if (music) {
       //   music.stop()
       // }
+
+      // Clean up pause manager to prevent keyboard listener conflicts
+      const pauseManager = getPauseManager()
+      pauseManager.reset()
     })
   })
 }
