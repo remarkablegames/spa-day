@@ -429,7 +429,8 @@ export class Character extends GameObject {
   }
 
   private renderSatisfactionFeedback() {
-    const indicatorY = this.position.y - GAME_CONFIG.CHARACTER_SIZE / 2 - 30
+    // Position satisfaction feedback below the Score text (which is at y=10)
+    const indicatorY = 60 // Below the Score: 0 text at y=10
     const currentEmoji = this.getSatisfactionEmoji()
     const roundedSatisfaction = Math.round(this.satisfactionLevel) // Round to whole number
 
@@ -441,14 +442,14 @@ export class Character extends GameObject {
       if (!this.satisfactionIndicator) {
         this.satisfactionIndicator = add([
           text(`${roundedSatisfaction}%`, { size: 32, font: 'bold' }),
-          pos(this.position.x, indicatorY),
-          anchor('center'),
+          pos(10, indicatorY), // Position below Score text
+          anchor('left'),
           color(255, 255, 255),
           z(30),
         ])
       } else {
         this.satisfactionIndicator.text = `${roundedSatisfaction}%`
-        this.satisfactionIndicator.pos = vec2(this.position.x, indicatorY)
+        this.satisfactionIndicator.pos = vec2(10, indicatorY)
       }
 
       // Update indicator color based on satisfaction level
@@ -464,19 +465,19 @@ export class Character extends GameObject {
     // Only update emoji if it actually changed
     if (currentEmoji !== this.lastSatisfactionEmoji) {
       this.lastSatisfactionEmoji = currentEmoji
-      const emojiY = indicatorY - 40
+      const emojiY = indicatorY + 40 // Below the satisfaction percentage
 
       if (!this.satisfactionEmoji) {
         this.satisfactionEmoji = add([
           text(currentEmoji, { size: 48 }),
-          pos(this.position.x, emojiY),
-          anchor('center'),
+          pos(10, emojiY), // Position below satisfaction percentage
+          anchor('left'),
           color(255, 255, 255),
           z(30),
         ])
       } else {
         this.satisfactionEmoji.text = currentEmoji
-        this.satisfactionEmoji.pos = vec2(this.position.x, emojiY)
+        this.satisfactionEmoji.pos = vec2(10, emojiY)
       }
     }
   }
