@@ -1,7 +1,26 @@
-import { Scene, Sprite } from '../constants'
+import { Scene } from '../constants'
+import { createLoadingScreen, initLoadingManager } from '../systems/loading'
 
 scene(Scene.Preload, () => {
-  loadSprite(Sprite.Bean, 'sprites/bean.png')
-  loadSprite(Sprite.Ghosty, 'sprites/ghosty.png')
-  go(Scene.Game)
+  // Create loading screen
+  const loadingUI = createLoadingScreen()
+
+  // Initialize loading manager
+  const loadingManager = initLoadingManager()
+
+  // Set up callbacks
+  loadingManager.setProgressCallback((progress) => {
+    loadingUI.updateProgress(progress.percentage)
+  })
+
+  loadingManager.setCompleteCallback(() => {
+    // Clean up loading screen
+    loadingUI.cleanup()
+
+    // Go to spa game scene
+    go(Scene.SpaGame)
+  })
+
+  // Start loading assets
+  loadingManager.loadAll()
 })
