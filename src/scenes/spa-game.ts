@@ -158,7 +158,7 @@ function createGameUI(gameState: GameState) {
 
   // Title
   add([
-    text('Spa Face Mask Game', { size: 32 }),
+    text('Spa Face Mask Game', { size: 48 }),
     pos(width() / 2, 50),
     anchor('center'),
     color(GAME_CONFIG.COLORS.UI_TEXT),
@@ -167,7 +167,7 @@ function createGameUI(gameState: GameState) {
 
   // Score display with animations
   const scoreText = add([
-    text('Score: 0', { size: 20, font: 'bold' }),
+    text('Score: 0', { size: 32, font: 'bold' }),
     pos(10, 10),
     color(GAME_CONFIG.COLORS.UI_TEXT),
     scale(1),
@@ -182,7 +182,7 @@ function createGameUI(gameState: GameState) {
   // Function to create score popup animation
   function showScorePopup(points: number, position: Vec2) {
     const popup = add([
-      text(`+${points}`, { size: 24, font: 'bold' }),
+      text(`+${points}`, { size: 36, font: 'bold' }),
       pos(position),
       color(255, 215, 0), // Gold color for points
       opacity(1),
@@ -267,16 +267,16 @@ function createGameUI(gameState: GameState) {
 
   // Collection button
   const collectionButton = add([
-    rect(120, 40),
-    pos(width() - 130, 60),
+    rect(160, 50),
+    pos(width() - 170, 60),
     color(GAME_CONFIG.COLORS.UI_BUTTON),
     z(100),
     area(),
   ])
 
   add([
-    text('Collection', { size: 16 }),
-    pos(width() - 70, 80),
+    text('Collection', { size: 24 }),
+    pos(width() - 90, 85),
     anchor('center'),
     color(255, 255, 255),
     z(101),
@@ -314,7 +314,7 @@ function createGameUI(gameState: GameState) {
       text(
         ` New Mask Unlocked: ${(data as { name: string }).name} ${(data as { icon: string }).icon}`,
         {
-          size: 18,
+          size: 24,
           font: 'bold',
         },
       ),
@@ -343,7 +343,7 @@ function createGameUI(gameState: GameState) {
 
     add([
       text(` Achievement: ${(achievement as { name: string }).name}`, {
-        size: 18,
+        size: 24,
         font: 'bold',
       }),
       pos(center().x, 130),
@@ -354,7 +354,7 @@ function createGameUI(gameState: GameState) {
 
     add([
       text((achievement as { description: string }).description, {
-        size: 14,
+        size: 20,
         width: 330,
       }),
       pos(center().x, 160),
@@ -371,15 +371,15 @@ function createGameUI(gameState: GameState) {
 
   // Timer display
   const timerText = add([
-    text('Time: 30s', { size: 24 }),
-    pos(width() - 150, 20),
+    text('Time: 30s', { size: 32 }),
+    pos(width() - 200, 20),
     color(GAME_CONFIG.COLORS.UI_TEXT),
     z(100),
   ])
 
   // Instructions
   add([
-    text('Drag masks to character face areas', { size: 16 }),
+    text('Drag masks to character face areas', { size: 24 }),
     pos(width() / 2, height() - 30),
     anchor('center'),
     color(GAME_CONFIG.COLORS.UI_TEXT),

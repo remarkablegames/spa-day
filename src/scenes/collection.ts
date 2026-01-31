@@ -65,7 +65,7 @@ export function createCollectionScene() {
 
   // Title
   add([
-    text('Mask Collection', { size: 32, font: 'bold' }),
+    text('Mask Collection', { size: 48, font: 'bold' }),
     pos(center().x, 50),
     anchor('center'),
     color(GAME_CONFIG.COLORS.UI_TEXT),
@@ -82,7 +82,7 @@ export function createCollectionScene() {
   ])
 
   add([
-    text('Back', { size: 16 }),
+    text('Back', { size: 24 }),
     pos(backButton.pos.x + 50, backButton.pos.y + 20),
     anchor('center'),
     color(255, 255, 255),
@@ -96,32 +96,32 @@ export function createCollectionScene() {
   // Stats display
   const statsY = 120
   add([
-    text(`Score: ${playerScore}`, { size: 18 }),
+    text(`Score: ${playerScore}`, { size: 32 }),
     pos(50, statsY),
     color(GAME_CONFIG.COLORS.UI_TEXT),
     z(10),
   ])
 
   add([
-    text(`Completions: ${completions}`, { size: 18 }),
-    pos(50, statsY + 30),
+    text(`Completions: ${completions}`, { size: 32 }),
+    pos(50, statsY + 40),
     color(GAME_CONFIG.COLORS.UI_TEXT),
     z(10),
   ])
 
   add([
-    text(`Avg Satisfaction: ${Math.round(satisfaction)}%`, { size: 18 }),
-    pos(50, statsY + 60),
+    text(`Avg Satisfaction: ${Math.round(satisfaction)}%`, { size: 32 }),
+    pos(50, statsY + 80),
     color(GAME_CONFIG.COLORS.UI_TEXT),
     z(10),
   ])
 
   // Mask type grid
-  const gridStartY = 220
+  const gridStartY = 250
   const gridCols = 3
-  const gridSpacing = 150
-  const cardWidth = 120
-  const cardHeight = 140
+  const gridSpacing = 180
+  const cardWidth = 160
+  const cardHeight = 180
 
   Object.values(MaskType).forEach((maskType, index) => {
     const config = getMaskTypeConfig(maskType)
@@ -129,7 +129,7 @@ export function createCollectionScene() {
 
     const col = index % gridCols
     const row = Math.floor(index / gridCols)
-    const x = 100 + col * gridSpacing
+    const x = 80 + col * gridSpacing
     const y = gridStartY + row * (cardHeight + 20)
 
     // Card background
@@ -157,7 +157,7 @@ export function createCollectionScene() {
       ])
 
       add([
-        text('🔒', { size: 32 }),
+        text('🔒', { size: 48 }),
         pos(x + cardWidth / 2, y + cardHeight / 2 - 10),
         anchor('center'),
         z(7),
@@ -166,8 +166,8 @@ export function createCollectionScene() {
       // Unlock requirement
       const reqText = getUnlockRequirementText(config.unlockRequirement)
       add([
-        text(reqText, { size: 12 }),
-        pos(x + cardWidth / 2, y + cardHeight / 2 + 20),
+        text(reqText, { size: 14 }),
+        pos(x + cardWidth / 2, y + cardHeight - 25),
         anchor('center'),
         color(255, 255, 255),
         z(7),
@@ -176,15 +176,15 @@ export function createCollectionScene() {
 
     // Icon
     add([
-      text(config.icon, { size: 32 }),
-      pos(x + cardWidth / 2, y + 30),
+      text(config.icon, { size: 48 }),
+      pos(x + cardWidth / 2, y + 25),
       anchor('center'),
       z(7),
     ])
 
     // Name
     add([
-      text(config.name, { size: 14, font: 'bold' }),
+      text(config.name, { size: 20, font: 'bold' }),
       pos(x + cardWidth / 2, y + 60),
       anchor('center'),
       color(255, 255, 255),
@@ -193,23 +193,23 @@ export function createCollectionScene() {
 
     // Stats
     add([
-      text(`⭐ ${config.effectiveness}%`, { size: 10 }),
-      pos(x + 10, y + 85),
+      text(`⭐ ${config.effectiveness}%`, { size: 14 }),
+      pos(x + 15, y + 85),
       color(255, 255, 255),
       z(7),
     ])
 
     add([
-      text(`⏱️ ${config.duration}s`, { size: 10 }),
-      pos(x + 10, y + 100),
+      text(`⏱️ ${config.duration}s`, { size: 14 }),
+      pos(x + 15, y + 105),
       color(255, 255, 255),
       z(7),
     ])
 
     // Description
     add([
-      text(config.description, { size: 9, width: cardWidth - 20 }),
-      pos(x + 10, y + 115),
+      text(config.description, { size: 12, width: cardWidth - 30 }),
+      pos(x + 15, y + 125),
       color(255, 255, 255),
       z(7),
     ])
@@ -250,7 +250,7 @@ export function createCollectionScene() {
       )
       const col = index % gridCols
       const row = Math.floor(index / gridCols)
-      const x = 100 + col * gridSpacing - 5
+      const x = 80 + col * gridSpacing - 5
       const y = gridStartY + row * (cardHeight + 20) - 5
 
       selectionIndicator = add([
@@ -292,7 +292,7 @@ export function createCollectionScene() {
       const config = getMaskTypeConfig(collectionState.selectedMaskType)
 
       detailsTitle = add([
-        text(config.name, { size: 20, font: 'bold' }),
+        text(config.name, { size: 32, font: 'bold' }),
         pos(width() - 130, detailsPanel.pos.y + 30),
         anchor('center'),
         color(GAME_CONFIG.COLORS.UI_TEXT),
@@ -302,7 +302,7 @@ export function createCollectionScene() {
       detailsText = add([
         text(
           `${config.description}\n\nEffectiveness: ${config.effectiveness}%\nDuration: ${config.duration}s\n\n${config.icon} ${config.name} masks provide ${config.name.toLowerCase()} benefits for the skin.`,
-          { size: 14, width: width() - 280 },
+          { size: 24, width: width() - 280 },
         ),
         pos(width() - 130, detailsPanel.pos.y + 70),
         anchor('center'),
@@ -311,7 +311,7 @@ export function createCollectionScene() {
       ])
     } else {
       detailsTitle = add([
-        text('Select a mask type', { size: 18, font: 'bold' }),
+        text('Select a mask type', { size: 28, font: 'bold' }),
         pos(width() - 130, detailsPanel.pos.y + 100),
         anchor('center'),
         color(GAME_CONFIG.COLORS.UI_TEXT),

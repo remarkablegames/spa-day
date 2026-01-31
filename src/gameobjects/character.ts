@@ -62,7 +62,7 @@ export class Character extends GameObject {
 
   private createFaceAreas(): FaceArea[] {
     const characterSize = GAME_CONFIG.CHARACTER_SIZE
-    const areaSize = 30
+    const areaSize = 60
 
     // Define face areas relative to character position
     const areas: FaceArea[] = [
@@ -157,7 +157,7 @@ export class Character extends GameObject {
           ])
 
           const maskText = add([
-            text('H', { size: 12 }),
+            text('H', { size: 24 }),
             pos(this.position.add(area.position)),
             anchor('center'),
             color(255, 255, 255),
@@ -341,7 +341,7 @@ export class Character extends GameObject {
       // Update or create satisfaction indicator
       if (!this.satisfactionIndicator) {
         this.satisfactionIndicator = add([
-          text(`${roundedSatisfaction}%`, { size: 16, font: 'bold' }),
+          text(`${roundedSatisfaction}%`, { size: 32, font: 'bold' }),
           pos(this.position.x, indicatorY),
           anchor('center'),
           color(255, 255, 255),
@@ -365,11 +365,11 @@ export class Character extends GameObject {
     // Only update emoji if it actually changed
     if (currentEmoji !== this.lastSatisfactionEmoji) {
       this.lastSatisfactionEmoji = currentEmoji
-      const emojiY = indicatorY - 25
+      const emojiY = indicatorY - 40
 
       if (!this.satisfactionEmoji) {
         this.satisfactionEmoji = add([
-          text(currentEmoji, { size: 24 }),
+          text(currentEmoji, { size: 48 }),
           pos(this.position.x, emojiY),
           anchor('center'),
           color(255, 255, 255),

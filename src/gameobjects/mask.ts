@@ -77,7 +77,7 @@ export class FaceMask extends GameObject {
       ])
 
       this.textElement = add([
-        text(this.name[0], { size: 16 }),
+        text(this.name[0], { size: 32 }),
         pos(this.position),
         anchor('center'),
         color(255, 255, 255),
@@ -103,7 +103,7 @@ export class FaceMask extends GameObject {
       }
       if (!this.lockText) {
         this.lockText = add([
-          text('🔒', { size: 16 }),
+          text('🔒', { size: 32 }),
           pos(this.position),
           anchor('center'),
           z(101),
