@@ -124,9 +124,9 @@ description: 'Task list template for feature implementation'
 - [x] T035 Add background spa music
 - [x] T036 [P] Mobile responsiveness optimization
 - [x] T037 Add loading screen and asset preloading
-- [ ] T038 Implement pause/resume functionality
-- [ ] T039 Add game over and restart functionality
-- [ ] T040 Asset preparation for external image swapping capability
+- [x] T038 Implement pause/resume functionality
+- [x] T039 Add game over and restart functionality
+- [x] T040 Asset preparation for external image swapping capability
 
 ---
 

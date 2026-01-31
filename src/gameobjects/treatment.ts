@@ -1,4 +1,5 @@
 import { GAME_CONFIG } from '../constants/game-config'
+import { PauseManager } from '../systems/pause'
 import { GameObject } from './base'
 import { Character } from './character'
 import { FaceMask } from './mask'
@@ -32,6 +33,7 @@ export class TreatmentSession extends GameObject {
   public duration: number
   public appliedMasks: AppliedMask[]
   public status: SessionStatus
+  private pauseManager: PauseManager | null = null
   public score: number
   public satisfaction: number
 
@@ -47,10 +49,16 @@ export class TreatmentSession extends GameObject {
     this.satisfaction = 0
   }
 
+  public setPauseManager(pauseManager: PauseManager): void {
+    this.pauseManager = pauseManager
+  }
+
   public update() {
     if (!this.isActive) return
 
-    const currentTime = Date.now()
+    const currentTime = this.pauseManager
+      ? this.pauseManager.getAdjustedGameTime()
+      : Date.now()
     const elapsedTime = (currentTime - this.startTime) / 1000 // Convert to seconds
 
     // Update applied masks
@@ -75,7 +83,9 @@ export class TreatmentSession extends GameObject {
     if (this.status !== SessionStatus.PREPARING) return false
 
     this.status = SessionStatus.ACTIVE
-    this.startTime = Date.now()
+    this.startTime = this.pauseManager
+      ? this.pauseManager.getAdjustedGameTime()
+      : Date.now()
     return true
   }
 
@@ -116,7 +126,9 @@ export class TreatmentSession extends GameObject {
     const appliedMask: AppliedMask = {
       maskId,
       faceAreaId,
-      applicationTime: Date.now(),
+      applicationTime: this.pauseManager
+        ? this.pauseManager.getAdjustedGameTime()
+        : Date.now(),
       completionTime: null,
       effectiveness: this.calculateMaskEffectiveness(maskId, character),
     }
@@ -140,7 +152,10 @@ export class TreatmentSession extends GameObject {
 
   public getElapsedTime(): number {
     if (this.status === SessionStatus.PREPARING) return 0
-    return (Date.now() - this.startTime) / 1000
+    const currentTime = this.pauseManager
+      ? this.pauseManager.getAdjustedGameTime()
+      : Date.now()
+    return (currentTime - this.startTime) / 1000
   }
 
   public getRemainingTime(): number {
@@ -257,7 +272,7 @@ export class TreatmentSession extends GameObject {
     const config: TreatmentConfig = {
       sessionId,
       characterId,
-      startTime: Date.now(),
+      startTime: 0, // Will be set when treatment starts
       duration: GAME_CONFIG.DEFAULT_TREATMENT_DURATION,
     }
 

@@ -15,7 +15,9 @@ import { Character } from '../gameobjects/character'
 import { FaceMask } from '../gameobjects/mask'
 import { TreatmentSession } from '../gameobjects/treatment'
 import { initAssetManager } from '../systems/assets'
+import { getGameOverManager, initGameOverManager } from '../systems/gameover'
 import { initInputSystem } from '../systems/input'
+import { getPauseManager, initPauseManager } from '../systems/pause'
 import {
   getPerformanceMonitor,
   initPerformanceMonitor,
@@ -51,6 +53,8 @@ export function createSpaGameScene() {
     initInputSystem()
     initAssetManager()
     initPerformanceMonitor()
+    initPauseManager()
+    initGameOverManager()
 
     // Start background music
     // const music = play(Sound.BackgroundMusic, {
@@ -70,6 +74,11 @@ export function createSpaGameScene() {
     // Game loop with performance monitoring
     onUpdate(() => {
       const perfMonitor = getPerformanceMonitor()
+      const pauseManager = getPauseManager()
+
+      // Skip game updates if paused
+      if (pauseManager.isPaused()) return
+
       perfMonitor.update()
 
       // Optimize if performance is poor
@@ -79,6 +88,12 @@ export function createSpaGameScene() {
       }
 
       updateGame(gameState)
+
+      // Update treatment session with pause-adjusted time
+      if (gameState.treatmentSession) {
+        gameState.treatmentSession.setPauseManager(pauseManager)
+        gameState.treatmentSession.update()
+      }
     })
 
     // Render
@@ -122,6 +137,10 @@ function setupGameState(gameState: GameState) {
   gameState.treatmentSession = TreatmentSession.createNewSession(
     gameState.character.id,
   )
+
+  // Set pause manager on treatment session immediately
+  const pauseManager = getPauseManager()
+  gameState.treatmentSession.setPauseManager(pauseManager)
 }
 
 function createGameUI(gameState: GameState) {
@@ -560,6 +579,16 @@ function handleTreatmentComplete(gameState: GameState) {
     comboMultiplier: 1,
     totalScore: gameState.treatmentSession.score,
   }
+
+  // Get character satisfaction
+  const satisfactionLevel = gameState.character.satisfactionLevel
+
+  // Trigger game over with treatment completion
+  const gameOverManager = getGameOverManager()
+  gameOverManager.completeTreatment(
+    scoreBreakdown.totalScore,
+    satisfactionLevel,
+  )
 
   // Go to results scene with treatment data
   go(Scene.Results, {
