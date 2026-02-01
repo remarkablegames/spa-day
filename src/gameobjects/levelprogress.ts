@@ -15,7 +15,6 @@ interface LevelProgressUI {
   container: GameObj | null
   levelText: GameObj | null
   progressBar: GameObj | null
-  currencyText: GameObj | null
   timerText: GameObj | null
 }
 
@@ -23,7 +22,6 @@ const uiState: LevelProgressUI = {
   container: null,
   levelText: null,
   progressBar: null,
-  currencyText: null,
   timerText: null,
 }
 
@@ -54,20 +52,11 @@ export function createLevelProgressUI(): void {
     z(101),
   ])
 
-  // Currency display (coins) - below level name with more spacing
-  uiState.currencyText = add([
-    text(`Coins: ${progress.totalCurrency}`, { size: 24, font: 'bold' }),
-    pos(centerX, topY + 45),
-    anchor('center'),
-    color(255, 215, 0), // Gold color
-    z(101),
-  ])
-
-  // Level unlock progress bar background - small bar below coins
+  // Level unlock progress bar background - below level name
   const barWidth = 140
   add([
     rect(barWidth, 10),
-    pos(centerX - barWidth / 2, topY + 75),
+    pos(centerX - barWidth / 2, topY + 45),
     color(Color.fromHex('#333333')),
     z(100),
   ])
@@ -79,36 +68,19 @@ export function createLevelProgressUI(): void {
 
   uiState.progressBar = add([
     rect(barWidth * progressPercent, 10),
-    pos(centerX - barWidth / 2, topY + 75),
+    pos(centerX - barWidth / 2, topY + 45),
     color(Color.fromHex(GAME_CONFIG.COLORS.UI_ACCENT)),
     z(101),
   ])
 
-  // Progress text - below progress bar with more spacing
+  // Progress text - below progress bar
   add([
     text(`${unlockedCount}/${maxLevels} unlocked`, { size: 14 }),
-    pos(centerX, topY + 95),
+    pos(centerX, topY + 65),
     anchor('center'),
     color(GAME_CONFIG.COLORS.UI_TEXT),
     z(101),
   ])
-
-  // Listen for currency updates
-  levelManager.on('level-completed', () => {
-    updateCurrencyDisplay()
-  })
-}
-
-/**
- * Update the currency display
- */
-export function updateCurrencyDisplay(): void {
-  const levelManager = getLevelManager()
-  const progress = levelManager.getLevelProgress()
-
-  if (uiState.currencyText) {
-    uiState.currencyText.text = `Coins: ${progress.totalCurrency}`
-  }
 }
 
 /**
@@ -318,7 +290,6 @@ export function destroyLevelProgressUI(): void {
   }
   uiState.levelText = null
   uiState.progressBar = null
-  uiState.currencyText = null
   uiState.timerText = null
 }
 
