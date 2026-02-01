@@ -103,6 +103,10 @@ Once the player has applied moisturizer to a sufficient percentage of the face, 
 - **FR-020**: System MUST follow the same tool enable/disable pattern as the cleanse tool (auto-enable when step begins, disable on completion)
 - **FR-021**: System MUST reuse drawing mechanics from cleanse tool (drag-based application, boundary constraints, real-time rendering)
 - **FR-022**: System MUST inherit input handling patterns from cleanse tool (mouse/touch support, drag detection, minimum movement thresholds)
+- **FR-023**: System MUST render Basic moisturizer in white (#FFFFFF) with smooth cream texture
+- **FR-024**: System MUST render Premium moisturizer in light blue (#ADD8E6) with smooth cream texture
+- **FR-025**: System MUST render Luxury moisturizer in lavender (#E6E6FA) with smooth cream texture
+- **FR-026**: System MUST apply consistent smooth cream texture across all moisturizer types, varying only the color by tier
 
 ### Key Entities
 
@@ -129,7 +133,7 @@ Once the player has applied moisturizer to a sufficient percentage of the face, 
 ## Assumptions
 
 - The face asset/character model will be provided and has a clear, closed boundary area
-- Moisturizer visual effect will be a cream/white color with slight transparency
+- Moisturizer visual effect will use color progression by tier: Basic=white, Premium=light blue, Luxury=lavender, all with smooth cream texture
 - Input method will support both mouse (desktop) and touch (mobile) interactions
 - The completion threshold of 85% provides enough buffer for players who may miss small areas
 - Audio feedback will use pleasant, spa-like sounds (not clinical or harsh tones)
