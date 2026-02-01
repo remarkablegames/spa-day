@@ -82,7 +82,7 @@ description: 'Task list template for feature implementation'
 - [x] T016 [P] [US2] Create customer template definitions in src/constants/level-config.ts
 - [x] T017 [US2] Enhance Character class for level-specific customers in src/gameobjects/character.ts
 - [x] T018 [US2] Implement customer personality system in src/gameobjects/character.ts
-- [ ] T019 [US2] Add customer feedback system in src/gameobjects/character.ts [DEFERRED to Phase 7]
+- [ ] T019 [US2] Add customer feedback system in src/gameobjects/character.ts [DEFERRED]
 - [x] T020 [US2] Integrate customer templates with LevelManager in src/systems/levelmanager.ts
 - [x] T021 [US2] Add customer-specific UI elements in src/scenes/spa-game.ts (personality affects gameplay)
 
@@ -129,26 +129,6 @@ description: 'Task list template for feature implementation'
 - [x] T037 [US4] Add inventory persistence in src/systems/economy.ts
 
 **Checkpoint**: Shop system should be fully functional and integrated with level progression
-
----
-
-## Phase 7: Polish & Cross-Cutting Concerns
-
-**Purpose**: Improvements that affect multiple user stories
-
-- [ ] T038 [P] Create manual test documentation for level progression in tests/manual/level-progression.md
-- [ ] T039 [P] Create manual test documentation for shop functionality in tests/manual/shop-functionality.md
-- [ ] T040 [P] Add error handling for corrupted save data in src/utils/storage.ts
-- [ ] T041 [P] Optimize localStorage operations with debouncing in src/utils/storage.ts
-- [ ] T042 Add performance monitoring for level transitions in src/systems/levelmanager.ts
-- [ ] T043 [P] Add loading states for scene transitions in src/scenes/level-select.ts
-- [ ] T044 [P] Add loading states for shop data in src/scenes/shop.ts
-- [ ] T045 Implement responsive UI scaling for mobile devices in src/scenes/shop.ts
-- [ ] T046 [P] Add sound effects for level completion in src/scenes/spa-game.ts
-- [ ] T047 [P] Add sound effects for shop transactions in src/scenes/shop.ts
-- [ ] T048 Create integration tests for level flow in tests/integration/level-flow.test.ts
-- [ ] T049 Validate quickstart.md implementation examples
-- [ ] T050 Performance validation for 60 FPS target on mobile devices
 
 ---
 
