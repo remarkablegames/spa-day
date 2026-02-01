@@ -153,7 +153,7 @@ function createLevelButtons() {
         levelManager.setCurrentLevel(level.number)
 
         // Transition to game scene with level parameter
-        go(Scene.Game, { levelId: level.id })
+        go(Scene.SpaGame, { levelId: level.id })
       })
 
       // Hover effect

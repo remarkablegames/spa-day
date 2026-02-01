@@ -282,7 +282,7 @@ export function showLevelFailedUI(): void {
     levelManager.retryLevel()
     // Restart current scene
     const currentLevel = levelManager.getCurrentLevel()
-    go(Scene.Game, { levelId: currentLevel.id })
+    go(Scene.SpaGame, { levelId: currentLevel.id })
   })
 
   // Level select button
