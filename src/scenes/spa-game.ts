@@ -1246,9 +1246,16 @@ function updateMoisturizerMode(gameState: SpaGameState): void {
 
     // Add satisfaction for moisturizer coverage
     if (gameState.character) {
-      gameState.character.addMoisturizerSatisfaction(
-        updateResult.coveragePercentage,
-      )
+      // Check if face is already fully covered (100%)
+      if (updateResult.coveragePercentage >= 100) {
+        // Apply penalty for over-moisturizing
+        gameState.character.applyOverMoisturizePenalty()
+      } else {
+        // Normal satisfaction gain for incomplete coverage
+        gameState.character.addMoisturizerSatisfaction(
+          updateResult.coveragePercentage,
+        )
+      }
     }
   }
 

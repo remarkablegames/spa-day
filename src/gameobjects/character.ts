@@ -185,6 +185,16 @@ export class Character extends GameObject {
   }
 
   /**
+   * Decrease satisfaction when too much moisturizer is applied
+   * Penalty for over-moisturizing
+   */
+  public applyOverMoisturizePenalty(): void {
+    // Penalty: -2% satisfaction for applying too much
+    const penalty = 2
+    this.satisfactionLevel = Math.max(0, this.satisfactionLevel - penalty)
+  }
+
+  /**
    * Get feedback text based on action and current state
    */
   public getCleaningFeedback(): string {
