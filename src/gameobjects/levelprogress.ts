@@ -35,29 +35,36 @@ export function createLevelProgressUI(): void {
   const currentLevel = levelManager.getCurrentLevel()
   const progress = levelManager.getLevelProgress()
 
-  // Container for all level UI elements
-  uiState.container = add([pos(width() - 200, 10), z(100)])
+  // Position at top center to avoid overlapping with existing UI
+  const centerX = width() / 2
+  const topY = 10
 
-  // Level number display
+  // Container for all level UI elements
+  uiState.container = add([pos(centerX, topY), z(100)])
+
+  // Level number display - centered at top
   uiState.levelText = add([
     text(`Level ${currentLevel.number}: ${currentLevel.name}`, { size: 18 }),
-    pos(width() - 190, 15),
+    pos(centerX, topY),
+    anchor('center'),
     color(GAME_CONFIG.COLORS.UI_TEXT),
     z(101),
   ])
 
-  // Currency display (coins)
+  // Currency display (coins) - below level name
   uiState.currencyText = add([
     text(`Coins: ${progress.totalCurrency}`, { size: 16 }),
-    pos(width() - 190, 40),
+    pos(centerX, topY + 22),
+    anchor('center'),
     color(255, 215, 0), // Gold color
     z(101),
   ])
 
-  // Level unlock progress bar background
+  // Level unlock progress bar background - small bar below coins
+  const barWidth = 120
   add([
-    rect(180, 10),
-    pos(width() - 195, 65),
+    rect(barWidth, 8),
+    pos(centerX - barWidth / 2, topY + 42),
     color(Color.fromHex('#333333')),
     z(100),
   ])
@@ -68,16 +75,16 @@ export function createLevelProgressUI(): void {
   const progressPercent = unlockedCount / maxLevels
 
   uiState.progressBar = add([
-    rect(180 * progressPercent, 10),
-    pos(width() - 195, 65),
+    rect(barWidth * progressPercent, 8),
+    pos(centerX - barWidth / 2, topY + 42),
     color(Color.fromHex(GAME_CONFIG.COLORS.UI_ACCENT)),
     z(101),
   ])
 
-  // Progress text
+  // Progress text - below progress bar
   add([
-    text(`${unlockedCount}/${maxLevels} unlocked`, { size: 12 }),
-    pos(width() - 100, 80),
+    text(`${unlockedCount}/${maxLevels} unlocked`, { size: 11 }),
+    pos(centerX, topY + 55),
     anchor('center'),
     color(GAME_CONFIG.COLORS.UI_TEXT),
     z(101),
