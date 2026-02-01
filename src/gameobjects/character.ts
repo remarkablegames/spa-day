@@ -177,8 +177,8 @@ export class Character extends GameObject {
   public addMoisturizerSatisfaction(coveragePercentage: number): void {
     const multiplier = this.getSatisfactionMultiplier()
 
-    // Base gain: 0.25% satisfaction per 1% coverage (max 25% at 100% coverage)
-    const baseGain = Math.round(coveragePercentage * 0.25)
+    // Base gain: 0.12% satisfaction per 1% coverage (max 12% at 100% coverage)
+    const baseGain = Math.round(coveragePercentage * 0.12)
     const actualGain = Math.round(baseGain * multiplier)
 
     this.satisfactionLevel = Math.min(100, this.satisfactionLevel + actualGain)
