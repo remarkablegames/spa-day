@@ -1,3 +1,4 @@
+import { createLevelSelectScene } from './level-select'
 import { createResultsScene } from './results'
 import { createSpaGameScene } from './spa-game'
 
@@ -6,3 +7,6 @@ createSpaGameScene()
 
 // Create the results scene
 createResultsScene()
+
+// Create the level select scene
+createLevelSelectScene()
