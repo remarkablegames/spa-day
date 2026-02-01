@@ -6,7 +6,7 @@
 
 ## Prerequisites
 
-- Node.js 18+ installed
+- Node.js 24 installed
 - Repository cloned and dependencies installed (`npm install`)
 - Familiarity with existing cleaning system (src/systems/cleaning-state.ts, src/gameobjects/eraser.ts)
 - Review of feature specification: [spec.md](./spec.md)

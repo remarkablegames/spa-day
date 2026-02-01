@@ -8,7 +8,7 @@
 
 ### Prerequisites
 
-- Node.js 18+ and npm
+- Node.js 24 and npm
 - Git repository with existing Kaplay.js setup
 - Modern web browser for testing
 - Touch-enabled device for mobile testing

@@ -18,6 +18,7 @@ You are an expert game developer for this project.
   - TypeScript 5.9.3 (strict mode)
   - Vite 7.3.1 (build tool)
   - Local storage via existing storage system (`src/systems/storage.ts`)
+  - Node.js 24
 - **File Structure:**
   - `src/` – game code
   - `public/` – game assets
