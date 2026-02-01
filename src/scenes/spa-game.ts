@@ -1121,7 +1121,7 @@ function initializeMoisturizerMode(gameState: SpaGameState): void {
 
   // Add moisturizer toggle button - positioned to the right of the eraser button
   const moisturizerToggleButton = add([
-    rect(100, 40),
+    rect(140, 40),
     pos(150, height() - 220),
     color(100, 100, 200),
     z(90),
@@ -1129,8 +1129,8 @@ function initializeMoisturizerMode(gameState: SpaGameState): void {
   ]) as GameObj<RectComp | PosComp | ColorComp | ZComp | AreaComp>
 
   const moisturizerButtonText = add([
-    text('Moisturize', { size: 14 }),
-    pos(200, height() - 200),
+    text('Moisturize: OFF', { size: 14 }),
+    pos(220, height() - 200),
     anchor('center'),
     color(255, 255, 255),
     z(91),
@@ -1182,7 +1182,7 @@ function toggleMoisturizerMode(
     }
   } else {
     // Disable moisturizer mode
-    buttonText.text = 'Moisturize'
+    buttonText.text = 'Moisturize: OFF'
     button.color = rgb(100, 100, 200)
     gameState.moisturizerProgressUI!.opacity = 0
 
