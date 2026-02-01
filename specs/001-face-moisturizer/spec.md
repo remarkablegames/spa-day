@@ -5,6 +5,13 @@
 **Status**: Draft  
 **Input**: User description: "draw moisturizer on face"
 
+## Clarifications
+
+### Session 2026-02-01
+
+- Q: Should this moisturizer feature be integrated into an existing spa game scene/flow, or is it a standalone mini-game? → A: Integrated - Add to existing spa game as one step in a multi-treatment sequence (e.g., cleanse → mask → moisturize)
+- Q: Where does the moisturizer step occur in the spa treatment sequence? → A: Last - Final step before spa session completion
+
 ## User Scenarios & Testing _(mandatory)_
 
 ### User Story 1 - Basic Moisturizer Application (Priority: P1)
@@ -41,7 +48,7 @@ The player receives visual feedback showing which areas of the face have been mo
 
 ### User Story 3 - Treatment Completion and Rewards (Priority: P3)
 
-Once the player has applied moisturizer to a sufficient percentage of the face, the treatment is considered complete. The player receives positive feedback (visual/audio) and can proceed to the next spa treatment or step in the game flow.
+Once the player has applied moisturizer to a sufficient percentage of the face, the treatment is considered complete. The player receives positive feedback (visual/audio) and the spa session concludes, showing the final result and session summary.
 
 **Why this priority**: Provides closure to the activity and enables game progression. Creates a satisfying sense of accomplishment.
 
@@ -50,7 +57,7 @@ Once the player has applied moisturizer to a sufficient percentage of the face, 
 **Acceptance Scenarios**:
 
 1. **Given** the player has applied moisturizer to at least 85% of the face area, **When** they reach this threshold, **Then** a completion state triggers with positive visual/audio feedback
-2. **Given** the treatment is complete, **When** completion is triggered, **Then** the player can proceed to the next step/treatment
+2. **Given** the treatment is complete, **When** completion is triggered, **Then** the spa session concludes and displays a summary screen
 3. **Given** the player has not reached 85% coverage, **When** they attempt to proceed, **Then** they receive guidance to continue applying moisturizer
 
 ---
@@ -62,6 +69,9 @@ Once the player has applied moisturizer to a sufficient percentage of the face, 
 - What happens if the player tries to apply moisturizer outside the designated face area? (Should be ignored or provide gentle boundary feedback)
 - How does the system handle very small drag movements? (Should have a minimum threshold to avoid accidental dots)
 - What if the player applies moisturizer in a repetitive back-and-forth pattern on the same small area? (Coverage should not exceed 100% for that region)
+- How does the transition from the previous treatment work? (Should show face in state after prior treatments, e.g., clean and mask-free)
+- What happens if the player tries to skip the moisturizer step? (Should require completion as this is the mandatory final step)
+- How is the spa session completion communicated? (Should show clear session-end feedback and summary)
 
 ## Requirements _(mandatory)_
 
@@ -102,3 +112,5 @@ Once the player has applied moisturizer to a sufficient percentage of the face, 
 - Input method will support both mouse (desktop) and touch (mobile) interactions
 - The completion threshold of 85% provides enough buffer for players who may miss small areas
 - Audio feedback will use pleasant, spa-like sounds (not clinical or harsh tones)
+- This treatment is integrated into a larger spa treatment sequence (e.g., cleanse → mask → moisturize)
+- Character state (face condition) is maintained across treatment transitions within a spa session
