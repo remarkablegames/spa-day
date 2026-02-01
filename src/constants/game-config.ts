@@ -55,6 +55,10 @@ export const GAME_CONFIG = {
     GAME_SETTINGS: 'spa-day-game-settings',
     HIGH_SCORE: 'spa-day-high-score',
     CUSTOMER_LOYALTY: 'spa-day-customer-loyalty',
+    LEVEL_PROGRESS: 'spa-day-level-progress',
+    PLAYER_INVENTORY: 'spa-day-player-inventory',
+    SHOP_INVENTORY: 'spa-day-shop-inventory',
+    ECONOMY_DATA: 'spa-day-economy-data',
   },
 
   // Game states
@@ -65,6 +69,8 @@ export const GAME_CONFIG = {
     COLLECTION: 'collection',
     RESULTS: 'results',
     SETTINGS: 'settings',
+    LEVEL_SELECT: 'level-select',
+    SHOP: 'shop',
   },
 
   // Asset paths

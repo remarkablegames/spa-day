@@ -1,4 +1,5 @@
 import { GAME_CONFIG } from '../constants/game-config'
+import type { LevelProgress, PlayerInventory } from '../types/level'
 
 export interface PlayerProgress {
   totalScore: number
@@ -261,6 +262,119 @@ export class StorageManager {
       }
     }
     return totalSize
+  }
+
+  // Level System Storage Methods (T004)
+  public saveLevelProgress(progress: LevelProgress): boolean {
+    const storage = this.getStorage()
+    if (!storage) return false
+
+    try {
+      setData(GAME_CONFIG.STORAGE_KEYS.LEVEL_PROGRESS, progress)
+      return true
+    } catch {
+      return false
+    }
+  }
+
+  public loadLevelProgress(): LevelProgress | null {
+    const storage = this.getStorage()
+    if (!storage) return null
+
+    try {
+      const data = getData(GAME_CONFIG.STORAGE_KEYS.LEVEL_PROGRESS)
+      if (!data || typeof data !== 'object') return null
+
+      // Validate and sanitize loaded data
+      const progress = data as LevelProgress
+      return {
+        currentLevel: progress.currentLevel ?? 1,
+        unlockedLevels: Array.isArray(progress.unlockedLevels)
+          ? progress.unlockedLevels
+          : ['1'],
+        completedLevels: Array.isArray(progress.completedLevels)
+          ? progress.completedLevels
+          : [],
+        bestScores:
+          typeof progress.bestScores === 'object' ? progress.bestScores : {},
+        totalCurrency:
+          typeof progress.totalCurrency === 'number'
+            ? progress.totalCurrency
+            : 0,
+      }
+    } catch {
+      return null
+    }
+  }
+
+  public savePlayerInventory(inventory: PlayerInventory): boolean {
+    const storage = this.getStorage()
+    if (!storage) return false
+
+    try {
+      setData(GAME_CONFIG.STORAGE_KEYS.PLAYER_INVENTORY, inventory)
+      return true
+    } catch {
+      return false
+    }
+  }
+
+  public loadPlayerInventory(): PlayerInventory {
+    const storage = this.getStorage()
+    if (!storage) return this.getDefaultPlayerInventory()
+
+    try {
+      const data = getData(GAME_CONFIG.STORAGE_KEYS.PLAYER_INVENTORY)
+      if (!data || typeof data !== 'object')
+        return this.getDefaultPlayerInventory()
+
+      const inventory = data as PlayerInventory
+      return {
+        ownedItems: Array.isArray(inventory.ownedItems)
+          ? inventory.ownedItems
+          : [],
+        currency:
+          typeof inventory.currency === 'number' ? inventory.currency : 0,
+        lastUpdated: inventory.lastUpdated
+          ? new Date(inventory.lastUpdated)
+          : new Date(),
+      }
+    } catch {
+      return this.getDefaultPlayerInventory()
+    }
+  }
+
+  private getDefaultPlayerInventory(): PlayerInventory {
+    return {
+      ownedItems: [],
+      currency: 0,
+      lastUpdated: new Date(),
+    }
+  }
+
+  public validateStoredData(): boolean {
+    try {
+      const progress = this.loadLevelProgress()
+      const inventory = this.loadPlayerInventory()
+      return progress !== null && inventory !== null
+    } catch {
+      return false
+    }
+  }
+
+  public clearLevelData(): boolean {
+    const storage = this.getStorage()
+    if (!storage) return false
+
+    try {
+      storage.removeItem(GAME_CONFIG.STORAGE_KEYS.LEVEL_PROGRESS)
+      storage.removeItem(GAME_CONFIG.STORAGE_KEYS.PLAYER_INVENTORY)
+      storage.removeItem(GAME_CONFIG.STORAGE_KEYS.SHOP_INVENTORY)
+      storage.removeItem(GAME_CONFIG.STORAGE_KEYS.ECONOMY_DATA)
+      return true
+    } catch {
+      return false
+    }
   }
 }
 
