@@ -1119,10 +1119,10 @@ function initializeMoisturizerMode(gameState: SpaGameState): void {
   // Set the tool in state manager
   stateManager.setTool(gameState.moisturizerTool)
 
-  // Add moisturizer toggle button
+  // Add moisturizer toggle button - positioned to the right of the eraser button
   const moisturizerToggleButton = add([
-    rect(120, 40),
-    pos(20, height() - 270),
+    rect(100, 40),
+    pos(150, height() - 220),
     color(100, 100, 200),
     z(90),
     area(),
@@ -1130,7 +1130,7 @@ function initializeMoisturizerMode(gameState: SpaGameState): void {
 
   const moisturizerButtonText = add([
     text('Moisturize', { size: 14 }),
-    pos(80, height() - 250),
+    pos(200, height() - 200),
     anchor('center'),
     color(255, 255, 255),
     z(91),
