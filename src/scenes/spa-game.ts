@@ -1157,7 +1157,7 @@ function initializeMoisturizerMode(gameState: SpaGameState): void {
   // Create progress UI (hidden initially)
   gameState.moisturizerProgressUI = add([
     text('Coverage: 0%', { size: 20 }),
-    pos(width() - 150, 120),
+    pos(width() - 170, 120),
     color(255, 255, 255),
     opacity(0),
     z(100),
