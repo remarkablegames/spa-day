@@ -35,11 +35,6 @@ Install the dependencies:
 npm install
 ```
 
-Update the files:
-
-- [ ] `public/app-icon.png`
-- [ ] `public/favicon.png`
-
 ## Environment Variables
 
 Update the environment variables:
