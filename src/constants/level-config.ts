@@ -14,8 +14,8 @@ import type {
 export const LEVEL_CONFIGS: Record<number, LevelConfig> = {
   1: {
     timeLimit: 15,
-    satisfactionThreshold: 40,
-    scoreThreshold: 150,
+    satisfactionThreshold: 35,
+    scoreThreshold: 100,
     availableMaskTypes: ['hydrating', 'soothing'],
     scoreMultiplier: 1.0,
     difficultyMultiplier: 1.0,
@@ -242,15 +242,15 @@ export function validateLevelCompletion(
   levelNumber: number,
   score: number,
   satisfaction: number,
-  timeUsed: number,
 ): boolean {
   const config = LEVEL_CONFIGS[levelNumber]
   if (!config) return false
 
+  // Level only fails if satisfaction or score requirements not met
+  // Time limit is displayed but doesn't cause failure
   return (
     score >= config.scoreThreshold &&
-    satisfaction >= config.satisfactionThreshold &&
-    timeUsed <= config.timeLimit
+    satisfaction >= config.satisfactionThreshold
   )
 }
 

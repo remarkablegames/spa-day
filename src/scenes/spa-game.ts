@@ -124,6 +124,11 @@ export function createSpaGameScene() {
     // Initialize cleaning mode automatically
     initializeCleaningMode(gameState)
 
+    // Start the treatment session
+    if (gameState.treatmentSession) {
+      gameState.treatmentSession.startTreatment()
+    }
+
     // Game loop with performance monitoring
     onUpdate(() => {
       const perfMonitor = getPerformanceMonitor()

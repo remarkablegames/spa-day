@@ -128,17 +128,8 @@ export class LevelManager {
   /**
    * Validate level completion
    */
-  public validateLevelCompletion(
-    score: number,
-    satisfaction: number,
-    timeUsed: number,
-  ): boolean {
-    return validateLevelCompletion(
-      this.currentLevel,
-      score,
-      satisfaction,
-      timeUsed,
-    )
+  public validateLevelCompletion(score: number, satisfaction: number): boolean {
+    return validateLevelCompletion(this.currentLevel, score, satisfaction)
   }
 
   /**
@@ -151,7 +142,6 @@ export class LevelManager {
     const success = this.validateLevelCompletion(
       results.score,
       results.satisfaction,
-      results.timeUsed,
     )
 
     // Calculate currency earned (score to currency conversion)
