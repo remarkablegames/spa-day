@@ -14,6 +14,7 @@
 - Q: How many moisturizers will be available and can they be upgraded via the shop? → A: Multiple moisturizer types (basic, premium, luxury) with unlock/upgrade mechanics via shop
 - Q: What determines when players can unlock/upgrade moisturizers? → A: Levels and/or cost using existing game economy system
 - Q: How is customer satisfaction scored based on moisturizer application? → A: Coverage percentage + moisturizer type bonus integrated with existing scoring system
+- Q: Is the moisturizer tool similar to the cleanse tool in how it's enabled/disabled and drawn? → A: Yes - reuse same enable/disable logic and drawing mechanics from cleanse tool
 
 ## User Scenarios & Testing _(mandatory)_
 
@@ -99,6 +100,9 @@ Once the player has applied moisturizer to a sufficient percentage of the face, 
 - **FR-017**: System MUST calculate customer satisfaction score based on coverage percentage (85-94%=3 stars, 95-99%=4 stars, 100%=5 stars)
 - **FR-018**: System MUST apply moisturizer type multipliers to satisfaction score (basic=1x, premium=1.2x, luxury=1.5x)
 - **FR-019**: System MUST integrate satisfaction scoring with existing spa session scoring system
+- **FR-020**: System MUST follow the same tool enable/disable pattern as the cleanse tool (auto-enable when step begins, disable on completion)
+- **FR-021**: System MUST reuse drawing mechanics from cleanse tool (drag-based application, boundary constraints, real-time rendering)
+- **FR-022**: System MUST inherit input handling patterns from cleanse tool (mouse/touch support, drag detection, minimum movement thresholds)
 
 ### Key Entities
 
@@ -131,3 +135,4 @@ Once the player has applied moisturizer to a sufficient percentage of the face, 
 - Audio feedback will use pleasant, spa-like sounds (not clinical or harsh tones)
 - This treatment is integrated into a larger spa treatment sequence (e.g., cleanse → mask → moisturize)
 - Character state (face condition) is maintained across treatment transitions within a spa session
+- Moisturizer tool implementation follows the same architectural pattern as the cleanse tool for consistency
