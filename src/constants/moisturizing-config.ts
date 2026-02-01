@@ -8,7 +8,7 @@
 export const MOISTURIZING_CONFIG = {
   // Zone settings for coverage tracking
   zones: {
-    gridSize: 45, // Pixels per zone (larger for easier application)
+    gridSize: 25, // Pixels per zone (smaller for slower coverage increase)
     completionThreshold: 0.85, // 85% for completion
     maxZones: 100, // Maximum zones per face
     minZones: 50, // Minimum zones per face
