@@ -1,8 +1,11 @@
 import {
+  AnchorComp,
+  AreaComp,
   ColorComp,
   GameObj,
   OpacityComp,
   PosComp,
+  RectComp,
   ScaleComp,
   TextComp,
   Vec2,
@@ -11,6 +14,7 @@ import {
 
 import { Scene } from '../constants'
 import { GAME_CONFIG } from '../constants/game-config'
+import { MOISTURIZING_CONFIG } from '../constants/moisturizing-config'
 import { getGameStateManager } from '../gameobjects/base'
 import { Character } from '../gameobjects/character'
 import {
@@ -19,12 +23,18 @@ import {
   showLevelFailedUI,
 } from '../gameobjects/levelprogress'
 import { FaceMask } from '../gameobjects/mask'
+import { MoisturizerTool } from '../gameobjects/moisturizer-tool'
+import { MoisturizerTrail } from '../gameobjects/moisturizer-trail'
 import { TreatmentSession } from '../gameobjects/treatment'
 import { getGameOverManager } from '../systems/gameover'
 import {
   getLevelManager,
   initializeLevelManager,
 } from '../systems/levelmanager'
+import {
+  getMoisturizingStateManager,
+  initMoisturizingStateManager,
+} from '../systems/moisturizing-state'
 import { getPauseManager } from '../systems/pause'
 import { getPerformanceMonitor } from '../systems/performance'
 import type { TreatmentResults } from '../types/level'
@@ -72,6 +82,14 @@ interface SpaGameState {
   cleaningState: GameObj<TextComp | PosComp | ColorComp | ZComp> | null
   dirtSpots: DirtSpot[]
   score: number
+  // Moisturizer mode state
+  moisturizerMode: boolean
+  moisturizerTool: MoisturizerTool | null
+  moisturizerTrail: MoisturizerTrail | null
+  moisturizerProgressUI: GameObj<
+    TextComp | PosComp | ColorComp | OpacityComp | ZComp
+  > | null
+  showZoneDebug: boolean
 }
 
 export function createSpaGameScene() {
@@ -89,6 +107,12 @@ export function createSpaGameScene() {
       cleaningState: null,
       dirtSpots: [],
       score: 0,
+      // Moisturizer mode state
+      moisturizerMode: false,
+      moisturizerTool: null,
+      moisturizerTrail: null,
+      moisturizerProgressUI: null,
+      showZoneDebug: false,
     }
 
     // Initialize level manager
@@ -128,6 +152,9 @@ export function createSpaGameScene() {
     // Initialize cleaning mode automatically
     initializeCleaningMode(gameState)
 
+    // Initialize moisturizer mode (for testing/feature availability)
+    initializeMoisturizerMode(gameState)
+
     // Start the treatment session
     if (gameState.treatmentSession) {
       gameState.treatmentSession.startTreatment()
@@ -153,6 +180,9 @@ export function createSpaGameScene() {
 
       // Update cleaning mode (always active)
       updateCleaningMode(gameState)
+
+      // Update moisturizer mode (when active)
+      updateMoisturizerMode(gameState)
 
       // Update treatment session with pause-adjusted time
       if (gameState.treatmentSession) {
@@ -1023,4 +1053,263 @@ function updateCleaningMode(gameState: SpaGameState): void {
       }
     }
   })
+}
+
+/**
+ * Initialize moisturizer mode - toggleable feature
+ */
+function initializeMoisturizerMode(gameState: SpaGameState): void {
+  if (!gameState.character) return
+
+  // Initialize the state manager
+  initMoisturizingStateManager()
+  const stateManager = getMoisturizingStateManager()
+
+  // Create moisturizer tool (hidden initially)
+  const sessionId = `moisturizer-session-${Date.now()}`
+  gameState.moisturizerTool = new MoisturizerTool(
+    'moisturizer-tool',
+    vec2(gameState.character.position.x, gameState.character.position.y),
+    'moisturizer_basic',
+    sessionId,
+  )
+
+  // Set face bounds for the tool
+  const faceAreas = gameState.character.faceAreas || []
+  if (faceAreas.length > 0) {
+    // Calculate combined bounds of all face areas
+    let minX = Infinity,
+      minY = Infinity,
+      maxX = -Infinity,
+      maxY = -Infinity
+    faceAreas.forEach((area) => {
+      const worldX = gameState.character!.position.x + area.position.x
+      const worldY = gameState.character!.position.y + area.position.y
+      minX = Math.min(minX, worldX - area.size.x / 2)
+      minY = Math.min(minY, worldY - area.size.y / 2)
+      maxX = Math.max(maxX, worldX + area.size.x / 2)
+      maxY = Math.max(maxY, worldY + area.size.y / 2)
+    })
+
+    gameState.moisturizerTool.setAllowedBounds({
+      x: minX - 20,
+      y: minY - 20,
+      width: maxX - minX + 40,
+      height: maxY - minY + 40,
+    })
+  }
+
+  // Create visual trail
+  gameState.moisturizerTrail = new MoisturizerTrail(
+    MOISTURIZING_CONFIG.colors.basic,
+  )
+
+  // Initialize state manager with session config
+  stateManager.initialize({
+    sessionId,
+    faceBounds: gameState.moisturizerTool.allowedBounds || {
+      x: gameState.character.position.x - 100,
+      y: gameState.character.position.y - 100,
+      width: 200,
+      height: 200,
+    },
+    zoneGridSize: MOISTURIZING_CONFIG.zones.gridSize,
+    completionThreshold: MOISTURIZING_CONFIG.zones.completionThreshold,
+    moisturizerTypeId: 'moisturizer_basic',
+  })
+
+  // Set the tool in state manager
+  stateManager.setTool(gameState.moisturizerTool)
+
+  // Add moisturizer toggle button
+  const moisturizerToggleButton = add([
+    rect(120, 40),
+    pos(20, height() - 270),
+    color(100, 100, 200),
+    z(90),
+    area(),
+  ]) as GameObj<RectComp | PosComp | ColorComp | ZComp | AreaComp>
+
+  const moisturizerButtonText = add([
+    text('Moisturize', { size: 14 }),
+    pos(80, height() - 250),
+    anchor('center'),
+    color(255, 255, 255),
+    z(91),
+  ]) as GameObj<TextComp | PosComp | ColorComp | ZComp | AnchorComp>
+
+  // Handle button click
+  moisturizerToggleButton.onClick(() => {
+    toggleMoisturizerMode(
+      gameState,
+      moisturizerButtonText,
+      moisturizerToggleButton,
+    )
+  })
+
+  // Add debug zone visualization toggle button (for testing)
+  const debugButton = add([
+    rect(80, 30),
+    pos(150, height() - 270),
+    color(50, 50, 50),
+    z(90),
+    area(),
+  ]) as GameObj<RectComp | PosComp | ColorComp | AreaComp | ZComp>
+
+  const debugButtonText = add([
+    text('Debug', { size: 12 }),
+    pos(190, height() - 255),
+    anchor('center'),
+    color(255, 255, 255),
+    z(91),
+  ]) as GameObj<TextComp | PosComp | ColorComp | AnchorComp | ZComp>
+
+  debugButton.onClick(() => {
+    gameState.showZoneDebug = !gameState.showZoneDebug
+    toggleZoneDebug(gameState, debugButton, debugButtonText)
+  })
+
+  // Create progress UI (hidden initially)
+  gameState.moisturizerProgressUI = add([
+    text('Coverage: 0%', { size: 20 }),
+    pos(width() - 150, 120),
+    color(255, 255, 255),
+    opacity(0),
+    z(100),
+  ]) as GameObj<TextComp | PosComp | ColorComp | OpacityComp | ZComp>
+
+  // Setup moisturizer controls
+  setupMoisturizerControls(gameState)
+}
+
+/**
+ * Toggle moisturizer mode on/off
+ */
+function toggleMoisturizerMode(
+  gameState: SpaGameState,
+  buttonText: GameObj<TextComp | PosComp | ColorComp | AnchorComp | ZComp>,
+  button: GameObj<RectComp | PosComp | ColorComp | AreaComp | ZComp>,
+): void {
+  gameState.moisturizerMode = !gameState.moisturizerMode
+
+  if (gameState.moisturizerMode) {
+    // Enable moisturizer mode
+    buttonText.text = 'Moisturizer: ON'
+    button.color = rgb(100, 200, 100)
+    gameState.moisturizerProgressUI!.opacity = 1
+
+    // Activate tool
+    if (gameState.moisturizerTool) {
+      gameState.moisturizerTool.activate()
+      // Move to current mouse position
+      gameState.moisturizerTool.moveTo(mousePos())
+    }
+  } else {
+    // Disable moisturizer mode
+    buttonText.text = 'Moisturize'
+    button.color = rgb(100, 100, 200)
+    gameState.moisturizerProgressUI!.opacity = 0
+
+    // Deactivate tool
+    if (gameState.moisturizerTool) {
+      gameState.moisturizerTool.deactivate()
+    }
+
+    // Clear trail
+    if (gameState.moisturizerTrail) {
+      gameState.moisturizerTrail.clear()
+    }
+  }
+}
+
+/**
+ * Setup mouse/touch controls for moisturizer
+ */
+function setupMoisturizerControls(gameState: SpaGameState): void {
+  if (!gameState.moisturizerTool) return
+
+  // Mouse movement - follow cursor when active
+  onMouseMove((pos) => {
+    if (gameState.moisturizerMode && gameState.moisturizerTool) {
+      gameState.moisturizerTool.moveTo(pos)
+
+      // Add trail segment when moving and active
+      if (gameState.moisturizerTool.isActive && gameState.moisturizerTrail) {
+        gameState.moisturizerTrail.addSegment({ x: pos.x, y: pos.y })
+      }
+    }
+  })
+
+  // Touch support
+  onTouchMove((pos) => {
+    if (gameState.moisturizerMode && gameState.moisturizerTool) {
+      gameState.moisturizerTool.moveTo(pos)
+
+      // Add trail segment when moving and active
+      if (gameState.moisturizerTool.isActive && gameState.moisturizerTrail) {
+        gameState.moisturizerTrail.addSegment({ x: pos.x, y: pos.y })
+      }
+    }
+  })
+}
+
+/**
+ * Update moisturizer mode logic
+ */
+function updateMoisturizerMode(gameState: SpaGameState): void {
+  if (!gameState.moisturizerMode || !gameState.moisturizerTool) return
+
+  const stateManager = getMoisturizingStateManager()
+
+  // Update smooth movement
+  gameState.moisturizerTool.updateSmoothMovement()
+
+  // Update coverage tracking
+  const updateResult = stateManager.updateCoverage()
+
+  // Update progress UI if there was new coverage
+  if (updateResult.isNewCoverage && gameState.moisturizerProgressUI) {
+    gameState.moisturizerProgressUI.text = `Coverage: ${Math.round(updateResult.coveragePercentage)}%`
+  }
+
+  // Check for completion
+  if (stateManager.isComplete()) {
+    // Handle completion - could show success message
+    gameState.moisturizerProgressUI!.text = 'Complete! 100%'
+  }
+}
+
+/**
+ * Toggle zone debug visualization
+ */
+function toggleZoneDebug(
+  gameState: SpaGameState,
+  button: GameObj<RectComp | PosComp | ColorComp | AreaComp | ZComp>,
+  buttonText: GameObj<TextComp | PosComp | ColorComp | AnchorComp | ZComp>,
+): void {
+  const stateManager = getMoisturizingStateManager()
+  const zones = stateManager.getZones()
+
+  if (gameState.showZoneDebug) {
+    // Enable debug mode - show all zones
+    button.color = rgb(100, 100, 100)
+    buttonText.text = 'Debug: ON'
+
+    zones.forEach((zone) => {
+      zone.createVisual([100, 100, 100]) // Gray color for debug
+      if (zone.isCovered) {
+        zone.showCoveredVisual()
+      } else {
+        zone.setVisualOpacity(0.1) // Light opacity for uncovered
+      }
+    })
+  } else {
+    // Disable debug mode - hide all zones
+    button.color = rgb(50, 50, 50)
+    buttonText.text = 'Debug'
+
+    zones.forEach((zone) => {
+      zone.destroyVisual()
+    })
+  }
 }

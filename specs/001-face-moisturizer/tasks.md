@@ -46,9 +46,9 @@ Phase 6 (Polish)
 
 **Goal**: Initialize feature development environment and reference existing patterns.
 
-- [ ] T001 Review existing eraser.ts and cleaning-state.ts patterns to understand tool architecture and state management approach in src/gameobjects/eraser.ts and src/systems/cleaning-state.ts
-- [ ] T002 Verify development environment by running npm start and confirming server starts at http://localhost:5173
-- [ ] T003 Run lint and typecheck to establish baseline: npm run lint:fix && npm run lint:tsc
+- [x] T001 Review existing eraser.ts and cleaning-state.ts patterns to understand tool architecture and state management approach in src/gameobjects/eraser.ts and src/systems/cleaning-state.ts
+- [x] T002 Verify development environment by running npm start and confirming server starts at http://localhost:5173
+- [x] T003 Run lint and typecheck to establish baseline: npm run lint:fix && npm run lint:tsc
 
 ## Phase 2: Foundational
 
@@ -56,11 +56,11 @@ Phase 6 (Polish)
 
 **Independent Test**: All TypeScript compiles without errors, types are properly exported.
 
-- [ ] T004 [P] Create MOISTURIZING_CONFIG constant with zone settings, tool settings, visual settings, scoring thresholds, and color definitions in src/constants/moisturizing-config.ts
-- [ ] T005 [P] Create MoisturizerShopItem type definition extending ShopItem with moisturizer-specific fields (tier, color, satisfactionMultiplier) in src/types/shop.ts (extend existing)
-- [ ] T006 Create core type definitions including Position, BoundingBox, MoisturizerTier, CoverageZone, MoisturizerState, SatisfactionScore, and all event types in src/events/moisturizing-types.ts
-- [ ] T007 [P] Create MoisturizingEventManager singleton following the CleaningEventManager pattern with all moisturizing event types in src/events/moisturizing.ts
-- [ ] T008 Export all moisturizing types and events from src/events/index.ts to make them available to other modules
+- [x] T004 [P] Create MOISTURIZING_CONFIG constant with zone settings, tool settings, visual settings, scoring thresholds, and color definitions in src/constants/moisturizing-config.ts
+- [x] T005 [P] Create MoisturizerShopItem type definition extending ShopItem with moisturizer-specific fields (tier, color, satisfactionMultiplier) in src/types/shop.ts (extend existing)
+- [x] T006 Create core type definitions including Position, BoundingBox, MoisturizerTier, CoverageZone, MoisturizerState, SatisfactionScore, and all event types in src/events/moisturizing-types.ts
+- [x] T007 [P] Create MoisturizingEventManager singleton following the CleaningEventManager pattern with all moisturizing event types in src/events/moisturizing.ts
+- [x] T008 Export all moisturizing types and events from src/events/index.ts to make them available to other modules
 
 ## Phase 3: User Story 1 - Basic Moisturizer Application (P1)
 
@@ -74,12 +74,12 @@ Phase 6 (Polish)
 2. Given player is applying moisturizer, when they stop dragging, then moisturizer remains visible
 3. Given player is applying moisturizer, when they drag outside face boundaries, then no moisturizer appears outside
 
-- [ ] T009 [P] [US1] Create CoverageZone class with bounds-based collision detection for tool overlap checking in src/gameobjects/coverage-zone.ts
-- [ ] T010 [US1] Create MoisturizerTool class mirroring EraserTool with position tracking, bounds constraint, smoothing, input handling (mouse/touch), and activation lifecycle in src/gameobjects/moisturizer-tool.ts
-- [ ] T011 [P] [US1] Create MoisturizerTrail class for rendering cream texture along drag path using Kaplay components (rect, pos, color, opacity) with segment limiting for performance in src/gameobjects/moisturizer-trail.ts
-- [ ] T012 [US1] Create MoisturizingStateManager class with zone generation from face bounds, coverage tracking, progress calculation, and tool integration in src/systems/moisturizing-state.ts
-- [ ] T013 [P] [US1] Add moisturizer items (basic, premium, luxury) to SHOP_ITEMS in src/constants/shop-inventory.ts with proper requirements and tier metadata
-- [ ] T014 [US1] Create minimal moisturizer step integration in spa-game.ts to verify tool, trail, and state manager work together end-to-end in src/scenes/spa-game.ts (basic integration only)
+- [x] T009 [P] [US1] Create CoverageZone class with bounds-based collision detection for tool overlap checking in src/gameobjects/coverage-zone.ts
+- [x] T010 [US1] Create MoisturizerTool class mirroring EraserTool with position tracking, bounds constraint, smoothing, input handling (mouse/touch), and activation lifecycle in src/gameobjects/moisturizer-tool.ts
+- [x] T011 [P] [US1] Create MoisturizerTrail class for rendering cream texture along drag path using Kaplay components (rect, pos, color, opacity) with segment limiting for performance in src/gameobjects/moisturizer-trail.ts
+- [x] T012 [US1] Create MoisturizingStateManager class with zone generation from face bounds, coverage tracking, progress calculation, and tool integration in src/systems/moisturizing-state.ts
+- [x] T013 [P] [US1] Add moisturizer items (basic, premium, luxury) to SHOP_ITEMS in src/constants/shop-inventory.ts with proper requirements and tier metadata
+- [x] T014 [US1] Create minimal moisturizer step integration in spa-game.ts to verify tool, trail, and state manager work together end-to-end in src/scenes/spa-game.ts (basic integration only)
 
 ## Phase 4: User Story 2 - Coverage Feedback and Progress (P2)
 
@@ -95,10 +95,10 @@ Phase 6 (Polish)
 
 **Dependencies**: Requires US1 completion (tool, state manager, trail working)
 
-- [ ] T015 [US2] Add progress UI component showing coverage percentage with visual progress bar in spa game scene in src/scenes/spa-game.ts (progress display)
-- [ ] T016 [US2] Implement visual distinction for covered zones (shinier/different color overlay) using Kaplay components when zones are activated in src/gameobjects/coverage-zone.ts (visual feedback)
-- [ ] T017 [P] [US2] Create zone visualization debug mode (optional) to help test coverage accuracy - show grid overlay on face in src/gameobjects/coverage-zone.ts (debug visualization)
-- [ ] T018 [US2] Add real-time progress updates to UI when coverage changes, emitting progress_updated events in src/systems/moisturizing-state.ts (progress events)
+- [x] T015 [US2] Add progress UI component showing coverage percentage with visual progress bar in spa game scene in src/scenes/spa-game.ts (progress display)
+- [x] T016 [US2] Implement visual distinction for covered zones (shinier/different color overlay) using Kaplay components when zones are activated in src/gameobjects/coverage-zone.ts (visual feedback)
+- [x] T017 [P] [US2] Create zone visualization debug mode (optional) to help test coverage accuracy - show grid overlay on face in src/gameobjects/coverage-zone.ts (debug visualization)
+- [x] T018 [US2] Add real-time progress updates to UI when coverage changes, emitting progress_updated events in src/systems/moisturizing-state.ts (progress events)
 
 ## Phase 5: User Story 3 - Treatment Completion and Rewards (P3)
 
@@ -114,12 +114,12 @@ Phase 6 (Polish)
 
 **Dependencies**: Requires US2 completion (progress tracking working)
 
-- [ ] T019 [P] [US3] Extend ScoringSystem with calculateMoisturizerScore method implementing star rating logic (85-94%=3★, 95-99%=4★, 100%=5★) and tier multipliers (basic=1x, premium=1.2x, luxury=1.5x) in src/systems/scoring.ts
-- [ ] T020 [US3] Add completion detection logic in MoisturizingStateManager that triggers when coverage >= 85% and emits completion events in src/systems/moisturizing-state.ts (completion detection)
-- [ ] T021 [US3] Create completion feedback system with visual celebration effects (particles, glow) and audio feedback using existing sound system in src/systems/visual-feedback.ts or new file src/systems/moisturizer-feedback.ts
-- [ ] T022 [P] [US3] Implement satisfaction score calculation integration with spa session scoring, ensuring no double-counting and <100ms calculation time in src/systems/scoring.ts (session integration)
-- [ ] T023 [US3] Add session completion logic that transitions from moisturizer step to results screen with final score display in src/scenes/spa-game.ts (session completion)
-- [ ] T024 [US3] Create incomplete coverage guidance system that shows hint/prompt when player attempts to proceed before 85% threshold in src/scenes/spa-game.ts (completion guidance)
+- [x] T019 [P] [US3] Extend ScoringSystem with calculateMoisturizerScore method implementing star rating logic (85-94%=3★, 95-99%=4★, 100%=5★) and tier multipliers (basic=1x, premium=1.2x, luxury=1.5x) in src/systems/scoring.ts
+- [x] T020 [US3] Add completion detection logic in MoisturizingStateManager that triggers when coverage >= 85% and emits completion events in src/systems/moisturizing-state.ts (completion detection)
+- [x] T021 [US3] Create completion feedback system with visual celebration effects (particles, glow) and audio feedback using existing sound system in src/systems/visual-feedback.ts or new file src/systems/moisturizer-feedback.ts
+- [x] T022 [P] [US3] Implement satisfaction score calculation integration with spa session scoring, ensuring no double-counting and <100ms calculation time in src/systems/scoring.ts (session integration)
+- [x] T023 [US3] Add session completion logic that transitions from moisturizer step to results screen with final score display in src/scenes/spa-game.ts (session completion)
+- [x] T024 [US3] Create incomplete coverage guidance system that shows hint/prompt when player attempts to proceed before 85% threshold in src/scenes/spa-game.ts (completion guidance)
 
 ## Phase 6: Polish & Cross-Cutting Concerns
 
@@ -127,10 +127,10 @@ Phase 6 (Polish)
 
 **Independent Test**: Full treatment flow works end-to-end, edge cases handled (rapid input, overlapping coverage, boundary constraints), shop shows moisturizer unlocks, mobile touch works smoothly.
 
-- [ ] T025 [P] Handle edge cases: rapid input (batch updates), overlapping coverage (idempotent zone.cover()), boundary constraints (soft feedback), minimum movement thresholds (5px), repetitive patterns (ignore redundant coverage) in src/systems/moisturizing-state.ts and src/gameobjects/moisturizer-tool.ts (edge case handling)
-- [ ] T026 [P] Optimize performance: cap trail segments at 100, limit zone checks to O(1) with spatial indexing, ensure 60 FPS during drag operations, pool trail segment objects in src/gameobjects/moisturizer-trail.ts and src/systems/moisturizing-state.ts (performance optimization)
-- [ ] T027 Integrate moisturizer selection UI before treatment begins, showing only unlocked moisturizers with proper visual indicators for locked items in src/scenes/spa-game.ts or src/scenes/shop.ts (moisturizer selection UI)
-- [ ] T028 Final verification: run npm run lint:fix && npm run lint:tsc, manual test on desktop and mobile, verify all success criteria met (SC-001 through SC-008) in all modified files (final verification)
+- [x] T025 [P] Handle edge cases: rapid input (batch updates), overlapping coverage (idempotent zone.cover()), boundary constraints (soft feedback), minimum movement thresholds (5px), repetitive patterns (ignore redundant coverage) in src/systems/moisturizing-state.ts and src/gameobjects/moisturizer-tool.ts (edge case handling)
+- [x] T026 [P] Optimize performance: cap trail segments at 100, limit zone checks to O(1) with spatial indexing, ensure 60 FPS during drag operations, pool trail segment objects in src/gameobjects/moisturizer-trail.ts and src/systems/moisturizing-state.ts (performance optimization)
+- [x] T027 Integrate moisturizer selection UI before treatment begins, showing only unlocked moisturizers with proper visual indicators for locked items in src/scenes/spa-game.ts or src/scenes/shop.ts (moisturizer selection UI)
+- [x] T028 Final verification: run npm run lint:fix && npm run lint:tsc, manual test on desktop and mobile, verify all success criteria met (SC-001 through SC-008) in all modified files (final verification)
 
 ## Parallel Execution Opportunities
 

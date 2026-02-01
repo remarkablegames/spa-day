@@ -371,6 +371,69 @@ export class ScoringSystem {
       this.scoringHistory = this.scoringHistory.slice(-100)
     }
   }
+
+  /**
+   * Calculate moisturizer application score
+   * Implements star rating: 85-94%=3★, 95-99%=4★, 100%=5★
+   * Applies tier multipliers: basic=1x, premium=1.2x, luxury=1.5x
+   */
+  public calculateMoisturizerScore(
+    coveragePercentage: number,
+    moisturizerTier: 'basic' | 'premium' | 'luxury' = 'basic',
+  ): ScoreBreakdown {
+    // Determine star rating from coverage
+    let starRating: 3 | 4 | 5
+    if (coveragePercentage >= 100) {
+      starRating = 5
+    } else if (coveragePercentage >= 95) {
+      starRating = 4
+    } else {
+      starRating = 3
+    }
+
+    // Get base score from star rating
+    const baseScores: Record<number, number> = {
+      3: 100,
+      4: 150,
+      5: 200,
+    }
+    const baseScore = baseScores[starRating]
+
+    // Apply tier multiplier
+    const multipliers: Record<string, number> = {
+      basic: 1.0,
+      premium: 1.2,
+      luxury: 1.5,
+    }
+    const tierMultiplier = multipliers[moisturizerTier] ?? 1.0
+
+    // Calculate final score
+    const totalScore = Math.floor(baseScore * tierMultiplier)
+
+    // Record the scoring event
+    this.recordScoringEvent({
+      type: 'treatment_completed',
+      score: totalScore,
+      details: {
+        coveragePercentage,
+        starRating,
+        moisturizerTier,
+        baseScore,
+        tierMultiplier,
+      },
+      timestamp: Date.now(),
+    })
+
+    return {
+      baseScore,
+      effectivenessBonus: 0,
+      timingBonus: 0,
+      completionBonus: 0,
+      satisfactionBonus: starRating >= 4 ? Math.floor(baseScore * 0.2) : 0,
+      comboMultiplier: tierMultiplier,
+      totalScore,
+    }
+  }
 }
 
 // Global scoring system instance

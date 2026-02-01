@@ -108,7 +108,7 @@ export interface ShopInventory {
 export interface ShopItem {
   id: string
   name: string
-  type: 'mask' | 'tool' | 'cosmetic'
+  type: 'mask' | 'tool' | 'cosmetic' | 'moisturizer'
   basePrice: number
   description: string
   requirements: string[]

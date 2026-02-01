@@ -88,6 +88,36 @@ export const SHOP_ITEMS: ShopItem[] = [
     requirements: ['level_5_unlocked', 'all_masks_owned'],
     isPurchased: false,
   },
+
+  // Moisturizers - Available at all levels
+  {
+    id: 'moisturizer_basic',
+    name: 'Basic Moisturizer',
+    type: 'moisturizer',
+    basePrice: 0, // Free - starting item
+    description: 'Standard moisturizing cream for everyday use',
+    requirements: [],
+    isPurchased: true, // Already owned by default
+  },
+  {
+    id: 'moisturizer_premium',
+    name: 'Premium Moisturizer',
+    type: 'moisturizer',
+    basePrice: 200,
+    description: 'Advanced formula with better results (+20% satisfaction)',
+    requirements: ['level_3_unlocked'],
+    isPurchased: false,
+  },
+  {
+    id: 'moisturizer_luxury',
+    name: 'Luxury Moisturizer',
+    type: 'moisturizer',
+    basePrice: 500,
+    description:
+      'Exclusive luxury formula for best results (+50% satisfaction)',
+    requirements: ['level_5_unlocked'],
+    isPurchased: false,
+  },
 ]
 
 // Shop upgrades for masks
