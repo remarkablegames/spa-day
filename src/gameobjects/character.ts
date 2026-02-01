@@ -29,6 +29,7 @@ export interface CharacterConfig {
   position: Vec2
   satisfactionLevel: number
   preferredMaskTypes: string[]
+  personalityTraits?: string[] // Customer personality affects gameplay
 }
 
 type VisualElement = GameObj<PosComp | ZComp>
@@ -44,6 +45,7 @@ export class Character extends GameObject {
   public name: string
   public satisfactionLevel: number
   public preferredMaskTypes: string[]
+  public personalityTraits: string[]
   public faceAreas: FaceArea[]
   private visualElement: VisualElement | null = null
   private faceAreaVisuals: Map<string, FaceAreaVisuals> = new Map()
@@ -60,7 +62,66 @@ export class Character extends GameObject {
     this.name = config.name
     this.satisfactionLevel = 0 // Start at 0%, build up with actions
     this.preferredMaskTypes = config.preferredMaskTypes
+    this.personalityTraits = config.personalityTraits || []
     this.faceAreas = this.createFaceAreas()
+  }
+
+  /**
+   * Get satisfaction multiplier based on personality traits
+   */
+  private getSatisfactionMultiplier(): number {
+    let multiplier = 1.0
+
+    // Impatient customers are harder to please
+    if (this.personalityTraits.includes('impatient')) {
+      multiplier *= 0.8 // 20% less satisfaction gain
+    }
+
+    // Patient customers are easier to please
+    if (this.personalityTraits.includes('patient')) {
+      multiplier *= 1.2 // 20% more satisfaction gain
+    }
+
+    // Demanding customers need more work
+    if (this.personalityTraits.includes('demanding')) {
+      multiplier *= 0.85 // 15% less satisfaction gain
+    }
+
+    // Forgiving customers are easier to please
+    if (this.personalityTraits.includes('forgiving')) {
+      multiplier *= 1.15 // 15% more satisfaction gain
+    }
+
+    return multiplier
+  }
+
+  /**
+   * Get score multiplier based on personality traits
+   */
+  public getScoreMultiplier(): number {
+    let multiplier = 1.0
+
+    // Generous customers give more points
+    if (this.personalityTraits.includes('generous')) {
+      multiplier *= 1.25 // 25% more score
+    }
+
+    // Extremely generous customers give even more
+    if (this.personalityTraits.includes('extremely_generous')) {
+      multiplier *= 1.5 // 50% more score
+    }
+
+    // High value customers give more points
+    if (this.personalityTraits.includes('high_value')) {
+      multiplier *= 1.3 // 30% more score
+    }
+
+    // Critical customers give less points
+    if (this.personalityTraits.includes('critical')) {
+      multiplier *= 0.9 // 10% less score
+    }
+
+    return multiplier
   }
 
   /**
@@ -72,8 +133,14 @@ export class Character extends GameObject {
 
     // Only give satisfaction if area was dirty and is now being cleaned
     if ((area.cleanliness || 0) < 1.0) {
-      // Increase satisfaction by 10% per cleaned area
-      this.satisfactionLevel = Math.min(100, this.satisfactionLevel + 10)
+      // Base satisfaction: 10% per cleaned area
+      const baseGain = 10
+      const multiplier = this.getSatisfactionMultiplier()
+      const actualGain = Math.round(baseGain * multiplier)
+      this.satisfactionLevel = Math.min(
+        100,
+        this.satisfactionLevel + actualGain,
+      )
     }
   }
 
@@ -81,13 +148,190 @@ export class Character extends GameObject {
    * Increase satisfaction when mask is applied
    */
   public addMaskSatisfaction(maskId: string): void {
+    const multiplier = this.getSatisfactionMultiplier()
+
     // Check if preferred mask type
     if (this.preferredMaskTypes.includes(maskId)) {
-      // Preferred mask: +20% satisfaction
-      this.satisfactionLevel = Math.min(100, this.satisfactionLevel + 20)
+      // Preferred mask: +20% satisfaction (with personality multiplier)
+      const baseGain = 20
+      const actualGain = Math.round(baseGain * multiplier)
+      this.satisfactionLevel = Math.min(
+        100,
+        this.satisfactionLevel + actualGain,
+      )
     } else {
-      // Regular mask: +15% satisfaction
-      this.satisfactionLevel = Math.min(100, this.satisfactionLevel + 15)
+      // Regular mask: +15% satisfaction (with personality multiplier)
+      const baseGain = 15
+      const actualGain = Math.round(baseGain * multiplier)
+      this.satisfactionLevel = Math.min(
+        100,
+        this.satisfactionLevel + actualGain,
+      )
+    }
+  }
+
+  /**
+   * Get feedback text based on action and current state
+   */
+  public getCleaningFeedback(): string {
+    const feedbacks: Record<string, string[]> = {
+      patient: ['Thanks for cleaning!', 'Much better!', 'I appreciate it!'],
+      impatient: ['Hurry up!', 'Finally!', 'About time!'],
+      demanding: ['Is that all?', 'Make sure its thorough!', 'Check again!'],
+      forgiving: ['Good job!', 'Thank you!', 'Perfect!'],
+      knowledgeable: ['Proper technique!', 'Clean technique!', 'Good work!'],
+      expert: ['Precise work!', 'Professional!', 'Excellent!'],
+      celebrity: ['Not bad...', 'Acceptable', 'Will do'],
+      default: ['Thanks!', 'Clean!', 'Nice!'],
+    }
+
+    // Find matching trait feedback
+    for (const trait of this.personalityTraits) {
+      if (feedbacks[trait]) {
+        const options = feedbacks[trait]
+        return options[Math.floor(Math.random() * options.length)]
+      }
+    }
+
+    // Return default
+    const defaults = feedbacks.default
+    return defaults[Math.floor(Math.random() * defaults.length)]
+  }
+
+  /**
+   * Get feedback for mask application
+   */
+  public getMaskFeedback(isPreferred: boolean): string {
+    if (isPreferred) {
+      const preferredFeedbacks: Record<string, string[]> = {
+        patient: [
+          'Exactly what I needed!',
+          'Perfect choice!',
+          'You know your stuff!',
+        ],
+        demanding: ['Acceptable choice', 'This will do', 'Good selection'],
+        knowledgeable: ['Excellent selection!', 'Spot on!', 'Perfect match!'],
+        expert: [
+          'Precisely what I need!',
+          'Impressive choice!',
+          'You understand skin!',
+        ],
+        celebrity: [
+          'This better work...',
+          'I expect results!',
+          'It better be good',
+        ],
+        default: ['Great choice!', 'Perfect!', 'Exactly!'],
+      }
+
+      for (const trait of this.personalityTraits) {
+        if (preferredFeedbacks[trait]) {
+          const options = preferredFeedbacks[trait]
+          return options[Math.floor(Math.random() * options.length)]
+        }
+      }
+      const defaults = preferredFeedbacks.default
+      return defaults[Math.floor(Math.random() * defaults.length)]
+    } else {
+      const regularFeedbacks: Record<string, string[]> = {
+        patient: ['This is fine', 'Thank you', 'I trust you'],
+        demanding: [
+          'Are you sure?',
+          'This isnt what I wanted',
+          'Why this one?',
+        ],
+        knowledgeable: [
+          'Interesting choice',
+          'Different approach',
+          'Unconventional',
+        ],
+        expert: [
+          'Questionable choice...',
+          'Is this the best option?',
+          'Hmm...',
+        ],
+        celebrity: ['This wont do!', 'Unacceptable!', 'Wrong choice!'],
+        default: ['Okay', 'Thanks', 'Alright'],
+      }
+
+      for (const trait of this.personalityTraits) {
+        if (regularFeedbacks[trait]) {
+          const options = regularFeedbacks[trait]
+          return options[Math.floor(Math.random() * options.length)]
+        }
+      }
+      const defaults = regularFeedbacks.default
+      return defaults[Math.floor(Math.random() * defaults.length)]
+    }
+  }
+
+  /**
+   * Get final treatment feedback based on satisfaction level
+   */
+  public getFinalFeedback(satisfaction: number): string {
+    if (satisfaction >= 80) {
+      const highFeedbacks: Record<string, string[]> = {
+        patient: [
+          'Wonderful experience!',
+          'I feel amazing!',
+          'Best spa day ever!',
+        ],
+        demanding: [
+          'Exceeded expectations!',
+          'Finally, quality service!',
+          'Impressive!',
+        ],
+        expert: ['Professional work!', 'Skilled technique!', 'Outstanding!'],
+        celebrity: [
+          'I might come back',
+          'Rarely impressed, but...',
+          'Acceptable service',
+        ],
+        default: ['Amazing!', 'Wonderful!', 'Perfect!'],
+      }
+
+      for (const trait of this.personalityTraits) {
+        if (highFeedbacks[trait]) {
+          const options = highFeedbacks[trait]
+          return options[Math.floor(Math.random() * options.length)]
+        }
+      }
+      const defaults = highFeedbacks.default
+      return defaults[Math.floor(Math.random() * defaults.length)]
+    } else if (satisfaction >= 60) {
+      const midFeedbacks: Record<string, string[]> = {
+        patient: ['Good service', 'Thank you', 'Pleasant experience'],
+        demanding: ['It was okay', 'Could be better', 'Mediocre'],
+        expert: ['Decent work', 'Acceptable', 'Standard service'],
+        celebrity: ['Not terrible', 'Passable', 'Fine I guess'],
+        default: ['Good', 'Nice', 'Thanks'],
+      }
+
+      for (const trait of this.personalityTraits) {
+        if (midFeedbacks[trait]) {
+          const options = midFeedbacks[trait]
+          return options[Math.floor(Math.random() * options.length)]
+        }
+      }
+      const defaults = midFeedbacks.default
+      return defaults[Math.floor(Math.random() * defaults.length)]
+    } else {
+      const lowFeedbacks: Record<string, string[]> = {
+        patient: ['Could improve', 'Not what I hoped', 'Disappointing'],
+        demanding: ['Unacceptable!', 'Terrible!', 'Never again!'],
+        expert: ['Amateur work', 'Poor technique', 'Unprofessional'],
+        celebrity: ['Outrageous!', 'Do you know who I am?!', 'Worst ever!'],
+        default: ['Not good', 'Poor', 'Bad'],
+      }
+
+      for (const trait of this.personalityTraits) {
+        if (lowFeedbacks[trait]) {
+          const options = lowFeedbacks[trait]
+          return options[Math.floor(Math.random() * options.length)]
+        }
+      }
+      const defaults = lowFeedbacks.default
+      return defaults[Math.floor(Math.random() * defaults.length)]
     }
   }
 

@@ -176,13 +176,14 @@ function setupGameState(gameState: SpaGameState) {
   const customerTemplate = levelManager.getCustomerTemplate()
   const levelConfig = levelManager.getLevelConfig()
 
-  // Create character with level-specific template
+  // Create character with level-specific template and personality
   gameState.character = new Character({
     id: `character_level_${currentLevel.number}`,
     name: customerTemplate.name,
     position: center(),
     satisfactionLevel: 50,
     preferredMaskTypes: customerTemplate.preferredMaskTypes,
+    personalityTraits: customerTemplate.personalityTraits,
   })
 
   // Create available masks (start with first mask unlocked)
@@ -554,12 +555,15 @@ function handleTouchEnd(touchPos: TouchPosition, gameState: SpaGameState) {
           ])
         }
 
-        // Update score
+        // Update score with personality multiplier
         const stateManager = getGameStateManager()
-        const maskScore = gameState.selectedMask.calculateScore(
+        const baseMaskScore = gameState.selectedMask.calculateScore(
           GAME_CONFIG.BASE_MASK_SCORE,
         )
-        stateManager.addScore(maskScore)
+        // Apply customer personality score multiplier
+        const scoreMultiplier = gameState.character.getScoreMultiplier()
+        const finalMaskScore = Math.round(baseMaskScore * scoreMultiplier)
+        stateManager.addScore(finalMaskScore)
 
         // Mark mask as applied and destroy its visual elements
         gameState.selectedMask.isApplied = true
@@ -688,14 +692,9 @@ function handleTreatmentComplete(gameState: SpaGameState) {
     return // Don't navigate to results if level failed
   }
 
-  // Go to results scene with treatment data
-  go(Scene.Results, {
-    session: gameState.treatmentSession,
-    character: gameState.character,
-    scoreBreakdown: scoreBreakdown,
-    treatmentDuration: timeUsed * 1000,
-    levelCompletion: levelCompletionResult,
-  })
+  // Navigate to shop after successful level completion
+  // From shop, player can buy items and then continue to next level
+  go(Scene.Shop, { fromLevel: true })
 }
 
 /**
@@ -989,7 +988,13 @@ function updateCleaningMode(gameState: SpaGameState): void {
 
         // Update UI - main game score is already handled by stateManager
         const stateManager = getGameStateManager()
-        stateManager.addScore(spot.points)
+        // Apply customer personality score multiplier to dirt cleaning
+        const cleaningScoreMultiplier =
+          gameState.character?.getScoreMultiplier() || 1.0
+        const finalCleaningScore = Math.round(
+          spot.points * cleaningScoreMultiplier,
+        )
+        stateManager.addScore(finalCleaningScore)
 
         // Add satisfaction for cleaning dirt (+10%)
         if (gameState.character) {
