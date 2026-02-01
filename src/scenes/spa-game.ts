@@ -1246,12 +1246,12 @@ function updateMoisturizerMode(gameState: SpaGameState): void {
 
     // Add satisfaction for moisturizer coverage
     if (gameState.character) {
-      // Check if face is already fully covered (100%)
-      if (updateResult.coveragePercentage >= 100) {
-        // Apply penalty for over-moisturizing
+      // 80% coverage gives best score, above that decreases score
+      if (updateResult.coveragePercentage > 80) {
+        // Apply penalty for over-moisturizing (above 80%)
         gameState.character.applyOverMoisturizePenalty()
       } else {
-        // Normal satisfaction gain for incomplete coverage
+        // Normal satisfaction gain up to 80% (optimal coverage)
         gameState.character.addMoisturizerSatisfaction(
           updateResult.coveragePercentage,
         )
@@ -1259,9 +1259,9 @@ function updateMoisturizerMode(gameState: SpaGameState): void {
     }
   }
 
-  // Check for completion
-  if (stateManager.isComplete()) {
-    // Handle completion - could show success message
-    gameState.moisturizerProgressUI!.text = 'Complete! 100%'
+  // Check for completion (80% is optimal, above is over-application)
+  if (updateResult.coveragePercentage >= 80) {
+    // Show optimal coverage message
+    gameState.moisturizerProgressUI!.text = 'Optimal: 80%+'
   }
 }

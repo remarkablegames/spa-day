@@ -56,6 +56,7 @@ export class Character extends GameObject {
   private lastUpdateFrame: number = 0
   private updateThrottle: number = 10 // Update satisfaction every 10 frames
   private satisfactionDecayRate: number = 0.98 // Gradual decay factor
+  private overMoisturizeCount: number = 0 // Track consecutive over-applications
 
   constructor(config: CharacterConfig) {
     super(config.id, config.position)
@@ -182,16 +183,31 @@ export class Character extends GameObject {
     const actualGain = Math.round(baseGain * multiplier)
 
     this.satisfactionLevel = Math.min(100, this.satisfactionLevel + actualGain)
+
+    // Reset over-moisturize counter when applying normally
+    this.overMoisturizeCount = 0
   }
 
   /**
    * Decrease satisfaction when too much moisturizer is applied
-   * Penalty for over-moisturizing
+   * Penalty increases with consecutive over-applications
    */
   public applyOverMoisturizePenalty(): void {
-    // Penalty: -2% satisfaction for applying too much
-    const penalty = 2
+    // Increment over-application counter
+    this.overMoisturizeCount++
+
+    // Penalty increases: -2%, -4%, -6%, -8%, capped at -10%
+    const basePenalty = 2
+    const penalty = Math.min(10, basePenalty * this.overMoisturizeCount)
+
     this.satisfactionLevel = Math.max(0, this.satisfactionLevel - penalty)
+  }
+
+  /**
+   * Reset over-moisturize counter (call when completing or resetting treatment)
+   */
+  public resetOverMoisturizeCount(): void {
+    this.overMoisturizeCount = 0
   }
 
   /**
