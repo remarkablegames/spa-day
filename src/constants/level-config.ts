@@ -19,6 +19,7 @@ export const LEVEL_CONFIGS: Record<number, LevelConfig> = {
     scoreMultiplier: 1.0,
     difficultyMultiplier: 1.0,
     dirtSpotCount: 3,
+    optimalMoisturizerCoverage: 80,
   },
   2: {
     timeLimit: 15,
@@ -27,6 +28,7 @@ export const LEVEL_CONFIGS: Record<number, LevelConfig> = {
     scoreMultiplier: 1.2,
     difficultyMultiplier: 1.1,
     dirtSpotCount: 5,
+    optimalMoisturizerCoverage: 80,
   },
   3: {
     timeLimit: 15,
@@ -35,6 +37,7 @@ export const LEVEL_CONFIGS: Record<number, LevelConfig> = {
     scoreMultiplier: 1.4,
     difficultyMultiplier: 1.2,
     dirtSpotCount: 7,
+    optimalMoisturizerCoverage: 80,
   },
   4: {
     timeLimit: 15,
@@ -49,6 +52,7 @@ export const LEVEL_CONFIGS: Record<number, LevelConfig> = {
     scoreMultiplier: 1.6,
     difficultyMultiplier: 1.3,
     dirtSpotCount: 9,
+    optimalMoisturizerCoverage: 80,
   },
   5: {
     timeLimit: 15,
@@ -63,6 +67,7 @@ export const LEVEL_CONFIGS: Record<number, LevelConfig> = {
     scoreMultiplier: 1.8,
     difficultyMultiplier: 1.4,
     dirtSpotCount: 12,
+    optimalMoisturizerCoverage: 80,
   },
 }
 

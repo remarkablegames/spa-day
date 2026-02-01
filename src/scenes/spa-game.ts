@@ -89,6 +89,7 @@ interface SpaGameState {
   moisturizerProgressUI: GameObj<
     TextComp | PosComp | ColorComp | OpacityComp | ZComp
   > | null
+  optimalMoisturizerCoverage: number // From level config
 }
 
 export function createSpaGameScene() {
@@ -111,6 +112,7 @@ export function createSpaGameScene() {
       moisturizerTool: null,
       moisturizerTrail: null,
       moisturizerProgressUI: null,
+      optimalMoisturizerCoverage: 80, // Default value, updated from level config
     }
 
     // Initialize level manager
@@ -123,6 +125,13 @@ export function createSpaGameScene() {
       if (!isNaN(levelNum)) {
         levelManager.setCurrentLevel(levelNum)
       }
+    }
+
+    // Get level config and set optimal moisturizer coverage
+    const currentLevel = levelManager.getCurrentLevel()
+    if (currentLevel) {
+      gameState.optimalMoisturizerCoverage =
+        currentLevel.config.optimalMoisturizerCoverage
     }
 
     // Create level progress UI (T014)
@@ -1246,12 +1255,13 @@ function updateMoisturizerMode(gameState: SpaGameState): void {
 
     // Add satisfaction for moisturizer coverage
     if (gameState.character) {
-      // 80% coverage gives best score, above that decreases score
-      if (updateResult.coveragePercentage > 80) {
-        // Apply penalty for over-moisturizing (above 80%)
+      const optimal = gameState.optimalMoisturizerCoverage
+      // Optimal coverage gives best score, above that decreases score
+      if (updateResult.coveragePercentage > optimal) {
+        // Apply penalty for over-moisturizing (above optimal)
         gameState.character.applyOverMoisturizePenalty()
       } else {
-        // Normal satisfaction gain up to 80% (optimal coverage)
+        // Normal satisfaction gain up to optimal coverage
         gameState.character.addMoisturizerSatisfaction(
           updateResult.coveragePercentage,
         )
@@ -1259,9 +1269,9 @@ function updateMoisturizerMode(gameState: SpaGameState): void {
     }
   }
 
-  // Check for completion (80% is optimal, above is over-application)
-  if (updateResult.coveragePercentage >= 80) {
+  // Check for completion (optimal coverage is best, above is over-application)
+  if (updateResult.coveragePercentage >= gameState.optimalMoisturizerCoverage) {
     // Show optimal coverage message
-    gameState.moisturizerProgressUI!.text = 'Optimal: 80%+'
+    gameState.moisturizerProgressUI!.text = `Optimal: ${gameState.optimalMoisturizerCoverage}%+`
   }
 }

@@ -26,6 +26,7 @@ export interface LevelConfig {
   scoreMultiplier: number
   difficultyMultiplier: number
   dirtSpotCount: number // Number of dirt spots to clean
+  optimalMoisturizerCoverage: number // Percentage for best score (default: 80)
 }
 
 /**
