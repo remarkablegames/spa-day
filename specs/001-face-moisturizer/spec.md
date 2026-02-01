@@ -13,6 +13,7 @@
 - Q: Where does the moisturizer step occur in the spa treatment sequence? → A: Last - Final step before spa session completion
 - Q: How many moisturizers will be available and can they be upgraded via the shop? → A: Multiple moisturizer types (basic, premium, luxury) with unlock/upgrade mechanics via shop
 - Q: What determines when players can unlock/upgrade moisturizers? → A: Levels and/or cost using existing game economy system
+- Q: How is customer satisfaction scored based on moisturizer application? → A: Coverage percentage + moisturizer type bonus integrated with existing scoring system
 
 ## User Scenarios & Testing _(mandatory)_
 
@@ -95,6 +96,9 @@ Once the player has applied moisturizer to a sufficient percentage of the face, 
 - **FR-014**: System MUST display available (unlocked) moisturizers in a selection UI before treatment begins
 - **FR-015**: System MUST apply stat differences based on moisturizer type (e.g., coverage speed, visual quality, bonus rewards)
 - **FR-016**: System MUST check player level and currency balance before allowing moisturizer unlocks/purchases
+- **FR-017**: System MUST calculate customer satisfaction score based on coverage percentage (85-94%=3 stars, 95-99%=4 stars, 100%=5 stars)
+- **FR-018**: System MUST apply moisturizer type multipliers to satisfaction score (basic=1x, premium=1.2x, luxury=1.5x)
+- **FR-019**: System MUST integrate satisfaction scoring with existing spa session scoring system
 
 ### Key Entities
 
@@ -103,6 +107,7 @@ Once the player has applied moisturizer to a sufficient percentage of the face, 
 - **Coverage State**: Tracks which regions of the face have been moisturized and calculates overall completion percentage
 - **Moisturizer Types**: Collection of unlockable/upgradable moisturizers (basic, premium, luxury) with varying stats and visual effects
 - **Shop Integration**: Interface for unlocking and upgrading moisturizer types using in-game currency or rewards
+- **Satisfaction Score**: Composite rating based on coverage accuracy and moisturizer quality, feeding into overall spa session score
 
 ## Success Criteria _(mandatory)_
 
@@ -114,6 +119,8 @@ Once the player has applied moisturizer to a sufficient percentage of the face, 
 - **SC-004**: Coverage calculation is accurate within 5% of actual visual coverage
 - **SC-005**: The feature is fully playable with mouse and touch controls
 - **SC-006**: Players report satisfaction score of 4/5 or higher for the "satisfying" nature of the drawing mechanic
+- **SC-007**: Satisfaction scoring integrates seamlessly with existing spa session scoring (no conflicts or double-counting)
+- **SC-008**: Score calculation completes within 100ms of treatment completion
 
 ## Assumptions
 
