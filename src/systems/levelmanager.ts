@@ -137,15 +137,14 @@ export class LevelManager {
    */
   public completeLevel(results: TreatmentResults): LevelCompletionResult {
     const level = this.getCurrentLevel()
-    const config = LEVEL_CONFIGS[this.currentLevel]
 
     const success = this.validateLevelCompletion(
       results.score,
       results.satisfaction,
     )
 
-    // Calculate currency earned (score to currency conversion)
-    const currencyEarned = Math.floor(results.score * config.scoreMultiplier)
+    // Calculate currency earned based on satisfaction level
+    const currencyEarned = Math.floor(results.satisfaction)
 
     // Check if next level should unlock
     const nextLevelUnlocked =

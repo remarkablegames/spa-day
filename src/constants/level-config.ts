@@ -15,7 +15,7 @@ export const LEVEL_CONFIGS: Record<number, LevelConfig> = {
   1: {
     timeLimit: 15,
     satisfactionThreshold: 35,
-    scoreThreshold: 100,
+    scoreThreshold: 0,
     availableMaskTypes: ['hydrating', 'soothing'],
     scoreMultiplier: 1.0,
     difficultyMultiplier: 1.0,
@@ -23,7 +23,7 @@ export const LEVEL_CONFIGS: Record<number, LevelConfig> = {
   2: {
     timeLimit: 40,
     satisfactionThreshold: 65,
-    scoreThreshold: 400,
+    scoreThreshold: 0,
     availableMaskTypes: ['hydrating', 'soothing', 'clarifying'],
     scoreMultiplier: 1.2,
     difficultyMultiplier: 1.1,
@@ -31,7 +31,7 @@ export const LEVEL_CONFIGS: Record<number, LevelConfig> = {
   3: {
     timeLimit: 35,
     satisfactionThreshold: 70,
-    scoreThreshold: 500,
+    scoreThreshold: 0,
     availableMaskTypes: ['hydrating', 'soothing', 'clarifying', 'anti_aging'],
     scoreMultiplier: 1.4,
     difficultyMultiplier: 1.2,
@@ -39,7 +39,7 @@ export const LEVEL_CONFIGS: Record<number, LevelConfig> = {
   4: {
     timeLimit: 30,
     satisfactionThreshold: 75,
-    scoreThreshold: 600,
+    scoreThreshold: 0,
     availableMaskTypes: [
       'hydrating',
       'soothing',
@@ -53,7 +53,7 @@ export const LEVEL_CONFIGS: Record<number, LevelConfig> = {
   5: {
     timeLimit: 25,
     satisfactionThreshold: 80,
-    scoreThreshold: 700,
+    scoreThreshold: 0,
     availableMaskTypes: [
       'hydrating',
       'soothing',
