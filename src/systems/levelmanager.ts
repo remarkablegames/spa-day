@@ -16,6 +16,7 @@ import type {
   LevelProgress,
   TreatmentResults,
 } from '../types/level'
+import { economyManager } from './economy'
 import { storageManager } from './storage'
 
 /**
@@ -173,6 +174,9 @@ export class LevelManager {
 
       // Update total currency
       this.progress.totalCurrency += currencyEarned
+
+      // Add currency to economy manager for shop spending
+      economyManager.addCurrency(currencyEarned)
 
       // Unlock next level if criteria met
       if (nextLevelUnlocked) {
