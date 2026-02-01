@@ -7,7 +7,7 @@
 [![release](https://img.shields.io/github/v/release/remarkablegames/spa-day)](https://github.com/remarkablegames/spa-day/releases)
 [![build](https://github.com/remarkablegames/spa-day/actions/workflows/build.yml/badge.svg)](https://github.com/remarkablegames/spa-day/actions/workflows/build.yml)
 
-🫧 Spa Day
+🫧 <kbd>Spa Day</kbd> was made for Global Game Jam 2026, which the theme was **mask**.
 
 Play the game on:
 
