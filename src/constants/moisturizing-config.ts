@@ -25,7 +25,7 @@ export const MOISTURIZING_CONFIG = {
 
   // Visual settings
   visual: {
-    maxTrailSegments: 100, // Performance cap
+    maxTrailSegments: 10000, // High limit to allow full face coverage
     trailWidth: 8,
     minTrailDistance: 5, // Minimum 5px between trail points
     trailOpacity: 0.8,

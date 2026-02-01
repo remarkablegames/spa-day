@@ -1191,10 +1191,7 @@ function toggleMoisturizerMode(
       gameState.moisturizerTool.deactivate()
     }
 
-    // Clear trail
-    if (gameState.moisturizerTrail) {
-      gameState.moisturizerTrail.clear()
-    }
+    // Note: Trail is NOT cleared so moisturizer remains visible on face
   }
 }
 
