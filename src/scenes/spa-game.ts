@@ -1243,6 +1243,13 @@ function updateMoisturizerMode(gameState: SpaGameState): void {
   // Update progress UI if there was new coverage
   if (updateResult.isNewCoverage && gameState.moisturizerProgressUI) {
     gameState.moisturizerProgressUI.text = `Coverage: ${Math.round(updateResult.coveragePercentage)}%`
+
+    // Add satisfaction for moisturizer coverage
+    if (gameState.character) {
+      gameState.character.addMoisturizerSatisfaction(
+        updateResult.coveragePercentage,
+      )
+    }
   }
 
   // Check for completion
