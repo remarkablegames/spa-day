@@ -11,6 +11,8 @@
 
 - Q: Should this moisturizer feature be integrated into an existing spa game scene/flow, or is it a standalone mini-game? → A: Integrated - Add to existing spa game as one step in a multi-treatment sequence (e.g., cleanse → mask → moisturize)
 - Q: Where does the moisturizer step occur in the spa treatment sequence? → A: Last - Final step before spa session completion
+- Q: How many moisturizers will be available and can they be upgraded via the shop? → A: Multiple moisturizer types (basic, premium, luxury) with unlock/upgrade mechanics via shop
+- Q: What determines when players can unlock/upgrade moisturizers? → A: Levels and/or cost using existing game economy system
 
 ## User Scenarios & Testing _(mandatory)_
 
@@ -87,12 +89,20 @@ Once the player has applied moisturizer to a sufficient percentage of the face, 
 - **FR-008**: System MUST provide positive visual/audio feedback upon completion
 - **FR-009**: System MUST prevent double-counting when moisturizer is applied to already-covered areas
 - **FR-010**: System MUST allow players to proceed to next steps only after completion criteria are met
+- **FR-011**: System MUST provide at least 3 moisturizer types (basic, premium, luxury) with distinct visual effects and properties
+- **FR-012**: System MUST integrate with existing shop/economy system to allow unlocking/upgrading moisturizer types using in-game currency
+- **FR-013**: System MUST enforce level requirements and/or cost thresholds for unlocking premium/luxury moisturizers
+- **FR-014**: System MUST display available (unlocked) moisturizers in a selection UI before treatment begins
+- **FR-015**: System MUST apply stat differences based on moisturizer type (e.g., coverage speed, visual quality, bonus rewards)
+- **FR-016**: System MUST check player level and currency balance before allowing moisturizer unlocks/purchases
 
 ### Key Entities
 
 - **Face**: The interactive area representing a character's face, defined by visual boundaries and collision zones
 - **Moisturizer Trail**: Visual representation of applied moisturizer, consisting of individual drawing strokes that combine to show coverage
 - **Coverage State**: Tracks which regions of the face have been moisturized and calculates overall completion percentage
+- **Moisturizer Types**: Collection of unlockable/upgradable moisturizers (basic, premium, luxury) with varying stats and visual effects
+- **Shop Integration**: Interface for unlocking and upgrading moisturizer types using in-game currency or rewards
 
 ## Success Criteria _(mandatory)_
 
