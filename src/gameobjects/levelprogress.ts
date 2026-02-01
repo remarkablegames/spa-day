@@ -37,34 +37,37 @@ export function createLevelProgressUI(): void {
 
   // Position at top center to avoid overlapping with existing UI
   const centerX = width() / 2
-  const topY = 10
+  const topY = 25
 
   // Container for all level UI elements
   uiState.container = add([pos(centerX, topY), z(100)])
 
   // Level number display - centered at top
   uiState.levelText = add([
-    text(`Level ${currentLevel.number}: ${currentLevel.name}`, { size: 18 }),
+    text(`Level ${currentLevel.number}: ${currentLevel.name}`, {
+      size: 28,
+      font: 'bold',
+    }),
     pos(centerX, topY),
     anchor('center'),
     color(GAME_CONFIG.COLORS.UI_TEXT),
     z(101),
   ])
 
-  // Currency display (coins) - below level name
+  // Currency display (coins) - below level name with more spacing
   uiState.currencyText = add([
-    text(`Coins: ${progress.totalCurrency}`, { size: 16 }),
-    pos(centerX, topY + 22),
+    text(`Coins: ${progress.totalCurrency}`, { size: 24, font: 'bold' }),
+    pos(centerX, topY + 45),
     anchor('center'),
     color(255, 215, 0), // Gold color
     z(101),
   ])
 
   // Level unlock progress bar background - small bar below coins
-  const barWidth = 120
+  const barWidth = 140
   add([
-    rect(barWidth, 8),
-    pos(centerX - barWidth / 2, topY + 42),
+    rect(barWidth, 10),
+    pos(centerX - barWidth / 2, topY + 75),
     color(Color.fromHex('#333333')),
     z(100),
   ])
@@ -75,16 +78,16 @@ export function createLevelProgressUI(): void {
   const progressPercent = unlockedCount / maxLevels
 
   uiState.progressBar = add([
-    rect(barWidth * progressPercent, 8),
-    pos(centerX - barWidth / 2, topY + 42),
+    rect(barWidth * progressPercent, 10),
+    pos(centerX - barWidth / 2, topY + 75),
     color(Color.fromHex(GAME_CONFIG.COLORS.UI_ACCENT)),
     z(101),
   ])
 
-  // Progress text - below progress bar
+  // Progress text - below progress bar with more spacing
   add([
-    text(`${unlockedCount}/${maxLevels} unlocked`, { size: 11 }),
-    pos(centerX, topY + 55),
+    text(`${unlockedCount}/${maxLevels} unlocked`, { size: 14 }),
+    pos(centerX, topY + 95),
     anchor('center'),
     color(GAME_CONFIG.COLORS.UI_TEXT),
     z(101),
