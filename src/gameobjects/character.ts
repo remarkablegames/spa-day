@@ -225,7 +225,7 @@ export class Character extends GameObject {
     // Create visual element if it doesn't exist
     if (!this.visualElement) {
       // Load the character sprite
-      loadSprite('character_base', '/sprites/face-eyes-closed.png')
+      loadSprite('character_base', 'sprites/face-eyes-closed.png')
 
       this.visualElement = add([
         sprite('character_base'),
