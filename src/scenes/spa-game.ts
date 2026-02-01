@@ -13,11 +13,21 @@ import { Scene } from '../constants'
 import { GAME_CONFIG } from '../constants/game-config'
 import { getGameStateManager } from '../gameobjects/base'
 import { Character } from '../gameobjects/character'
+import {
+  createLevelProgressUI,
+  showLevelCompleteUI,
+  showLevelFailedUI,
+} from '../gameobjects/levelprogress'
 import { FaceMask } from '../gameobjects/mask'
 import { TreatmentSession } from '../gameobjects/treatment'
 import { getGameOverManager } from '../systems/gameover'
+import {
+  getLevelManager,
+  initializeLevelManager,
+} from '../systems/levelmanager'
 import { getPauseManager } from '../systems/pause'
 import { getPerformanceMonitor } from '../systems/performance'
+import type { TreatmentResults } from '../types/level'
 
 interface TouchPosition {
   x: number
@@ -78,7 +88,22 @@ export function createSpaGameScene() {
     score: 0,
   }
 
-  scene(Scene.SpaGame, () => {
+  scene(Scene.SpaGame, (params: { levelId?: string } = {}) => {
+    // Initialize level manager
+    initializeLevelManager()
+    const levelManager = getLevelManager()
+
+    // Set current level if provided
+    if (params.levelId) {
+      const levelNum = parseInt(params.levelId, 10)
+      if (!isNaN(levelNum)) {
+        levelManager.setCurrentLevel(levelNum)
+      }
+    }
+
+    // Create level progress UI (T014)
+    createLevelProgressUI()
+
     // Systems are now initialized in preload scene
     // Start background music
     // const music = play(Sound.BackgroundMusic, {
@@ -86,7 +111,7 @@ export function createSpaGameScene() {
     //   loop: true,
     // })
 
-    // Setup game state
+    // Setup game state with level configuration
     setupGameState(gameState)
 
     // Create UI
@@ -145,16 +170,17 @@ export function createSpaGameScene() {
 }
 
 function setupGameState(gameState: SpaGameState) {
-  // Create character
+  const levelManager = getLevelManager()
+  const currentLevel = levelManager.getCurrentLevel()
+  const customerTemplate = levelManager.getCustomerTemplate()
+
+  // Create character with level-specific template
   gameState.character = new Character({
-    id: 'character_1',
-    name: 'Spa Customer',
+    id: `character_level_${currentLevel.number}`,
+    name: customerTemplate.name,
     position: center(),
     satisfactionLevel: 50,
-    preferredMaskTypes: [
-      GAME_CONFIG.MASK_TYPES.HYDRATING,
-      GAME_CONFIG.MASK_TYPES.SOOTHING,
-    ],
+    preferredMaskTypes: customerTemplate.preferredMaskTypes,
   })
 
   // Create available masks (start with first mask unlocked)
@@ -599,6 +625,10 @@ function handleTreatmentComplete(gameState: SpaGameState) {
   // Play treatment completion sound
   // play(Sound.TreatmentComplete, { volume: 0.5 })
 
+  // Get level manager
+  const levelManager = getLevelManager()
+  const levelConfig = levelManager.getLevelConfig()
+
   // Create simple score breakdown from treatment session
   const scoreBreakdown = {
     baseScore: gameState.treatmentSession.score,
@@ -607,11 +637,28 @@ function handleTreatmentComplete(gameState: SpaGameState) {
     completionBonus: 0,
     satisfactionBonus: 0,
     comboMultiplier: 1,
-    totalScore: gameState.treatmentSession.score,
+    totalScore: Math.floor(
+      gameState.treatmentSession.score * levelConfig.scoreMultiplier,
+    ),
   }
 
   // Get character satisfaction
   const satisfactionLevel = gameState.character.satisfactionLevel
+  const timeUsed = gameState.treatmentSession.getElapsedTime()
+
+  // Create treatment results for level completion
+  const treatmentResults: TreatmentResults = {
+    score: scoreBreakdown.totalScore,
+    satisfaction: satisfactionLevel,
+    timeUsed: timeUsed,
+    masksApplied:
+      (gameState.treatmentSession as unknown as { appliedMasks?: string[] })
+        .appliedMasks || [],
+    customerFeedback: '',
+  }
+
+  // Complete the level and get results
+  const levelCompletionResult = levelManager.completeLevel(treatmentResults)
 
   // Trigger game over with treatment completion
   const gameOverManager = getGameOverManager()
@@ -620,12 +667,26 @@ function handleTreatmentComplete(gameState: SpaGameState) {
     satisfactionLevel,
   )
 
+  // Show level completion UI
+  if (levelCompletionResult.success) {
+    showLevelCompleteUI(
+      levelCompletionResult.score,
+      levelCompletionResult.satisfaction,
+      levelCompletionResult.currencyEarned,
+      levelCompletionResult.nextLevelUnlocked,
+    )
+  } else {
+    showLevelFailedUI()
+    return // Don't navigate to results if level failed
+  }
+
   // Go to results scene with treatment data
   go(Scene.Results, {
     session: gameState.treatmentSession,
     character: gameState.character,
     scoreBreakdown: scoreBreakdown,
-    treatmentDuration: gameState.treatmentSession.getElapsedTime() * 1000,
+    treatmentDuration: timeUsed * 1000,
+    levelCompletion: levelCompletionResult,
   })
 }
 

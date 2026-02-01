@@ -59,13 +59,13 @@ description: 'Task list template for feature implementation'
 
 ### Implementation for User Story 1
 
-- [ ] T009 [US1] Implement LevelManager class in src/systems/levelmanager.ts
-- [ ] T010 [US1] Create level progress tracking UI in src/gameobjects/levelprogress.ts
-- [ ] T011 [US1] Implement level completion validation in src/systems/levelmanager.ts
-- [ ] T012 [US1] Add level progression to spa-game scene in src/scenes/spa-game.ts
-- [ ] T013 [US1] Create level selection scene in src/scenes/level-select.ts
-- [ ] T014 [US1] Add level indicators to game UI in src/scenes/spa-game.ts
-- [ ] T015 [US1] Implement level retry functionality in src/systems/levelmanager.ts
+- [x] T009 [US1] Implement LevelManager class in src/systems/levelmanager.ts
+- [x] T010 [US1] Create level progress tracking UI in src/gameobjects/levelprogress.ts
+- [x] T011 [US1] Implement level completion validation in src/systems/levelmanager.ts
+- [x] T012 [US1] Add level progression to spa-game scene in src/scenes/spa-game.ts
+- [x] T013 [US1] Create level selection scene in src/scenes/level-select.ts
+- [x] T014 [US1] Add level indicators to game UI in src/scenes/spa-game.ts
+- [x] T015 [US1] Implement level retry functionality in src/systems/levelmanager.ts
 
 **Checkpoint**: At this point, User Story 1 should be fully functional and testable independently
 
