@@ -13,9 +13,9 @@ import type {
 // Level configurations by level number
 export const LEVEL_CONFIGS: Record<number, LevelConfig> = {
   1: {
-    timeLimit: 45,
-    satisfactionThreshold: 60,
-    scoreThreshold: 300,
+    timeLimit: 15,
+    satisfactionThreshold: 40,
+    scoreThreshold: 150,
     availableMaskTypes: ['hydrating', 'soothing'],
     scoreMultiplier: 1.0,
     difficultyMultiplier: 1.0,

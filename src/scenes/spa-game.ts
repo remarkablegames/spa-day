@@ -173,6 +173,7 @@ function setupGameState(gameState: SpaGameState) {
   const levelManager = getLevelManager()
   const currentLevel = levelManager.getCurrentLevel()
   const customerTemplate = levelManager.getCustomerTemplate()
+  const levelConfig = levelManager.getLevelConfig()
 
   // Create character with level-specific template
   gameState.character = new Character({
@@ -193,10 +194,13 @@ function setupGameState(gameState: SpaGameState) {
     mask.position = vec2(100 + index * 80, maskY)
   })
 
-  // Create treatment session
+  // Create treatment session with level-specific time limit
   gameState.treatmentSession = TreatmentSession.createNewSession(
     gameState.character.id,
   )
+
+  // Set the duration from level config
+  gameState.treatmentSession.duration = levelConfig.timeLimit
 
   // Set pause manager on treatment session immediately
   const pauseManager = getPauseManager()
