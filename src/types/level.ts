@@ -25,6 +25,7 @@ export interface LevelConfig {
   availableMaskTypes: string[]
   scoreMultiplier: number
   difficultyMultiplier: number
+  dirtSpotCount: number // Number of dirt spots to clean
 }
 
 /**

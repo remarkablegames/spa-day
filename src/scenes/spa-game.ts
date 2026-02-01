@@ -762,13 +762,24 @@ function initializeCleaningMode(gameState: SpaGameState): void {
 
   // Dirt spots covering face areas
   gameState.dirtSpots = []
-  const spotsPerArea = 5 // Number of dirt spots per face area
+
+  // Get dirt spot count from level config
+  const levelManager = getLevelManager()
+  const levelConfig = levelManager.getLevelConfig()
+  const totalDirtSpots = levelConfig.dirtSpotCount
 
   // Get face areas from character
   const faceAreas = gameState.character?.faceAreas || []
 
+  // Distribute dirt spots across face areas
+  const spotsPerArea = Math.ceil(totalDirtSpots / faceAreas.length)
+
   faceAreas.forEach((faceArea, areaIndex) => {
-    for (let i = 0; i < spotsPerArea; i++) {
+    for (
+      let i = 0;
+      i < spotsPerArea && gameState.dirtSpots.length < totalDirtSpots;
+      i++
+    ) {
       // Generate random position within this face area
       const areaHalfWidth = faceArea.size.x / 2
       const areaHalfHeight = faceArea.size.y / 2
