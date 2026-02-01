@@ -531,6 +531,9 @@ function handleTouchEnd(touchPos: TouchPosition, gameState: SpaGameState) {
         // Play mask application sound
         // play(Sound.MaskApply, { volume: 0.3 })
 
+        // Add satisfaction for applying mask (+15% or +20% for preferred)
+        gameState.character.addMaskSatisfaction(gameState.selectedMask.type)
+
         // Create particle effects at application point
         const faceAreaWorldPos = gameState.character.position.add(
           faceArea.position,
@@ -985,6 +988,11 @@ function updateCleaningMode(gameState: SpaGameState): void {
         // Update UI - main game score is already handled by stateManager
         const stateManager = getGameStateManager()
         stateManager.addScore(spot.points)
+
+        // Add satisfaction for cleaning dirt (+10%)
+        if (gameState.character) {
+          gameState.character.addCleaningSatisfaction('face_area')
+        }
       }
     }
   })

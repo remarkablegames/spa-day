@@ -58,9 +58,37 @@ export class Character extends GameObject {
   constructor(config: CharacterConfig) {
     super(config.id, config.position)
     this.name = config.name
-    this.satisfactionLevel = config.satisfactionLevel
+    this.satisfactionLevel = 0 // Start at 0%, build up with actions
     this.preferredMaskTypes = config.preferredMaskTypes
     this.faceAreas = this.createFaceAreas()
+  }
+
+  /**
+   * Increase satisfaction when dirt is cleaned
+   */
+  public addCleaningSatisfaction(areaId: string): void {
+    const area = this.faceAreas.find((a) => a.id === areaId)
+    if (!area) return
+
+    // Only give satisfaction if area was dirty and is now being cleaned
+    if ((area.cleanliness || 0) < 1.0) {
+      // Increase satisfaction by 10% per cleaned area
+      this.satisfactionLevel = Math.min(100, this.satisfactionLevel + 10)
+    }
+  }
+
+  /**
+   * Increase satisfaction when mask is applied
+   */
+  public addMaskSatisfaction(maskId: string): void {
+    // Check if preferred mask type
+    if (this.preferredMaskTypes.includes(maskId)) {
+      // Preferred mask: +20% satisfaction
+      this.satisfactionLevel = Math.min(100, this.satisfactionLevel + 20)
+    } else {
+      // Regular mask: +15% satisfaction
+      this.satisfactionLevel = Math.min(100, this.satisfactionLevel + 15)
+    }
   }
 
   /**
@@ -365,51 +393,14 @@ export class Character extends GameObject {
   }
 
   private updateSatisfaction() {
-    const occupiedAreas = this.getOccupiedAreas()
+    // Progressive satisfaction system - no decay
+    // Satisfaction only increases through player actions:
+    // - Cleaning dirt spots: +10% per area
+    // - Applying masks: +15% (regular) or +20% (preferred)
+    // This is handled by addCleaningSatisfaction() and addMaskSatisfaction()
 
-    if (occupiedAreas.length === 0) {
-      // Gradual decay instead of immediate drop to 0
-      const newSatisfaction = Math.max(
-        0,
-        this.satisfactionLevel * this.satisfactionDecayRate,
-      )
-      if (newSatisfaction !== this.satisfactionLevel) {
-        this.satisfactionLevel = newSatisfaction
-      }
-      return
-    }
-
-    let satisfactionScore = 0
-    occupiedAreas.forEach((area) => {
-      if (
-        area.currentMask &&
-        this.preferredMaskTypes.includes(area.currentMask)
-      ) {
-        satisfactionScore += 25 // Bonus for preferred masks
-      } else {
-        satisfactionScore += 15 // Base score for any mask
-      }
-    })
-
-    // Calculate satisfaction based on applied masks, not total possible
-    // Each mask gives significant satisfaction boost
-    const averageScorePerMask = satisfactionScore / occupiedAreas.length
-    const coverageBonus = (occupiedAreas.length / this.faceAreas.length) * 20 // Coverage bonus
-    const calculatedSatisfaction = Math.min(
-      100,
-      averageScorePerMask + coverageBonus,
-    )
-
-    // Blend calculated satisfaction with current level for smoother transitions
-    const blendFactor = 0.3 // How quickly to adapt to new satisfaction
-    const newSatisfactionLevel =
-      this.satisfactionLevel * (1 - blendFactor) +
-      calculatedSatisfaction * blendFactor
-
-    // Only update if satisfaction actually changed significantly
-    if (Math.abs(newSatisfactionLevel - this.satisfactionLevel) > 0.5) {
-      this.satisfactionLevel = newSatisfactionLevel
-    }
+    // Just ensure satisfaction stays within bounds
+    this.satisfactionLevel = Math.max(0, Math.min(100, this.satisfactionLevel))
   }
 
   public getSatisfaction(): number {
