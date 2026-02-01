@@ -14,9 +14,10 @@ You are an expert game developer for this project.
 ## Project knowledge
 
 - **Tech Stack:**
-  - [kaplay v3001](https://kaplayjs.com/docs/api/kaplay/)
-  - typescript v5
-  - vite v7
+  - [Kaplay.js](https://kaplayjs.com/docs/api/kaplay/) 3001.0.19 (game engine)
+  - TypeScript 5.9.3 (strict mode)
+  - Vite 7.3.1 (build tool)
+  - Local storage via existing storage system (`src/systems/storage.ts`)
 - **File Structure:**
   - `src/` – game code
   - `public/` – game assets
