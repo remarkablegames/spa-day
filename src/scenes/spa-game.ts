@@ -57,6 +57,7 @@ interface DirtSpot {
   isCleaned: boolean
   points: number
   visual: DirtSpotVisual | null
+  areaId: string // Track which face area this dirt spot belongs to
 }
 
 interface SpaGameState {
@@ -779,6 +780,7 @@ function initializeCleaningMode(gameState: SpaGameState): void {
         isCleaned: false,
         points: 10,
         visual: null,
+        areaId: faceArea.id, // Track which face area this spot belongs to
       }
 
       // Create visual dirt spot
@@ -991,7 +993,7 @@ function updateCleaningMode(gameState: SpaGameState): void {
 
         // Add satisfaction for cleaning dirt (+10%)
         if (gameState.character) {
-          gameState.character.addCleaningSatisfaction('face_area')
+          gameState.character.addCleaningSatisfaction(spot.areaId)
         }
       }
     }
