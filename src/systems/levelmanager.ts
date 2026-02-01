@@ -128,8 +128,8 @@ export class LevelManager {
   /**
    * Validate level completion
    */
-  public validateLevelCompletion(score: number, satisfaction: number): boolean {
-    return validateLevelCompletion(this.currentLevel, score, satisfaction)
+  public validateLevelCompletion(satisfaction: number): boolean {
+    return validateLevelCompletion(this.currentLevel, satisfaction)
   }
 
   /**
@@ -138,18 +138,14 @@ export class LevelManager {
   public completeLevel(results: TreatmentResults): LevelCompletionResult {
     const level = this.getCurrentLevel()
 
-    const success = this.validateLevelCompletion(
-      results.score,
-      results.satisfaction,
-    )
+    const success = this.validateLevelCompletion(results.satisfaction)
 
     // Calculate currency earned based on satisfaction level
     const currencyEarned = Math.floor(results.satisfaction)
 
     // Check if next level should unlock
     const nextLevelUnlocked =
-      success &&
-      canUnlockNextLevel(this.currentLevel, results.score, results.satisfaction)
+      success && canUnlockNextLevel(this.currentLevel, results.satisfaction)
 
     // Track completed challenges
     const challengesCompleted = this.checkCompletedChallenges(results)

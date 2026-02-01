@@ -22,7 +22,6 @@ export interface Level {
 export interface LevelConfig {
   timeLimit: number // seconds
   satisfactionThreshold: number // 0-100
-  scoreThreshold: number
   availableMaskTypes: string[]
   scoreMultiplier: number
   difficultyMultiplier: number

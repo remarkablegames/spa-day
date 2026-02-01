@@ -227,10 +227,10 @@ function createGameUI(gameState: SpaGameState) {
     z(-100),
   ])
 
-  // Score display with animations
+  // Score display (hidden - satisfaction is what matters now)
   const scoreText = add([
-    text('Score: 0', { size: 32, font: 'bold' }),
-    pos(10, 10),
+    text('', { size: 32, font: 'bold' }),
+    pos(-100, -100), // Off-screen
     color(GAME_CONFIG.COLORS.UI_TEXT),
     scale(1),
     z(100),

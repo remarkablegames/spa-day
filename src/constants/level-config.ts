@@ -15,7 +15,6 @@ export const LEVEL_CONFIGS: Record<number, LevelConfig> = {
   1: {
     timeLimit: 15,
     satisfactionThreshold: 35,
-    scoreThreshold: 0,
     availableMaskTypes: ['hydrating', 'soothing'],
     scoreMultiplier: 1.0,
     difficultyMultiplier: 1.0,
@@ -23,7 +22,6 @@ export const LEVEL_CONFIGS: Record<number, LevelConfig> = {
   2: {
     timeLimit: 40,
     satisfactionThreshold: 65,
-    scoreThreshold: 0,
     availableMaskTypes: ['hydrating', 'soothing', 'clarifying'],
     scoreMultiplier: 1.2,
     difficultyMultiplier: 1.1,
@@ -31,7 +29,6 @@ export const LEVEL_CONFIGS: Record<number, LevelConfig> = {
   3: {
     timeLimit: 35,
     satisfactionThreshold: 70,
-    scoreThreshold: 0,
     availableMaskTypes: ['hydrating', 'soothing', 'clarifying', 'anti_aging'],
     scoreMultiplier: 1.4,
     difficultyMultiplier: 1.2,
@@ -39,7 +36,6 @@ export const LEVEL_CONFIGS: Record<number, LevelConfig> = {
   4: {
     timeLimit: 30,
     satisfactionThreshold: 75,
-    scoreThreshold: 0,
     availableMaskTypes: [
       'hydrating',
       'soothing',
@@ -53,7 +49,6 @@ export const LEVEL_CONFIGS: Record<number, LevelConfig> = {
   5: {
     timeLimit: 25,
     satisfactionThreshold: 80,
-    scoreThreshold: 0,
     availableMaskTypes: [
       'hydrating',
       'soothing',
@@ -240,24 +235,19 @@ export function getAllLevels(): Level[] {
 // Validate level completion
 export function validateLevelCompletion(
   levelNumber: number,
-  score: number,
   satisfaction: number,
 ): boolean {
   const config = LEVEL_CONFIGS[levelNumber]
   if (!config) return false
 
-  // Level only fails if satisfaction or score requirements not met
-  // Time limit is displayed but doesn't cause failure
-  return (
-    score >= config.scoreThreshold &&
-    satisfaction >= config.satisfactionThreshold
-  )
+  // Level only fails if satisfaction requirement not met
+  // Score and time don't affect passing
+  return satisfaction >= config.satisfactionThreshold
 }
 
 // Check if player can unlock next level
 export function canUnlockNextLevel(
   currentLevel: number,
-  score: number,
   satisfaction: number,
 ): boolean {
   const nextLevel = currentLevel + 1
@@ -266,8 +256,6 @@ export function canUnlockNextLevel(
   const criteria = UNLOCK_CRITERIA[nextLevel]
   if (!criteria) return false
 
-  return (
-    score >= criteria.requiredScore &&
-    satisfaction >= criteria.requiredSatisfaction
-  )
+  // Only satisfaction matters for unlocking next level
+  return satisfaction >= criteria.requiredSatisfaction
 }
