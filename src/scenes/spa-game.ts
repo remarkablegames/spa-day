@@ -75,21 +75,22 @@ interface SpaGameState {
 }
 
 export function createSpaGameScene() {
-  const gameState: SpaGameState = {
-    character: null,
-    treatmentSession: null,
-    availableMasks: [],
-    selectedMask: null,
-    isDragging: false,
-    dragOffset: null,
-    cleaningMode: true, // Start in cleaning mode
-    eraser: null,
-    cleaningState: null,
-    dirtSpots: [],
-    score: 0,
-  }
-
   scene(Scene.SpaGame, (params: { levelId?: string } = {}) => {
+    // Create fresh game state for each level
+    const gameState: SpaGameState = {
+      character: null,
+      treatmentSession: null,
+      availableMasks: [],
+      selectedMask: null,
+      isDragging: false,
+      dragOffset: null,
+      cleaningMode: true,
+      eraser: null,
+      cleaningState: null,
+      dirtSpots: [],
+      score: 0,
+    }
+
     // Initialize level manager
     initializeLevelManager()
     const levelManager = getLevelManager()
@@ -114,6 +115,9 @@ export function createSpaGameScene() {
 
     // Setup game state with level configuration
     setupGameState(gameState)
+
+    // Reset score for new level
+    gameState.score = 0
 
     // Create UI
     createGameUI(gameState)
