@@ -89,7 +89,6 @@ interface SpaGameState {
   moisturizerProgressUI: GameObj<
     TextComp | PosComp | ColorComp | OpacityComp | ZComp
   > | null
-  showZoneDebug: boolean
 }
 
 export function createSpaGameScene() {
@@ -112,7 +111,6 @@ export function createSpaGameScene() {
       moisturizerTool: null,
       moisturizerTrail: null,
       moisturizerProgressUI: null,
-      showZoneDebug: false,
     }
 
     // Initialize level manager
@@ -1147,28 +1145,6 @@ function initializeMoisturizerMode(gameState: SpaGameState): void {
     )
   })
 
-  // Add debug zone visualization toggle button (for testing)
-  const debugButton = add([
-    rect(80, 30),
-    pos(150, height() - 270),
-    color(50, 50, 50),
-    z(90),
-    area(),
-  ]) as GameObj<RectComp | PosComp | ColorComp | AreaComp | ZComp>
-
-  const debugButtonText = add([
-    text('Debug', { size: 12 }),
-    pos(190, height() - 255),
-    anchor('center'),
-    color(255, 255, 255),
-    z(91),
-  ]) as GameObj<TextComp | PosComp | ColorComp | AnchorComp | ZComp>
-
-  debugButton.onClick(() => {
-    gameState.showZoneDebug = !gameState.showZoneDebug
-    toggleZoneDebug(gameState, debugButton, debugButtonText)
-  })
-
   // Create progress UI (hidden initially)
   gameState.moisturizerProgressUI = add([
     text('Coverage: 0%', { size: 20 }),
@@ -1276,40 +1252,5 @@ function updateMoisturizerMode(gameState: SpaGameState): void {
   if (stateManager.isComplete()) {
     // Handle completion - could show success message
     gameState.moisturizerProgressUI!.text = 'Complete! 100%'
-  }
-}
-
-/**
- * Toggle zone debug visualization
- */
-function toggleZoneDebug(
-  gameState: SpaGameState,
-  button: GameObj<RectComp | PosComp | ColorComp | AreaComp | ZComp>,
-  buttonText: GameObj<TextComp | PosComp | ColorComp | AnchorComp | ZComp>,
-): void {
-  const stateManager = getMoisturizingStateManager()
-  const zones = stateManager.getZones()
-
-  if (gameState.showZoneDebug) {
-    // Enable debug mode - show all zones
-    button.color = rgb(100, 100, 100)
-    buttonText.text = 'Debug: ON'
-
-    zones.forEach((zone) => {
-      zone.createVisual([100, 100, 100]) // Gray color for debug
-      if (zone.isCovered) {
-        zone.showCoveredVisual()
-      } else {
-        zone.setVisualOpacity(0.1) // Light opacity for uncovered
-      }
-    })
-  } else {
-    // Disable debug mode - hide all zones
-    button.color = rgb(50, 50, 50)
-    buttonText.text = 'Debug'
-
-    zones.forEach((zone) => {
-      zone.destroyVisual()
-    })
   }
 }
