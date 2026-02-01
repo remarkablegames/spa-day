@@ -5,24 +5,25 @@
  * Renders smooth cream texture along the drag path using Kaplay components.
  */
 
-import type { GameObj, OpacityComp, PosComp, RectComp } from 'kaplay'
+import type { CircleComp, GameObj, OpacityComp, PosComp } from 'kaplay'
 
 import { MOISTURIZING_CONFIG } from '../constants/moisturizing-config'
 import type { Position } from '../events/moisturizing-types'
 
-type TrailSegment = GameObj<PosComp | RectComp | OpacityComp>
+type TrailSegment = GameObj<PosComp | CircleComp | OpacityComp>
 
 export class MoisturizerTrail {
   private segments: TrailSegment[] = []
   private maxSegments: number
-  private trailWidth: number
+  private trailRadius: number
   private minTrailDistance: number
   private trailColor: [number, number, number]
   private lastPosition: Position | null = null
 
   constructor(color: string = MOISTURIZING_CONFIG.colors.basic) {
     this.maxSegments = MOISTURIZING_CONFIG.visual.maxTrailSegments
-    this.trailWidth = MOISTURIZING_CONFIG.visual.trailWidth
+    // Use radius instead of width for circles (half the trail width)
+    this.trailRadius = MOISTURIZING_CONFIG.visual.trailWidth / 2
     this.minTrailDistance = MOISTURIZING_CONFIG.visual.minTrailDistance
     this.trailColor = this.hexToRgbTuple(color)
   }
@@ -43,15 +44,15 @@ export class MoisturizerTrail {
       }
     }
 
-    // Create trail segment using Kaplay components
-    // Note: Using Kaplay's color() with RGB tuple
+    // Create trail segment using Kaplay circle components
     const [r, g, b] = this.trailColor
     const segment = add([
-      rect(this.trailWidth, this.trailWidth),
+      circle(this.trailRadius),
       pos(position.x, position.y),
       color(r, g, b),
       opacity(MOISTURIZING_CONFIG.visual.trailOpacity),
       anchor('center'),
+      z(45), // Above face (z=30) but below masks (z=50)
     ]) as TrailSegment
 
     this.segments.push(segment)

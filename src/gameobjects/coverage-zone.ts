@@ -64,8 +64,8 @@ export class CoverageZone {
     this.coverageTimestamp = Date.now()
     this.overlapCount = 1
 
-    // Show visual feedback for newly covered zone
-    this.showCoveredVisual()
+    // Note: Visual feedback is handled by the moisturizer trail, not zone visuals
+    // This keeps the interface clean and consistent with circular brush strokes
 
     return true // New coverage
   }
