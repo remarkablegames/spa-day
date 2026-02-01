@@ -21,7 +21,7 @@ export const LEVEL_CONFIGS: Record<number, LevelConfig> = {
     dirtSpotCount: 3,
   },
   2: {
-    timeLimit: 40,
+    timeLimit: 15,
     satisfactionThreshold: 65,
     availableMaskTypes: ['hydrating', 'soothing', 'clarifying'],
     scoreMultiplier: 1.2,
@@ -29,7 +29,7 @@ export const LEVEL_CONFIGS: Record<number, LevelConfig> = {
     dirtSpotCount: 5,
   },
   3: {
-    timeLimit: 35,
+    timeLimit: 15,
     satisfactionThreshold: 70,
     availableMaskTypes: ['hydrating', 'soothing', 'clarifying', 'anti_aging'],
     scoreMultiplier: 1.4,
@@ -37,7 +37,7 @@ export const LEVEL_CONFIGS: Record<number, LevelConfig> = {
     dirtSpotCount: 7,
   },
   4: {
-    timeLimit: 30,
+    timeLimit: 15,
     satisfactionThreshold: 75,
     availableMaskTypes: [
       'hydrating',
@@ -51,7 +51,7 @@ export const LEVEL_CONFIGS: Record<number, LevelConfig> = {
     dirtSpotCount: 9,
   },
   5: {
-    timeLimit: 25,
+    timeLimit: 15,
     satisfactionThreshold: 80,
     availableMaskTypes: [
       'hydrating',
