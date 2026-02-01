@@ -664,8 +664,9 @@ export class Character extends GameObject {
   }
 
   private renderSatisfactionFeedback() {
-    // Position satisfaction feedback below the Score text (which is at y=10)
-    const indicatorY = 60 // Below the Score: 0 text at y=10
+    // Position satisfaction feedback
+    const indicatorY = 80 // Position for satisfaction percentage
+    const emojiY = indicatorY - 40 // Emoji positioned above the percentage
     const currentEmoji = this.getSatisfactionEmoji()
     const roundedSatisfaction = Math.round(this.satisfactionLevel) // Round to whole number
 
@@ -673,11 +674,11 @@ export class Character extends GameObject {
     if (roundedSatisfaction !== this.lastSatisfactionLevel) {
       this.lastSatisfactionLevel = roundedSatisfaction
 
-      // Update or create satisfaction indicator
+      // Update or create satisfaction indicator (percentage text)
       if (!this.satisfactionIndicator) {
         this.satisfactionIndicator = add([
           text(`${roundedSatisfaction}%`, { size: 32, font: 'bold' }),
-          pos(10, indicatorY), // Position below Score text
+          pos(10, indicatorY),
           anchor('left'),
           color(255, 255, 255),
           z(30),
@@ -700,12 +701,11 @@ export class Character extends GameObject {
     // Only update emoji if it actually changed
     if (currentEmoji !== this.lastSatisfactionEmoji) {
       this.lastSatisfactionEmoji = currentEmoji
-      const emojiY = indicatorY + 40 // Below the satisfaction percentage
 
       if (!this.satisfactionEmoji) {
         this.satisfactionEmoji = add([
           text(currentEmoji, { size: 48 }),
-          pos(10, emojiY), // Position below satisfaction percentage
+          pos(10, emojiY), // Position above satisfaction percentage
           anchor('left'),
           color(255, 255, 255),
           z(30),
