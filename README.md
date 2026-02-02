@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="public/favicon.png" width="200" alt="Spa Day">
+  <img src="public/favicon.png" width="300" alt="Spa Day">
 </p>
 
 # Spa Day
